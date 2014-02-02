@@ -26,8 +26,8 @@ Code Style Guidelines (Recommended)
 Submission
 ----------
 
-- Any script can be submitted for review, <s>and must meet all requirements in the Code Style Guidelines section.</s>
-- All scripts should <s>MUST</s> be submitted with a licence and it should <s>MUST</s> be included at the top of all files submitted.
+- Any script can be submitted for review, <s>~~and must meet all requirements in the Code Style Guidelines section.~~</s>
+- All scripts should <s>~~MUST~~</s> be submitted with a licence and it should <s>~~MUST~~</s> be included at the top of all files submitted.
 - Group members will peer review the code for style and robustness.
 - Script author is included in the process.
 - Any issues found can be fixed and the script reevaluated.
