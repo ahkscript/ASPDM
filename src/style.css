@@ -1,0 +1,171 @@
+/* Sortable tables 
+table.sortable a.sortheader {
+	background-color:#eee;
+	color:#666666;
+	font-weight: bold;
+	text-decoration: none;
+	display: block;
+}
+table.sortable span.sortarrow {
+	color: black;
+	text-decoration: none;
+}
+*/
+
+table {
+	margin-bottom: 20px;
+	width: 100%;
+}
+
+th {
+	border-top: 0 none;
+}
+
+td {
+	border-top: 1px solid #DDDDDD;
+}
+
+th, td {
+	text-align: left;
+}
+
+tbody tr:nth-child(2n+1) th,
+tbody tr:nth-child(2n+1) td {
+	background-color: #F9F9F9;
+}
+
+
+#footer {
+	font-size:x-small;
+}
+
+h1:first-child {
+	font-size: 24px;
+	padding-bottom: 5px;
+}
+
+
+h2 {
+	border-color: #468847;
+	color: #468847;
+	border-style: solid;
+	border-width: 0 0 1px;
+}
+
+h1 a, h2 a {
+	color: inherit;
+}
+
+h1 {
+	margin-top: 32px;
+}
+
+.com {
+	//text-align: center;
+	font-weight: bold;
+}
+
+#logo {
+	width: 48px;
+	height: 48px;
+}
+
+#logolink {
+	border:0;
+	padding:0;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:active {
+	position: relative;
+	top: 1px;
+}
+
+a:hover {
+	background-color: #D0D0FF;
+}
+
+#headerlinks {
+	float: right;
+	position: relative;
+	bottom: -12px;
+}
+
+#headerlinks a {
+	border-style: solid;
+	border-width: 2px;
+	padding: 2px;
+}
+
+#headerlinks a:active,
+#headerlinks a:hover {
+	text-decoration: none;
+}
+
+i.fa {
+	margin: 2px;
+}
+
+input, textarea {
+	font-family: sans-serif;
+	border-color: #0088CC;
+	border-style: solid;
+	border-width: 1px;
+	margin: 4px;
+	padding: 2px;
+}
+
+textarea {
+	width: 100%;
+	height: 128px;
+}
+
+hr.min, hr.max {
+	margin: auto;
+	width: 70%;
+	border-style: solid;
+	border-width: 0;
+	border-top-width: 1px;
+	margin-top: 13px;
+	margin-bottom: 12px;
+	border-color: #468847;
+}
+
+hr.max {
+	width: 100% !important;
+}
+
+input.big {
+	padding: 4px;
+	border-style: solid;
+	border-width: 2px;
+	/* Style 01
+	border-color: #333333;
+	color: #FEFEFE;
+	background-color: #0088CC; */
+
+	border-radius: 0;
+	border-color: #333333;
+	color: #FEFEFE;
+	background-color: #468847;
+
+	font-family: sans-serif;
+	font-weight: bold;
+}
+
+input.big:hover {
+	background-color: #EFEFEF;
+	color: #468847;
+}
+
+input.big:active {
+	position: relative;
+	top: 2px;
+}
+
+.fullw {
+	width: 100%;
+} 

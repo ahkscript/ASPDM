@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<!-- Forked Web Design from here: http://win32.libav.org/win64/ -->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=0.6">
+		<title>ahkscript.org - Package/StdLib Distribution and Management</title>
+		<link type="image/png" href="src/ahk.png" rel="icon">
+		<link rel="stylesheet" href="src/font-awesome-4.0.3/css/font-awesome.min.css">
+		<link type="text/css"  href="src/bootstrap.css" rel="stylesheet">
+		<script src="src/sorttable.js"></script>
+		<link type="text/css"  href="src/style.css" rel="stylesheet">
+	</head>
+
+	<body>
+		<div class="container">
+			<h1><a href="http://ahkscript.org" id="logolink"><img id="logo" src="src/ahk.png"></a> ahkscript.org - Package/StdLib Distribution and Management</h1>
+			<div id="body">
+
+				<div id="headerlinks">
+					<a href="index.html">List Packages</a>
+					<a href="about.html">About ASPDM</a>
+				</div>
+
+			<h2>Package Submission</h2>
+
+			<div><form action="submit.php" method="get">
+				<h4>Package Information</h4>
+					<div class="fullw">
+						Short Name: <input type="text" name="name" placeholder="Short Name">
+						Full Name: <input type="text" name="fullname" placeholder="Full Name"></div>
+					<div class="fullw">
+						Author: <input type="text" name="author" placeholder="Author">
+						License: <input type="text" name="license" placeholder="License"></div>
+
+				<h4>Package Specifics</h4>
+					Package version: <input type="text" name="version" placeholder="Package version">
+					<div class="fullw">
+						Minimal AHK Version: <input type="text" name="ahkversion" placeholder="Minimal AHK Version"></div>
+					<div class="fullw">
+						Package type: <select name="type">
+							<option value="Library">Library</option>
+							<option value="Function">Function</option>
+							<option value="Tool">Tool</option>
+							<option value="Tool">Other</option>
+						</select>
+						Category: <select name="category">
+							<option value="">None</option>
+							<option value="Arrays">Arrays</option>
+							<option value="Call">Call</option>
+							<option value="COM">COM</option>
+							<option value="Console">Console</option>
+							<option value="Control">Control</option>
+							<option value="Dynamic">Dynamic</option>
+							<option value="Database">Database</option>
+							<option value="DateTime">DateTime</option>
+							<option value="Editor">Editor</option>
+							<option value="Encryption">Encryption</option>
+							<option value="File">File</option>
+							<option value="FileSystem">FileSystem</option>
+							<option value="Format">Format</option>
+							<option value="Graphics">Graphics</option>
+							<option value="Gui">Gui</option>
+							<option value="INI">INI</option>
+							<option value="Hardware">Hardware</option>
+							<option value="Hash">Hash</option>
+							<option value="Hotstrings">Hotstrings</option>
+							<option value="JSON">JSON</option>
+							<option value="Keyboard">Keyboard</option>
+							<option value="Math">Math</option>
+							<option value="Media">Media</option>
+							<option value="Memory">Memory</option>
+							<option value="Menu">Menu</option>
+							<option value="Network">Network</option>
+							<option value="Objects">Objects</option>
+							<option value="Parser">Parser</option>
+							<option value="Process">Process</option>
+							<option value="Regular Expressions">Regular Expressions</option>
+							<option value="Sound">Sound</option>
+							<option value="Strings">Strings</option>
+							<option value="System">System</option>
+							<option value="Text">Text</option>
+							<option value="Variables">Variables</option>
+							<option value="Window">Window</option>
+							<option value="Windows">Windows</option>
+							<option value="YAML">YAML</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+
+				<h4>Description: </h4>
+					<textarea name="description" placeholder="Description"></textarea>
+
+				<h4>Package Resource URLs</h3>
+					Forum URL: <input type="text" name="forumURL" placeholder="Forum URL">
+					Package URL: <input type="text" name="packageURL" placeholder="Package URL">
+					Screenshot URL: <input type="text" name="screenshotURL" placeholder="Screenshot URL">
+
+				<br><br><input type="Submit" value="Submit Package" class="big">
+				<hr class="max">
+			</form></div>
+
+			<h1>Notice</h1>
+				<h4>Submission terms and conditions </h4>
+				<p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at scelerisque magna, sed hendrerit enim. Aliquam interdum, felis non euismod dignissim, arcu nisi eleifend enim, sed mollis sem sem quis sem. Donec in iaculis quam, sed pretium quam. Donec congue, nunc vitae elementum tempus, nibh neque scelerisque ante, at tempus lacus augue convallis dui. Maecenas vitae elit consequat, volutpat nisl nec, mollis mi. Curabitur non tellus ut enim tristique commodo. Nulla pulvinar tellus augue, eget auctor est euismod nec. Maecenas vestibulum tortor at lacus aliquet, sed rhoncus leo elementum. Aliquam eleifend aliquet odio ut euismod. Morbi volutpat orci in ipsum facilisis, porttitor eleifend ipsum viverra. Nullam quis vehicula nisi.
+				</p>
+			</div>
+			<div id="footer">
+				<p>Hosted by <a href="http://sourceforge.net">SourceForge</a>
+				-
+				<a href="http://joedf.users.sourceforge.net/"> Joe DF</a>
+				-
+				Original Web Design from here: <a href="http://win32.libav.org/win64/">http://win32.libav.org/win64/</a>
+				</p>
+			</div>
+		</div>
+	</body>
+</html>
