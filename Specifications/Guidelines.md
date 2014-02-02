@@ -56,7 +56,7 @@ Repository
 - Automatic package download and installation.
 - Autoupdate to the latest version.
 - Separate sub-repositories for each set of AutoHotkey versions (v1.1, v2-alpha, AHK_H, maybe others ...).
-- <s>Versions: (say a new version makes breaking changes) Separate files: SuperLib.ahk, SuperLib2.ahk; major versions only.</s>
+- <s>~~Versions: (say a new version makes breaking changes) Separate files: SuperLib.ahk, SuperLib2.ahk; major versions only.~~</s>
 - Versions: For each package the latest version of every major version will be stored, for compatibility purposes. (e.g. SomeLib-1, SomeLib-2...)
 
 Users and moderators
