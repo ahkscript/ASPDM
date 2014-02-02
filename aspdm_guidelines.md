@@ -21,7 +21,7 @@ Code Style Guidelines (Recommended)
 - Exposed interfaces should be documented in a standard way. (doxygen or gendocs?).
 - Exposed interfaces should be mostly stable and not change.
 - Usage examples should be provided.
-- Forum topic on [ahkscript.org](http://ahkscript.org/) <s>[AutoHotkey.com](http://www.autohotkey.com/)</s>. (keep the centralized support)
+- Forum topic on [ahkscript.org](http://ahkscript.org/) <s>~~[AutoHotkey.com](http://www.autohotkey.com/)~~</s>. (keep the centralized support)
 
 Submission
 ----------
