@@ -16,6 +16,7 @@ Package Quality Guidelines
 - Code must be wrapped in functions/classes with clear, non-conflicting namespaces. Global variables should be avoided whenever possible.
 - Code must not depend on positioning of #include.
 - Prefer code without side effects. (e.g. unnecessarily and unexpectedly polluting or relying on the global namespace.)
+- Code should be reasonably optimized.
 - Consistent indentation style (Doesn't matter which).
 - Consistent brace style (Doesn't matter which).
 - Exposed interfaces are recommended to be documented in a standard way. (GenDocs or NDocs or ...?).
