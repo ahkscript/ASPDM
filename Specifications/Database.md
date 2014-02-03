@@ -26,7 +26,7 @@ An [open standard](http://en.wikipedia.org/wiki/Open_standard) and [human-readab
 
 _**All fields are mandatory, unless otherwise stated.**_
 
-| Categories                                       |
+| Categories  |             |                      |
 |-------------|-------------|----------------------|
 | Arrays      | Graphics    | Objects              |
 | Call        | Gui         | Parser               |
