@@ -1,30 +1,40 @@
-ASPDM Database (Non final version)
-===============================
+ASPDM Database (WIP)
+====================
 
-Metadata
---------------------------
+Package metadata format
+-----------------------
 
-The database format is [JSON (JavaScript Object Notation)](http://www.json.org/).  
-An [open standard](http://en.wikipedia.org/wiki/Open_standard) and [human-readable](http://en.wikipedia.org/wiki/Human-readable) data interchange format.
+The package metadata (manifest) format is a [JSON](http://www.json.org/) document. The package repository (aka database) format is a JSON array of package metadata documents.
 
-|     Items     |                            Description                              |
-|---------------|---------------------------------------------------------------------|
-| name          | A short/abbreviated version of the full name                        |
-| fullname      | The full name of the package                                        |
-| author        | The author(s) of the package                                        |
-| authorurl     | The author(s) homepage/webpage (**Optional**)                       |
-| description   | Description of the package                                          |
-| license       | The package's "copyright" terms (**Optional**)                      |
-| version       | Version of the package (must follow Ahk Lib v3 versioning)          |
-| type          | Type of package (Library, Function, Tool, Other)                    |
-| category      | See "**Categories**" below                                          |
-| forumurl      | Forum topic's URL at ahkscript.org (**Optional**, **Recommended**)  |
-| packageurl    | The Package's download URL (**Only** for online package listing)    |
-| screenshoturl | URL to a screenshot to be displayed (**Optional**)                  |
-| ahkversion    | The minimal version of autohotkey to run the package                |
-| isstdlib      | True if the package is part of stdlib (**Internal**, **Moderated**) |
+_**All attributes are mandatory, unless otherwise stated.**_
 
-_**All fields are mandatory, unless otherwise stated.**_
+| Attribute     | Description                                                                            |
+|---------------|----------------------------------------------------------------------------------------|
+| name          | A short/abbreviated version of the full name (Should be a valid AutoHotkey identifier) |
+| version       | Package version (must follow AHK-flavored Semantic Versioning)                         |
+| type          | Package type (`lib`, `tool`, `other`)                                                  |
+| ahkbranch     | AutoHotkey branch the package is developed for (`v1.1`, `v2-alpha`, `ahk_h`, ...)      |
+| ahkversion    | Version number of AutoHotkey the package was developed with                            |
+| ahkflavour    | Comma-separated list of supported AutoHotkey flavours (`a32`, `u32`, `u64`)            |
+| fullname      | The full human-friendly name of the package                                            |
+| description   | Description of the package                                                             |
+| author        | The author(s) of the package                                                           |
+| authorurl     | (**Optional**) The author(s) website (may not be a good idea to store?)                |
+| license       | (**Optional**) Name of the license under which the package is released                 |
+| category      | See "**Package categories**" below                                                     |
+| forumurl      | (**Optional**, **Recommended**) ahkscript.org forum topic URL                          |
+| screenshot    | (**Optional**) Filename of the screenshot to be displayed                              |
+
+Licenses: packages submitted to ahkscript.org without the license attribute filled in are assumed to be released under the ahkscript.org Default Package License (TODO: write said license).
+
+### Package Repository-only attributes
+
+| Attribute     | Description                                                                                                        |
+|---------------|--------------------------------------------------------------------------------------------------------------------|
+| isstdlib      | (**Internal**, **Moderated**) True if the package has been selected to be part of the official StdLib distribution |
+| filename      | Filename of the package (used during downloading)                                                                  |
+
+### Package categories
 
 | Categories  |             |                      |
 |-------------|-------------|----------------------|
@@ -42,8 +52,8 @@ _**All fields are mandatory, unless otherwise stated.**_
 | FileSystem  | Menu        | YAML                 |
 | Format      | Network     | Other                |
 
-Packaging / Archive ?
---------------------------------
+Package File Format
+-------------------
 
 [to do] .ahkp file extension, etc...
 ?...
