@@ -9,6 +9,11 @@ http://ahkscript.github.io/ASPDM/Network/
 _Local-Client_ : The local package manager  
 _Network_ : The Web Frontend  
   
+**Specifications**  
+
+_Guidelines_ : [Specifications/Guidelines.md](Specifications/Guidelines.md)  
+_Database_ : [Specifications/Database.md](Specifications/Database.md)  
+  
 **Join the Conversation!**  
   
 - Trello : http://ahkscript.org/boards/viewtopic.php?f=17&t=1853
