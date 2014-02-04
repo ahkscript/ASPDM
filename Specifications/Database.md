@@ -19,13 +19,13 @@ _**All attributes are mandatory, unless otherwise stated.**_
 | fullname      | The full human-friendly name of the package                                            |
 | description   | Description of the package                                                             |
 | author        | The author(s) of the package                                                           |
-| authorurl     | (**Optional**) The author(s) website (may not be a good idea to store?)                |
+| authorurl     | (**Optional**) The author(s) ahkscript.org forum/ASPDM userpage (Unnecessary idea?)    |
 | license       | (**Optional**) Name of the license under which the package is released                 |
 | category      | See "**Package categories**" below                                                     |
 | forumurl      | (**Optional**, **Recommended**) ahkscript.org forum topic URL                          |
 | screenshot    | (**Optional**) Filename of the screenshot to be displayed                              |
 
-Licenses: packages submitted to ahkscript.org without the license attribute filled in are assumed to be released under the ahkscript.org Default Package License (TODO: write said license).
+_**Licenses:**_ packages submitted to ahkscript.org without the license attribute filled in are assumed to be released under the ahkscript.org Default Package License (TODO: write said license).
 
 ### Package Repository-only attributes
 
@@ -56,4 +56,4 @@ Package File Format
 -------------------
 
 [to do] .ahkp file extension, etc...
-?...
+Compression method?...
