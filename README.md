@@ -13,6 +13,8 @@ _Network_ : The Web Frontend
 
 _Guidelines_ : [Specifications/Guidelines.md](Specifications/Guidelines.md)  
 _Database_ : [Specifications/Database.md](Specifications/Database.md)  
+
+_License_ : [Specifications/License.md](Specifications/License.md)  
   
 **Join the Conversation!**  
   
