@@ -43,21 +43,20 @@ Submission
 ----------
 
 - Any package can be submitted to the repository, and should meet all mandatory requirements in the Package Quality Guidelines section.
-- All scripts should be submitted with a licence.
+- All packages should be submitted with a license. Those submitted without a license are assumed to be released under the ahkscript.org Default Package License.
 - Package author is included in the package metadata.
 - (In case of moderation queue):
   - Moderators will peer review the package for the above guidelines.
   - Any issues found can be fixed and the package reevaluated.
   - Two peer reviews to make sure any errors are caught early on.
-  - Eighty? percent majority approval for new packages to be added into ahkscript.org repository.
+  - Eighty (?) percent majority approval for new packages to be added into ahkscript.org repository.
 
 Repository
 ----------
 
 - Automatic package download and installation.
 - Autoupdate to the latest version.
-- Separate sub-repositories for each set of AutoHotkey versions (v1.1, v2-alpha, AHK_H, maybe others ...).
-- <s>~~Versions: (say a new version makes breaking changes) Separate files: SuperLib.ahk, SuperLib2.ahk; major versions only.~~</s>
+- Separate sub-repositories for each set of AutoHotkey versions (v1.1, v2-alpha, AHK_H,  others ...).
 - Versions: For each package the latest version of every major version will be stored, for compatibility purposes. (e.g. SomeLib-1, SomeLib-2...)
 
 Users and moderators
