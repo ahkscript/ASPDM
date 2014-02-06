@@ -19,7 +19,6 @@ _**All attributes are mandatory, unless otherwise stated.**_
 | fullname      | The full human-friendly name of the package                                            |
 | description   | Description of the package                                                             |
 | author        | The author(s) of the package                                                           |
-| authorurl     | (**Optional**) The author(s) ahkscript.org forum/ASPDM userpage (Unnecessary idea?)    |
 | license       | (**Optional**) Name of the license under which the package is released                 |
 | category      | See "**Package categories**" below                                                     |
 | forumurl      | (**Optional**, **Recommended**) ahkscript.org forum topic URL                          |
