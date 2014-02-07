@@ -1,0 +1,17 @@
+{
+  "name": "Samples",
+  "fullname": "Sample files in C, Lua, Ahk, Batch, AutoIt",
+  "version": "1.0.0.0",
+  "type": "Library",
+  "author": "Joe DF",
+  "license": "WTFPL",
+  "category": "text",
+  "forumurl": "http://ahkscript.org/boards/viewtopic.php?t=BlahBlah",
+  "screenshot": "preview.png",
+  "isstdlib": false,
+  "description": "This is a sample description.\nThis is the second sentence of this description.",
+  "ahkbranch": "v1.1",
+  "ahkversion": "1.1.13.01",
+  "ahkflavour": "a32,u32,u64",
+  "filename": "samples.ahkp"
+}
