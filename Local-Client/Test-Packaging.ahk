@@ -9,5 +9,5 @@ testDir := A_ScriptDir "\package_test"
 Package_Build(outP, testDir)
 MsgBox % Manifest_FromPackage(outP,lp)
 
-; extraction errors.. alignment error? 
+; extraction tree errors.. alignment error? 
 ; _Package_Extract(tempDir, outP, lp)
