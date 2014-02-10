@@ -42,3 +42,30 @@ Util_DirTree(dir, bd := "")
 	}
 	return data
 }
+
+Util_ExtractTree(ptr, dir)
+{
+	FileCreateDir, %dir%
+	nElems := NumGet(ptr+0, "UInt"), ptr += 4
+	Loop, %nElems%
+	{
+		name := dir "\" Util_ReadLenStr(ptr, ptr)
+		size := NumGet(ptr+0, "UInt"), ptr += 4
+		if (size = 0xFFFFFFFF)
+		{
+			; Directory
+			ret := Util_ExtractTree(ptr, name)
+			if ret != OK
+				return ret
+		} else
+		{
+			try f := FileOpen(name, "w", "UTF-8-RAW")
+			catch
+				throw Exception("Cannot extract data!")
+			f.RawWrite(ptr+0, size)
+			f := ""
+			ptr := (ptr+size+3)&~3
+		}
+	}
+	return "OK"
+}

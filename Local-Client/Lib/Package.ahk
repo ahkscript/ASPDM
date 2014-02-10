@@ -28,6 +28,27 @@ _Package_Compress(fIn, fOut, manjson)
 	Util_FileWriteStr(f, manjson)
 	f.WriteUInt(fSize)
 	f.RawWrite(bufTemp, cSize)
+	f.Close()
+}
+
+_Package_Extract(dir, inFile, lpOffset=0)
+{
+	FileGetSize, dataSize, %inFile%
+	FileRead, data, *c %inFile%
+	pData := &data
+	if StrGet(pData, 8, "UTF-8") != "AHKPKG00"
+		return "Invalid format"
+	
+	lpOffset+=3
+	uncompSize := NumGet(pData+lpOffset, "UInt"), pData += 4+lpOffset
+	
+	VarSetCapacity(uncompData, uncompSize)
+	; COMPRESSION_FORMAT_LZNT1 | COMPRESSION_ENGINE_MAXIMUM
+	if DllCall("ntdll\RtlDecompressBuffer", "ushort", 0x102, "ptr", &uncompData, "uint", uncompSize
+		, "ptr", pData, "uint", &data + dataSize - pData, "uint*", finalSize) != 0
+		throw Exception("Decompression error")
+	
+	return Util_ExtractTree(&uncompData, dir)
 }
 
 _Package_DumpTree(f, tree)

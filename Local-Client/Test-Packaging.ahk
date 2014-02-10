@@ -7,3 +7,7 @@ outP := A_ScriptDir "\package_test.ahkp"
 testDir := A_ScriptDir "\package_test"
 
 Package_Build(outP, testDir)
+MsgBox % Manifest_FromPackage(outP,lp)
+
+; extraction errors.. alignment error? 
+; _Package_Extract(tempDir, outP, lp)
