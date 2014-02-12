@@ -12,6 +12,16 @@
 		<link type="text/css"  href="src/bootstrap.css" rel="stylesheet">
 		<script src="src/sorttable.js"></script>
 		<link type="text/css"  href="src/style.css" rel="stylesheet">
+		
+		<script type="text/javascript">
+			function remember_me_tip(x) {
+				if (x)
+					document.getElementById("rememberme_notice").style.display = "block";
+				else
+					document.getElementById("rememberme_notice").style.display = "none";
+			}
+		</script>
+		
 	</head>
 
 	<body>
@@ -20,21 +30,38 @@
 			<div id="body">
 
 				<div id="headerlinks">
-					<a href="login.html">Sign In/Out</a>
 					<a href="index.html">List Packages</a>
 					<a href="submit.html">Submit Package</a>
+					<a href="about.html">About ASPDM</a>
 				</div>
 
-			<h2>About ASPDM</h2>
-			<div>
-				<a href="http://ahkscript.org/"><b>AHKScript.org</b></a>'s <b>"Package/StdLib Distribution and Management"</b> was founded ... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at scelerisque magna, sed hendrerit enim. Aliquam interdum, felis non euismod dignissim, arcu nisi eleifend enim, sed mollis sem sem quis sem. Donec in iaculis quam, sed pretium quam. Donec congue, nunc vitae elementum tempus, nibh neque scelerisque ante, at tempus lacus augue convallis dui. Maecenas vitae elit consequat, volutpat nisl nec, mollis mi. Curabitur non tellus ut enim tristique commodo. Nulla pulvinar tellus augue, eget auctor est euismod nec. Maecenas vestibulum tortor at lacus aliquet, sed rhoncus leo elementum. Aliquam eleifend aliquet odio ut euismod. Morbi volutpat orci in ipsum facilisis, porttitor eleifend ipsum viverra. Nullam quis vehicula nisi.
+			<h2>Log in with an AHKScript.org account</h2>
+			
+			
+			<div class="center" style="width:340px;">
+				<form action="api/login.php" method="get">
+					<h4>Enter your account info:</h4>
+						<div class="fullw">
+							User Name: <input type="text" name="user" placeholder="Username"></div>
+						<div class="fullw">
+							&nbsp;Password: <input type="password" name="pass" placeholder="********"></div>
+						<div class="fullw" style="height:32px;">
+							<div onmouseover="remember_me_tip(1)" onmouseout="remember_me_tip(0)">
+								<input type="checkbox" name="remember" value="yes"> Remember me
+							</div>
+							<div id="rememberme_notice" class="infobox" style="display:none;" onmouseover="remember_me_tip(0)">
+								Remember my login session for <b>two weeks</b> so that I can come back without logging in.
+							</div>
+						</div>
+					<input type="Submit" value="Sign In" class="big">
+				</form>
+				<div class="infobox" style="margin-top:16px;display:block">
+					<a href="http://ahkscript.org/boards/ucp.php?mode=sendpassword">Forgot your password?</a><br>
+					<br>Need an account on AHKScript.org?
+					<br><a href="http://ahkscript.org/boards/ucp.php?mode=register">Create Account</a>
+				</div>
 			</div>
-
-			<h3>The Team and the many contributors</h3>
-			<div>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at scelerisque magna, sed hendrerit enim. Aliquam interdum, felis non euismod dignissim, arcu nisi eleifend enim, sed mollis sem sem quis sem. Donec in iaculis quam, sed pretium quam. Donec congue, nunc vitae elementum tempus, nibh neque scelerisque ante, at tempus lacus augue convallis dui. Maecenas vitae elit consequat, volutpat nisl nec, mollis mi. Curabitur non tellus ut enim tristique commodo. Nulla pulvinar tellus augue, eget auctor est euismod nec. Maecenas vestibulum tortor at lacus aliquet, sed rhoncus leo elementum. Aliquam eleifend aliquet odio ut euismod. Morbi volutpat orci in ipsum facilisis, porttitor eleifend ipsum viverra. Nullam quis vehicula nisi.
-			</div>
-			<hr class="max">
+				<hr class="max">
 
 			<h1>Notice</h1>
 				<h4>Content terms and conditions </h4>

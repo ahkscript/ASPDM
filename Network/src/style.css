@@ -157,6 +157,7 @@ input.big {
 }
 
 input.big:hover {
+	cursor: hand; cursor: pointer;
 	background-color: #EFEFEF;
 	color: #468847;
 }
@@ -169,3 +170,31 @@ input.big:active {
 .fullw {
 	width: 100%;
 } 
+
+.halfw {
+	width: 50%;
+} 
+
+.thrdw {
+	width: 33%;
+} 
+
+.infobox {
+	
+}
+
+.center, div.center , form.center {
+	display:block;
+	text-align:center;
+	margin: auto;
+}
+
+.infobox {
+	padding: 4px;
+	background-color: rgba(208,208,255,0.9); /* #D0D0FF */
+	border: rgba(128,128,128,0.9) solid 1px;
+}
+#rememberme_notice {
+	position:relative;
+	z-index:2;
+}
