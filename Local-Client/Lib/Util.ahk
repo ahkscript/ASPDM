@@ -32,25 +32,6 @@ Util_ReadLenStr(ptr, ByRef endPtr)
 	return StrGet(ptr+4, len, "UTF-8")
 }
 
-Util_DirTree(dir, bd := "")
-{
-	data := [], bd := bd ? bd : dir, lbd := StrLen(bd)+1
-	Loop, %dir%\*.*, 1
-	{
-		StringTrimLeft, name, A_LoopFileFullPath, %lbd%
-		e := { name: name, fullPath: A_LoopFileLongPath }
-		if SubStr(name, 0) = "~" || SubStr(name, -3) = ".bak" || name = "package.json"
-			continue
-		IfInString, A_LoopFileAttrib, D
-		{
-			e.isDir := true
-			e.contents := Util_DirTree(A_LoopFileFullPath, bd)
-		}
-		data.Insert(e)
-	}
-	return data
-}
-
 Util_DirTreeIndexed(dir, bd := "")
 {
 	data := [], bd := bd ? bd : dir, lbd := StrLen(bd)+1
@@ -73,76 +54,6 @@ Util_DirTreeIndexed(dir, bd := "")
 		data.Insert(e)
 	}
 	return data
-}
-
-/*
-Util_ExtractTree(ptr, dir)
-{
-	FileCreateDir, %dir%
-	nElems := NumGet(ptr+0, "UInt"), ptr += 4
-	Loop, %nElems%
-	{
-		name := dir "\" Util_ReadLenStr(ptr, ptr)
-		size := NumGet(ptr+0, "UInt"), ptr += 4
-		if (size = 0xFFFFFFFF)
-		{
-			; Directory
-			ret := Util_ExtractTree(ptr, name)
-			if ret != OK
-				return ret
-		} else
-		{
-			f := FileOpen(name, "w", "UTF-8-RAW")
-			f.RawWrite(ptr+0, size)
-			f := ""
-			ptr := (ptr+size+3)&~3
-		}
-	}
-	return "OK"
-}
-*/
-
-Util_ExtractTree(ptr, dir, i=0, root="")
-{
-	global kPtr
-	if (!i)
-		kPtr:=ptr
-	
-	if (!root)
-		root:=dir
-	FileCreateDir, %dir%
-	nElems := NumGet(ptr+0, "UInt"), ptr += 4
-	Loop, %nElems%
-	{
-		nPtr:=ptr
-		
-		Nchk:=NumGet(ptr+0, "UInt")
-		if ( (Nchk==1) )
-			ptr+=4
-		
-		file := Util_ReadLenStr(ptr, ptr)
-		name := dir "\" file
-		if (i)
-			name := root "\" file
-		size := NumGet(ptr+0, "UInt"), ptr += 4
-		
-		if (size = 0xFFFFFFFF)
-		{
-			; Directory
-			ret := Util_ExtractTree(ptr, name, i+1, root)
-			if ret != OK
-				return ret
-		} else
-		{
-			try f := FileOpen(name, "w", "UTF-8-RAW")
-			catch
-				throw Exception("Cannot extract data!`nFile: """ . name . """")
-			f.RawWrite(ptr+0, size)
-			f := ""
-			ptr := (ptr+size+3)&~3
-		}
-	}
-	return "OK"
 }
 
 Util_ExtractTreeIndexed(byref ptr, tree, root="", fork=0)

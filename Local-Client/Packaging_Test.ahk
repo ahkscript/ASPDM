@@ -10,7 +10,7 @@ tempDir := Util_TempDir()
 Package_Build(outP, testDir)
 MsgBox % Manifest_FromPackage(outP)
 
-if (_Package_Extract(tempDir, outP) == "OK") {
+if (Package_Extract(tempDir, outP) == "OK") {
 	MsgBox, 68, , Extraction was successful!`nOpen in Explorer?
 	ifMsgBox, Yes
 		Run, Explorer.exe "%tempDir%"
