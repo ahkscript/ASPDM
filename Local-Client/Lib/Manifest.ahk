@@ -1,16 +1,17 @@
 ﻿
 Manifest_FromPackage(fileName)
 {
-	try {
+	try
+	{
 		FileRead, data, *c %fileName%
 		pData := &data
 		if StrGet(pData, 8, "UTF-8") != "AHKPKG00"
-			return "Invalid format"
-		sz := NumGet(pData+0,8,"UInt")
-		return StrGet(pData+12,sz,"UTF-8")
+			throw Exception("Invalid format!")
+		sz := NumGet(pData+8, "UInt")
+		return StrGet(pData+12, sz, "UTF-8")
 	}
 	catch e
-		throw Exception("Could not extract manifest!`n" . e)
+		throw e ; Propagate exception
 	return 0
 }
 

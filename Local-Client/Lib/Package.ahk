@@ -4,8 +4,8 @@ Package_Build(outFile, baseDir)
 	; Read manifest
 	man := Manifest_FromFile(baseDir "\package.json")
 	
-	tree := Util_DirTreeIndexed(baseDir)
-	_Package_DumpTreeIndexed(outFile, tree)
+	tree := Util_DirTree(baseDir)
+	_Package_DumpTree(outFile, tree)
 	_Package_Compress(outFile, outFile, JSON_FromObj(man))
 }
 
@@ -17,8 +17,10 @@ Package_Extract(dir, inFile)
 	if StrGet(pData, 8, "UTF-8") != "AHKPKG00"
 		return "Invalid format"
 	
-	lpOffset:=NumGet(pData+0,8,"UInt")+15
-	uncompSize := NumGet(pData+lpOffset, "UInt"), pData += (4+lpOffset)
+	; Skip manifest
+	off := 8, manSize := NumGet(data, off, "UInt"), off := (off+manSize+7) &~ 3
+	pData += off
+	uncompSize := NumGet(pData+0, "UInt"), pData += 4
 	
 	VarSetCapacity(uncompData, uncompSize)
 	; COMPRESSION_FORMAT_LZNT1 | COMPRESSION_ENGINE_MAXIMUM
@@ -26,13 +28,7 @@ Package_Extract(dir, inFile)
 		, "ptr", pData, "uint", &data + dataSize - pData, "uint*", finalSize) != 0
 		throw Exception("Decompression error")
 	
-	ptr := &uncompData
-	tPtr := NumGet(ptr+0, "UInt") + ptr
-	tSz  := NumGet(ptr+4, "UInt")
-	tree := JSON_ToObj(StrGet(tPtr,tSz,"UTF-8"))
-	ptr += 8
-	
-	return Util_ExtractTreeIndexed(ptr, tree, dir)
+	return _Package_ExtractTree(&uncompData, dir)
 }
 
 _Package_Compress(fIn, fOut, manjson)
@@ -54,38 +50,57 @@ _Package_Compress(fIn, fOut, manjson)
 	Util_FileWriteStr(f, manjson)
 	f.WriteUInt(fSize)
 	f.RawWrite(bufTemp, cSize)
-	f.Close()
+	; f.Close() not necessary because 'f' goes out of scope
 }
 
-_Package_DumpTreeIndexed(f, ByRef tree, fork=0)
+_Package_DumpTree(f, tree)
 {
 	if !IsObject(f)
-		f := FileOpen(f, "rw", "UTF-8-RAW")
-	if (!fork) {
-		f.Seek(8)
-	}
+		f := FileOpen(f, "w", "UTF-8-RAW")
+	
+	tl := tree.MaxIndex(), tl := tl ? tl : 0
+	f.WriteUInt(tl)
 	for _,e in tree
 	{
+		Util_FileWriteStr(f, e.name)
 		if e.isDir
 		{
-			e.Remove("fullPath")
-			_Package_DumpTreeIndexed(f, e.contents, fork+1)
-		}
-		else
+			f.WriteUInt(-1)
+			_Package_DumpTree(f, e.contents)
+		} else
 		{
-			fullPath := e.Remove("fullPath")
-			VarSetCapacity(fData, e.size)
+			fullPath := e.fullPath
+			FileGetSize, fSize, %fullPath%
+			VarSetCapacity(fData, fSize)
 			FileRead, fData, *c %fullPath%
-			f.RawWrite(fData, e.size)
+			f.WriteUInt(fSize)
+			f.RawWrite(fData, fSize)
+			Util_FileAlign(f)
 			VarSetCapacity(fData, 0)
 		}
 	}
-	if (!fork) {
-		x := f.Pos
-		f.Write((sTree:=JSON_FromObj(tree)))
-		f.Seek(0)
-		f.WriteUInt(x)
-		f.WriteUInt(StrLen(sTree))
-		f.Close()
+}
+
+_Package_ExtractTree(ptr, dir)
+{
+	try FileCreateDir, %dir%
+	nElems := NumGet(ptr+0, "UInt"), ptr += 4
+	Loop, %nElems%
+	{
+		name := dir "\" Util_ReadLenStr(ptr, ptr)
+		size := NumGet(ptr+0, "UInt"), ptr += 4
+		if (size = 0xFFFFFFFF)
+		{
+			; Directory
+			if not ptr := _Package_ExtractTree(ptr, name)
+				break
+		} else
+		{
+			f := FileOpen(name, "w", "UTF-8-RAW")
+			f.RawWrite(ptr+0, size)
+			f := ""
+			ptr += (size+3) &~ 3
+		}
 	}
+	return ptr
 }

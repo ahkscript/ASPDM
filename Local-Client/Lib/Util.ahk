@@ -28,63 +28,27 @@ Util_FileWriteStr(f, ByRef str)
 Util_ReadLenStr(ptr, ByRef endPtr)
 {
 	len := NumGet(ptr+0, "UInt")
-	endPtr := (ptr+len+7)&~3
+	endPtr := ptr + ((len+7)&~3)
 	return StrGet(ptr+4, len, "UTF-8")
 }
 
-Util_DirTreeIndexed(dir, bd := "")
+Util_DirTree(dir)
 {
-	data := [], bd := bd ? bd : dir, lbd := StrLen(bd)+1
+	data := [], ldir := StrLen(dir)+1
 	Loop, %dir%\*.*, 1
 	{
-		StringTrimLeft, name, A_LoopFileFullPath, %lbd%
+		StringTrimLeft, name, A_LoopFileFullPath, %ldir%
 		e := { name: name, fullPath: A_LoopFileLongPath }
 		if SubStr(name, 0) = "~" || SubStr(name, -3) = ".bak" || name = "package.json"
 			continue
 		IfInString, A_LoopFileAttrib, D
 		{
 			e.isDir := true
-			e.contents := Util_DirTreeIndexed(A_LoopFileFullPath, bd)
-		}
-		else
-		{
-			FileGetSize, fsz, %A_LoopFileFullPath%
-			e.size := fsz
+			e.contents := Util_DirTree(A_LoopFileFullPath)
 		}
 		data.Insert(e)
 	}
 	return data
-}
-
-Util_ExtractTreeIndexed(byref ptr, tree, root="", fork=0)
-{
-	static sPtr
-	if (!fork) {
-		sPtr := ptr
-	}
-
-	for _,e in tree
-	{
-		if e.isDir
-		{
-			d:=e.name
-			FileCreateDir, %root%\%d%
-			ret := Util_ExtractTreeIndexed(ptr, e.contents, root, fork+1)
-			if ret != OK
-				return ret
-		}
-		else
-		{
-			fname := root . "\" . (e.name)
-			try f := FileOpen(fname, "w", "UTF-8-RAW")
-			catch
-				throw Exception("Cannot extract data!`nFile: """ . fname . """")
-			f.RawWrite(ptr+0, e.size)
-			f := ""
-			ptr := ptr + (e.size)
-		}
-	}
-	return "OK"
 }
 
 Util_isASCII(s)

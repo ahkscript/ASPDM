@@ -10,12 +10,12 @@ tempDir := Util_TempDir()
 Package_Build(outP, testDir)
 MsgBox % Manifest_FromPackage(outP)
 
-if (Package_Extract(tempDir, outP) == "OK") {
+if Package_Extract(tempDir, outP)
+{
 	MsgBox, 68, , Extraction was successful!`nOpen in Explorer?
-	ifMsgBox, Yes
+	IfMsgBox, Yes
 		Run, Explorer.exe "%tempDir%"
-}
-else
+} else
 {
 	FileRemoveDir, %tempDir%, 1
 	MsgBox, 16, , Extraction failed!
