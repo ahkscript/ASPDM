@@ -5,9 +5,18 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 outP := A_ScriptDir "\package_test.ahkp"
 testDir := A_ScriptDir "\package_test"
+tempDir := Util_TempDir()
 
 Package_Build(outP, testDir)
-MsgBox % Manifest_FromPackage(outP,lp)
+MsgBox % Manifest_FromPackage(outP)
 
-; extraction tree errors.. alignment error? 
-; _Package_Extract(tempDir, outP, lp)
+if (_Package_Extract(tempDir, outP) == "OK") {
+	MsgBox, 68, , Extraction was successful!`nOpen in Explorer?
+	ifMsgBox, Yes
+		Run, Explorer.exe "%tempDir%"
+}
+else
+{
+	FileRemoveDir, %tempDir%, 1
+	MsgBox, 16, , Extraction failed!
+}

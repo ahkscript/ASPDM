@@ -1,62 +1,17 @@
 ﻿
-/* Method A
-Manifest_FromPackage(fileName,ByRef lastpos=-1)
+Manifest_FromPackage(fileName)
 {
-	if (f:=FileOpen(fileName,"r")) {
-		f.Seek(0)
-		o:="", s:=0
-		Loop % (l:=f.Length)
-		{
-			if (k:=f.RawRead(c,1)) {
-				if ( (c==chr(0)) && s ) ;if reading & encounter null byte
-					break
-				if (c=="{")
-					s:=1
-				if (s)
-					o.=c
-				if (c=="}") {
-					lastpos := f.Pos + 0
-					break
-				}
-			}
-			else
-				break
-		}
-		f.Close()
-	}
-	if ( (!f) || (lastpos<2) || (SubStr(o,0)!="}") )
-		throw Exception("Could not extract manifest!")
-	return o
-}
-*/
-
-; Method B
-Manifest_FromPackage(fileName,ByRef lastpos=-1)
-{
-	o:="", s:=0
 	try {
 		FileRead, data, *c %fileName%
-		Loop, % VarSetCapacity(data)
-		{
-			c:=Chr(*(&data + A_Index - 1))
-			if ( (c==chr(0)) && s ) ;if reading & encounter null byte
-				break
-			if (c=="{")
-				s:=1
-			if (s)
-				o.=c
-			if (c=="}") {
-				lastpos := A_Index
-				break
-			}
-		}
-		VarSetCapacity(data,0)
-		if ( (lastpos<2) || (SubStr(o,0)!="}") )
-			throw "Could not extract manifest!"
+		pData := &data
+		if StrGet(pData, 8, "UTF-8") != "AHKPKG00"
+			return "Invalid format"
+		sz := NumGet(pData+0,8,"UInt")
+		return StrGet(pData+12,sz,"UTF-8")
 	}
 	catch e
-		throw Exception(e)
-	return o
+		throw Exception("Could not extract manifest!`n" . e)
+	return 0
 }
 
 Manifest_FromFile(fileName)
