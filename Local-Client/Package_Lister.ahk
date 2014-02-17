@@ -22,16 +22,20 @@ Package O00015	Jack	2013-12-08 21:18	224 Kb
 
 CheckedItems:=0
 
+; "Standard" ASPDM Header
 Gui, Font, s16 wBold, Arial
 Gui, Add, Picture, x12 y8 w32 h-1, res\ahk.png
 Gui, Add, Text, x+4 yp+4 , ASPDM
 Gui, Font
 Gui, Add, Text, yp+5 x+12, AHKScript.org's Package/StdLib Distribution and Management
+
 Gui, Add, ListView, x16 y+16 w440 h200 Checked AltSubmit gListView_Events, Name|Maintainer|Last modified|Size ;Name|Type|FullName|Author
 Gui, Add, Button, y+4 w80 vInstallButton Disabled, Install
 Gui, Add, Button, yp x+2 w80 gGuiClose, Quit
 Gui, Add, Text, yp+6 x+180 vPackageCounter Right, Loading packages...
-Gui, Show,, ASPDM - Package/StdLib Distribution and Management
+
+Gui, Show,, ASPDM - Package Listing
+
 Loop, Parse, data, `n
 {
 	a:=StrSplit(A_LoopField,A_Tab)
