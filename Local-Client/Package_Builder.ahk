@@ -10,7 +10,6 @@ Attributes:={name:			"A short/abbreviated version of the full name (Should be a 
 			,description:	"Description of the package"
 			,author:		"The author(s) of the package"
 			,license:		"(Optional) Name of the license under which the package is released"
-			,category:		"See ""Package categories"" below"
 			,forumurl:		"(Optional, Recommended) ahkscript.org forum topic URL"
 			,screenshot:	"(Optional) Filename of the screenshot to be displayed"}
 Categories =
@@ -34,24 +33,24 @@ GuiTab:=6
 GuiDispBlock:="x" GuiLeft
 GuiDispInline:="yp x+" GuiTab
 Gui, +HWNDhGUI
-Gui, Add, Edit, vname %GuiDispBlock%,
-Gui, Add, Edit, vversion %GuiDispInline%,
-Gui, Add, Edit, vfullname %GuiDispInline%,
-Gui, Add, Edit, vahkbranch %GuiDispBlock%,
-Gui, Add, Edit, vahkversion %GuiDispInline%,
-Gui, Add, Edit, vahkflavour %GuiDispInline%,
-Gui, Add, Edit, vdescription %GuiDispBlock%,
-Gui, Add, Edit, vauthor %GuiDispInline%,
-Gui, Add, Edit, vlicense %GuiDispInline%,
-Gui, Add, Edit, vforumurl %GuiDispBlock%,
-Gui, Add, Edit, vscreenshot %GuiDispInline%,
+Gui, Add, Edit, vname %GuiDispBlock% gInfoActive,
+Gui, Add, Edit, vversion %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vfullname %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vahkbranch %GuiDispBlock% gInfoActive,
+Gui, Add, Edit, vahkversion %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vahkflavour %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vdescription %GuiDispBlock% gInfoActive,
+Gui, Add, Edit, vauthor %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vlicense %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vforumurl %GuiDispBlock% gInfoActive,
+Gui, Add, Edit, vscreenshot %GuiDispInline% gInfoActive,
 Gui, Add, Text, yp+3 x+4, Type
 Gui, Add, DropDownList, vtype x+4 yp-3, Library|Tool|Other
 Gui, Add, Text, %GuiDispBlock%, Category
 Gui, Add, DropDownList, vCategory x+4 yp-3, %Categories%
-Gui, Add, Button, yp-1 x+24 Default, Select Files...
-Gui, Add, Button, %GuiDispInline%, Save JSON
-Gui, Add, Button, %GuiDispInline%, Build Package
+Gui, Add, Button, yp-1 x+24 Default gInfoActive, Select Files...
+Gui, Add, Button, %GuiDispInline% gInfoActive, Save JSON
+Gui, Add, Button, %GuiDispInline% gInfoActive, Build Package
 
 ;Add placeholders - supported since Windows XP
 SetEditPlaceholder("name","name")
@@ -66,10 +65,33 @@ SetEditPlaceholder("author","author")
 SetEditPlaceholder("license","license")
 SetEditPlaceholder("forumurl","forumurl")
 SetEditPlaceholder("screenshot","screenshot")
-
 Gui, Show,, ASPDM - Package Creation
 ControlFocus, Button1, ahk_id %hGUI%
 return
 
 GuiClose:
 ExitApp
+
+InfoActive:
+GuiControlGet, FocusedControl, FocusV
+EditShowBalloonTip(FocusedControl,FocusedControl,Attributes[FocusedControl])
+return
+
+~Enter::
+~Tab::
+ToolTip
+return
+
+EditShowBalloonTip(h, title, text, timeout=2000) {
+    if control is not number
+        GuiControlGet, h, HWND, %h%
+    ControlGetPos,x,y,,t,,ahk_id %h%
+    ToolTip, %title%`n%text%, %x%, % (y+t)
+    SetTimer, RemoveToolTip, %timeout%
+    return
+
+    RemoveToolTip:
+    SetTimer, RemoveToolTip, Off
+    ToolTip
+    return
+}
