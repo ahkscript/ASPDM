@@ -29,19 +29,37 @@ Gui, Add, Text, x+4 yp+4 , ASPDM
 Gui, Font
 Gui, Add, Text, yp+5 x+12, AHKScript.org's Package/StdLib Distribution and Management
 
-Gui, Add, ListView, x16 y+16 w440 h200 Checked AltSubmit gListView_Events, Name|Maintainer|Last modified|Size ;Name|Type|FullName|Author
-Gui, Add, Button, y+4 w80 vInstallButton Disabled, Install
-Gui, Add, Button, yp x+2 w80 gGuiClose, Quit
-Gui, Add, Text, yp+6 x+180 vPackageCounter Right, Loading packages...
+Gui, +hwndhGUI +Resize +MinSize480x300
 
+;gui tabs
+Gui, Add, Tab2, x8 y+16 w456 h264 vTabs, Available|Updates|Installed|Create Package|Settings ;all-in-one GUI ?
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit gListView_Events vLV_A, Name|Maintainer|Last modified|Size ;Name|Type|FullName|Author
+	Gui, Add, Button, y+4 w80 vInstallButton Disabled, Install
+	Gui, Add, Button, yp x+2 vInstallFileButton, Install from file...
+	Gui, Add, Text, yp+6 x+172 vPackageCounter_A +Right, Loading packages...
+Gui, Tab, Updates
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit vLV_U, Updates
+	Gui, Add, Button, y+4 w80 Disabled vUpdateButton, Update
+	Gui, Add, Button, yp x+2 vUpdateFileButton, Update from file...
+	Gui, Add, Text, yp+6 x+172 +Right vPackageCounter_U, Loading packages...
+Gui, Tab, Installed
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit vLV_I, Installed
+	Gui, Add, Button, y+4 w80 Disabled vRemoveButton, Remove
+	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
+Gui, Tab, Create Package
+	Gui, Add, Text, y80 x24, Not implemented yet.
+Gui, Tab, Settings
+	Gui, Add, Text, y80 x24, Not implemented yet.
+	
 Gui, Show,, ASPDM - Package Listing
 
+Gui, ListView, LV_A
 Loop, Parse, data, `n
 {
 	a:=StrSplit(A_LoopField,A_Tab)
 	LV_Add("",a[1],a[2],a[3],a[4],a[5])
 	TotalItems:=LV_GetCount()
-	GuiControl,,PackageCounter, %TotalItems% Packages
+	GuiControl,,PackageCounter_A, %TotalItems% Packages
 }
 LV_ModifyCol(1,"144")
 LV_ModifyCol(2,"100")
@@ -64,6 +82,19 @@ if A_GuiEvent = I
 		GuiControl,,InstallButton,Install
 	}
 }
+return
+
+GuiSize:
+GuiControl,move,Tabs, % "w" (A_GuiWidth-16) " h" (A_GuiHeight-60)
+GuiSize_list:="AUI"
+Loop, Parse, GuiSize_list
+{
+	GuiControl,move,LV_%A_LoopField%, % "w" (A_GuiWidth-32) " h" (A_GuiHeight-124)
+	GuiControl,move,PackageCounter_%A_LoopField%, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-118)
+}
+GuiSize_list:="Install|InstallFile|Update|UpdateFile|Remove"
+Loop, Parse, GuiSize_list, |
+	GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-44)
 return
 
 GuiClose:
