@@ -32,7 +32,7 @@ Gui, Add, Text, yp+5 x+12, AHKScript.org's Package/StdLib Distribution and Manag
 Gui, +hwndhGUI +Resize +MinSize480x300
 
 ;gui tabs
-Gui, Add, Tab2, x8 y+16 w456 h264 vTabs, Available|Updates|Installed|Create Package|Settings ;all-in-one GUI ?
+Gui, Add, Tab2, x8 y+16 w456 h264 vTabs, Available|Updates|Installed|Settings
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit gListView_Events vLV_A, Name|Maintainer|Last modified|Size ;Name|Type|FullName|Author
 	Gui, Add, Button, y+4 w80 vInstallButton Disabled, Install
 	Gui, Add, Button, yp x+2 vInstallFileButton, Install from file...
@@ -46,8 +46,6 @@ Gui, Tab, Installed
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit vLV_I, Installed
 	Gui, Add, Button, y+4 w80 Disabled vRemoveButton, Remove
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
-Gui, Tab, Create Package
-	Gui, Add, Text, y80 x24, Not implemented yet.
 Gui, Tab, Settings
 	Gui, Add, Text, y80 x24, Not implemented yet.
 	
