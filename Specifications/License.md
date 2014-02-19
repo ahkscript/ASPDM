@@ -4,6 +4,6 @@ ahkscript.org Default Package License
 
 Copyright (c) `<year>` `<copyright holders>`
 
-All is permitted, to do anything with the Software as long as the above copyright notice and this permission notice are included in all copies or substantial portions of the Software.
+All is permitted, to do anything with the Software as long as appropriate attribution is given : the above copyright notice shall be included in substantial portions of the Software. The user is responsible to know about the following permission notice:
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND. THE AUTHORS OR COPYRIGHT HOLDERS CAN NOT BE HELD LIABLE FOR ANY REASON, DAMAGES, CLAIM OR LIABILITY WHATSOEVER.
