@@ -1,4 +1,17 @@
 ﻿;Package Builder
+;-------------------------------------------
+	#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+	; #Warn  ; Enable warnings to assist with detecting common errors.
+	SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
+	SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+
+package_dir := 0
+
+all_vars =
+(RTrim Join
+name|version|fullname|ahkbranch|ahkversion|ahkflavour|description|
+author|license|forumurl|screenshot|type|category
+)
 
 Attributes:={name:			"A short/abbreviated version of the full name (Should be a valid AutoHotkey identifier)"
 			,version:		"Package version (must follow AHK-flavored Semantic Versioning)"
@@ -27,6 +40,7 @@ Gui, Add, Picture, x12 y8 w32 h-1, res\ahk.png
 Gui, Add, Text, x+4 yp+4 , ASPDM
 Gui, Font
 Gui, Add, Text, yp+5 x+12, AHKScript.org's Package/StdLib Distribution and Management
+;Gui, Add, Picture, x12 y+16 w418 h1, res\greenpixel.bmp
 
 GuiLeft:=12
 GuiTab:=6
@@ -34,38 +48,47 @@ GuiDispBlock:="x" GuiLeft
 GuiDispInline:="yp x+" GuiTab
 Gui, +HWNDhGUI
 Gui, Add, Edit, vname %GuiDispBlock% gInfoActive,
-Gui, Add, Edit, vversion %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vversion %GuiDispInline% gInfoActive Limit10,
 Gui, Add, Edit, vfullname %GuiDispInline% gInfoActive,
 Gui, Add, Edit, vahkbranch %GuiDispBlock% gInfoActive,
-Gui, Add, Edit, vahkversion %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vahkversion %GuiDispInline% gInfoActive Limit10,
 Gui, Add, Edit, vahkflavour %GuiDispInline% gInfoActive,
-Gui, Add, Edit, vdescription %GuiDispBlock% gInfoActive,
-Gui, Add, Edit, vauthor %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vauthor %GuiDispBlock% gInfoActive,
 Gui, Add, Edit, vlicense %GuiDispInline% gInfoActive,
-Gui, Add, Edit, vforumurl %GuiDispBlock% gInfoActive,
-Gui, Add, Edit, vscreenshot %GuiDispInline% gInfoActive,
-Gui, Add, Text, yp+3 x+4, Type
-Gui, Add, DropDownList, vtype x+4 yp-3, Library|Tool|Other
-Gui, Add, Text, %GuiDispBlock%, Category
+Gui, Add, Edit, vforumurl %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vscreenshot %GuiDispBlock% gInfoActive,
+Gui, Add, Text, yp+3 x+4, Category
 Gui, Add, DropDownList, vCategory x+4 yp-3, %Categories%
-Gui, Add, Button, yp-1 x+24 Default gInfoActive, Select Files...
-Gui, Add, Button, %GuiDispInline% gInfoActive, Save JSON
-Gui, Add, Button, %GuiDispInline% gInfoActive, Build Package
+Gui, Add, Text, x+%GuiTab% yp+3, Type
+Gui, Add, DropDownList, vtype x+4 yp-3 w64, Library|Tool|Other
+Gui, Add, Text, %GuiDispBlock%, Description
+Gui, Add, Edit, vdescription y+4 %GuiDispBlock% gInfoActive +Multi w410 h86,
+
+Gui, Add, Button, %GuiDispBlock% Default gOpen, Open JSON
+Gui, Add, Button, %GuiDispInline% gSave, Save JSON
+Gui, Add, Button, %GuiDispInline% gBuild, Build Package
 
 ;Add placeholders - supported since Windows XP
-SetEditPlaceholder("name","name")
-SetEditPlaceholder("version","version")
-SetEditPlaceholder("type","type")
-SetEditPlaceholder("ahkbranch","ahkbranch")
-SetEditPlaceholder("ahkversion","ahkversion")
-SetEditPlaceholder("ahkflavour","ahkflavour")
-SetEditPlaceholder("fullname","fullname")
-SetEditPlaceholder("description","description")
-SetEditPlaceholder("author","author")
-SetEditPlaceholder("license","license")
-SetEditPlaceholder("forumurl","forumurl")
-SetEditPlaceholder("screenshot","screenshot")
+	SetEditPlaceholder("name","name")
+	SetEditPlaceholder("version","version")
+	SetEditPlaceholder("type","type")
+	SetEditPlaceholder("ahkbranch","ahkbranch")
+	SetEditPlaceholder("ahkversion","ahkversion")
+	SetEditPlaceholder("ahkflavour","ahkflavour")
+	SetEditPlaceholder("fullname","fullname")
+	SetEditPlaceholder("author","author")
+	SetEditPlaceholder("license","license")
+	SetEditPlaceholder("forumurl","forumurl")
+	SetEditPlaceholder("screenshot","screenshot")
+	;SetEditPlaceholder("description","description")
+
+Gui, Add, StatusBar,,
+SB_SetParts(320)
+SB_SetText("No JSON file opened.")
+SB_SetText("(Idle)",2)
+
 Gui, Show,, ASPDM - Package Creation
+GroupAdd, MainGUIWindows, ahk_id %hGUI%
 ControlFocus, Button1, ahk_id %hGUI%
 return
 
@@ -73,14 +96,15 @@ GuiClose:
 ExitApp
 
 InfoActive:
-GuiControlGet, FocusedControl, FocusV
-EditShowBalloonTip(FocusedControl,FocusedControl,Attributes[FocusedControl])
+	GuiControlGet, FocusedControl, FocusV
+	EditShowBalloonTip(FocusedControl,FocusedControl,Attributes[FocusedControl])
 return
 
-~Enter::
+#IfWinActive ahk_group MainGUIWindows
 ~Tab::
-ToolTip
+	ToolTip
 return
+#IfWinActive
 
 EditShowBalloonTip(h, title, text, timeout=2000) {
     if control is not number
@@ -95,3 +119,117 @@ EditShowBalloonTip(h, title, text, timeout=2000) {
     ToolTip
     return
 }
+
+Open:
+	Gui +OwnDialogs
+	FileSelectFile, _SelectedFile, 3, , Open a package JSON file, JSON file (*.json)
+	if _SelectedFile =
+		MsgBox, 64, , No package JSON file selected.
+	else
+	{
+		FileRead,json_s,%_SelectedFile%
+		oJSON:=Manifest_FromStr(json_s)
+		Loop, Parse, all_vars, |
+		{
+			if (A_LoopField = "type") or (A_LoopField = "category")
+				GuiControl,ChooseString,%A_LoopField%, % oJSON[A_LoopField]
+			else
+				GuiControl,,%A_LoopField%, % oJSON[A_LoopField]
+		}
+		SplitPath,_SelectedFile,,package_dir
+		SelectedFile:=_SelectedFile
+		SB_SetText("JSON: " . Util_ShortPath(SelectedFile))
+		SB_SetText("File opened.",2)
+		
+	}
+return
+
+Save:
+	Gui +OwnDialogs
+	FileSelectFile, _SelectedFile, S18, package.json, Save package JSON file, JSON file (*.json)
+	if _SelectedFile =
+		MsgBox, 64, , Package JSON file was not saved.
+	else
+	{
+		Gui, Submit, NoHide
+		;this part is redundant...
+		;suggest Manifest_FromObj()
+		mdata:=JSON_FromObj(Manifest_FromStr(JSON_FromObj({name: name
+			,version: version
+			,fullname: fullname
+			,ahkbranch: ahkbranch
+			,ahkversion: ahkversion
+			,ahkflavour: ahkflavour
+			,description: description
+			,author: author
+			,license: license
+			,forumurl: forumurl
+			,screenshot: screenshot
+			,type: type
+			,category: category})))
+			
+		try
+		{
+			;Overwrite "safely"
+			if (FileExist(_SelectedFile)) {
+				safety_bkp:=1
+				FileGetSize,safety_bkp_sz,%_SelectedFile%
+				tmpfile:=Util_TempFile()
+				FileMove,%_SelectedFile%,%tmpfile%
+			}
+			
+			FileAppend,%mdata%,%_SelectedFile%
+			FileGetSize,sz,%_SelectedFile%
+			if (!sz)
+				throw "Could not write/parse JSON!"
+			else
+			{
+				if (safety_bkp) {
+					;copy was successful, delete backup
+					FileDelete,%tmpfile%
+				}
+			}
+		}
+		catch e
+		{
+			if (safety_bkp) {
+				FileMove,%tmpfile%,%_SelectedFile%,1
+				FileGetSize,sz,%_SelectedFile%
+				if (sz != safety_bkp_sz)
+					MsgBox, 16, , All data was lost.`nErrorlevel: %nErrorlevel%
+			}
+			throw e
+		}
+		SplitPath,_SelectedFile,,package_dir
+		SelectedFile:=_SelectedFile
+		SB_SetText("JSON: " . Util_ShortPath(SelectedFile))
+		SB_SetText("File saved.",2)
+	}
+return
+
+Build:
+	Gui +OwnDialogs
+	if (!package_dir)
+		MsgBox, 48, , No package JSON file has been selected.`n(No JSON file was opened or saved.)`n`nPlease try again.
+	else if !FileExist(SelectedFile) || !FileExist(package_dir)
+		MsgBox, 64, , Please save the current JSON file to your package folder first.`n`nPlease try again.
+	else
+	{
+		FileSelectFile, outP, S18, package.ahkp, Save the built package file, AHKP file (*.ahkp)
+		if outP =
+			MsgBox, 64, , Package build canceled.
+		else
+		{
+			Gui +Disabled
+				SplitPath,outP,outP_file,outP_dir
+				SB_SetText("JSON: " . Util_ShortPath(SelectedFile))
+				SB_SetText("Building package...",2)
+				Package_Build(outP, package_dir, SelectedFile)
+				SB_SetText("Done.",2)
+			Gui -Disabled
+			MsgBox, 68, , Package built.`nOpen containing folder?
+			IfMsgBox, Yes
+				Run, Explorer.exe "%outP_dir%"
+		}
+	}
+return

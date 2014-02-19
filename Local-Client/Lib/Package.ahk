@@ -1,8 +1,11 @@
 ﻿
-Package_Build(outFile, baseDir)
+Package_Build(outFile, baseDir, jfile="")
 {
 	; Read manifest
-	man := Manifest_FromFile(baseDir "\package.json")
+	if (!jfile)
+		man := Manifest_FromFile(baseDir "\package.json")
+	else
+		man := Manifest_FromFile(jfile)
 	
 	tree := Util_DirTree(baseDir)
 	_Package_DumpTree(outFile, tree)

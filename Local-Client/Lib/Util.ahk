@@ -1,10 +1,28 @@
 ﻿
+Util_ShortPath(p,l=50) {
+	VarSetCapacity(_p, (A_IsUnicode?2:1)*StrLen(p) )
+	DllCall("shlwapi\PathCompactPathEx"
+		,"str", _p
+		,"str", p
+		,"uint", abs(l)
+		,"uint", 0)
+	return _p
+}
+
 Util_TempDir(outDir="")
 {
 	Loop
 		tempName := "~temp" A_TickCount ".tmp", tempDir := ((!outDir)?A_WorkingDir:outDir) "\" tempName
 	until !FileExist(tempDir)
 	return tempDir
+}
+
+Util_TempFile()
+{
+	Loop
+		tempName := "~temp" A_TickCount ".tmp"
+	until !FileExist(tempName)
+	return tempName
 }
 
 Util_FileAlign(f)
