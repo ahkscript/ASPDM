@@ -29,10 +29,10 @@ Gui, Add, Text, x+4 yp+4 , ASPDM
 Gui, Font
 Gui, Add, Text, yp+5 x+12, AHKScript.org's Package/StdLib Distribution and Management
 
-Gui, +hwndhGUI +Resize +MinSize480x300
+Gui, +hwndhGUI +Resize +MinSize480x304
 
 ;gui tabs
-Gui, Add, Tab2, x8 y+16 w456 h264 vTabs, Available|Updates|Installed|Settings
+Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|Settings
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit gListView_Events vLV_A, Name|Maintainer|Last modified|Size ;Name|Type|FullName|Author
 	Gui, Add, Button, y+4 w80 vInstallButton Disabled, Install
 	Gui, Add, Button, yp x+2 vInstallFileButton, Install from file...
@@ -48,10 +48,17 @@ Gui, Tab, Installed
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
 	Gui, Add, Text, y80 x24, Not implemented yet.
-	
-Gui, Show,, ASPDM - Package Listing
+Gui, Tab,
+	Gui, Add, Edit, vSearchBar y44 x272 w250,
+	SetEditPlaceholder("SearchBar","Search...")
+
+Gui, Show, w480, ASPDM - Package Listing
 
 Gui, ListView, LV_A
+LV_ModifyCol(1,"144")
+LV_ModifyCol(2,"100")
+LV_ModifyCol(3,"100")
+LV_ModifyCol(4,"Right 64")
 Loop, Parse, data, `n
 {
 	a:=StrSplit(A_LoopField,A_Tab)
@@ -59,10 +66,6 @@ Loop, Parse, data, `n
 	TotalItems:=LV_GetCount()
 	GuiControl,,PackageCounter_A, %TotalItems% Packages
 }
-LV_ModifyCol(1,"144")
-LV_ModifyCol(2,"100")
-LV_ModifyCol(3,"100")
-LV_ModifyCol(4,"Right 64")
 return
 
 ListView_Events:
@@ -82,8 +85,14 @@ if A_GuiEvent = I
 }
 return
 
+TabSwitch:
+	if (Tabs!="Settings")
+		Gui, ListView, % "LV_" SubStr(Tabs,1,1)
+return
+
 GuiSize:
 GuiControl,move,Tabs, % "w" (A_GuiWidth-16) " h" (A_GuiHeight-60)
+GuiControl,move,SearchBar, % "x" (A_GuiWidth-258)
 GuiSize_list:="AUI"
 Loop, Parse, GuiSize_list
 {
