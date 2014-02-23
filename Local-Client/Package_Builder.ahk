@@ -9,17 +9,17 @@ package_dir := 0
 
 all_vars =
 (RTrim Join
-name|version|fullname|ahkbranch|ahkversion|ahkflavour|description|
+id|version|name|ahkbranch|ahkversion|ahkflavour|description|
 author|license|forumurl|screenshot|type|category
 )
 
-Attributes:={name:			"A short/abbreviated version of the full name (Should be a valid AutoHotkey identifier)"
+Attributes:={id:			"A short name used for identification purposes (Should be a valid AutoHotkey identifier)"
 			,version:		"Package version (must follow AHK-flavored Semantic Versioning)"
 			,type:			"Package type (lib, tool, other)"
 			,ahkbranch:		"AutoHotkey branch the package is developed for (v1.1, v2-alpha, ahk_h, ...)"
 			,ahkversion:	"Version number of AutoHotkey the package was developed with"
 			,ahkflavour:	"Comma-separated list of supported AutoHotkey flavours (a32, u32, u64)"
-			,fullname:		"The full human-friendly name of the package"
+			,name:			"The human-friendly name of the package"
 			,description:	"Description of the package"
 			,author:		"The author(s) of the package"
 			,license:		"(Optional) Name of the license under which the package is released"
@@ -47,9 +47,9 @@ GuiTab:=6
 GuiDispBlock:="x" GuiLeft
 GuiDispInline:="yp x+" GuiTab
 Gui, +HWNDhGUI
-Gui, Add, Edit, vname %GuiDispBlock% gInfoActive,
+Gui, Add, Edit, vid %GuiDispBlock% gInfoActive,
 Gui, Add, Edit, vversion %GuiDispInline% gInfoActive Limit10,
-Gui, Add, Edit, vfullname %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vname %GuiDispInline% gInfoActive,
 Gui, Add, Edit, vahkbranch %GuiDispBlock% gInfoActive,
 Gui, Add, Edit, vahkversion %GuiDispInline% gInfoActive Limit10,
 Gui, Add, Edit, vahkflavour %GuiDispInline% gInfoActive,
@@ -69,13 +69,13 @@ Gui, Add, Button, %GuiDispInline% gSave, Save JSON
 Gui, Add, Button, %GuiDispInline% gBuild, Build Package
 
 ;Add placeholders - supported since Windows XP
-	SetEditPlaceholder("name","name")
+	SetEditPlaceholder("id","id")
 	SetEditPlaceholder("version","version")
 	SetEditPlaceholder("type","type")
 	SetEditPlaceholder("ahkbranch","ahkbranch")
 	SetEditPlaceholder("ahkversion","ahkversion")
 	SetEditPlaceholder("ahkflavour","ahkflavour")
-	SetEditPlaceholder("fullname","fullname")
+	SetEditPlaceholder("name","name")
 	SetEditPlaceholder("author","author")
 	SetEditPlaceholder("license","license")
 	SetEditPlaceholder("forumurl","forumurl")
@@ -106,7 +106,8 @@ return
 return
 #IfWinActive
 
-EditShowBalloonTip(h, title, text, timeout=2000) {
+EditShowBalloonTip(h, title, text, timeout := 2000)
+{
     if control is not number
         GuiControlGet, h, HWND, %h%
     ControlGetPos,x,y,,t,,ahk_id %h%
@@ -154,9 +155,9 @@ Save:
 		Gui, Submit, NoHide
 		;this part is redundant...
 		;suggest Manifest_FromObj()
-		mdata:=JSON_FromObj(Manifest_FromStr(JSON_FromObj({name: name
+		mdata:=JSON_FromObj(Manifest_FromStr(JSON_FromObj({id: id
 			,version: version
-			,fullname: fullname
+			,name: name
 			,ahkbranch: ahkbranch
 			,ahkversion: ahkversion
 			,ahkflavour: ahkflavour
@@ -171,7 +172,8 @@ Save:
 		try
 		{
 			;Overwrite "safely"
-			if (FileExist(_SelectedFile)) {
+			if FileExist(_SelectedFile)
+			{
 				safety_bkp:=1
 				FileGetSize,safety_bkp_sz,%_SelectedFile%
 				tmpfile:=Util_TempFile()
@@ -184,15 +186,15 @@ Save:
 				throw "Could not write/parse JSON!"
 			else
 			{
-				if (safety_bkp) {
+				if (safety_bkp)
 					;copy was successful, delete backup
 					FileDelete,%tmpfile%
-				}
 			}
 		}
 		catch e
 		{
-			if (safety_bkp) {
+			if (safety_bkp)
+			{
 				FileMove,%tmpfile%,%_SelectedFile%,1
 				FileGetSize,sz,%_SelectedFile%
 				if (sz != safety_bkp_sz)

@@ -33,15 +33,15 @@ Manifest_FromStr(tman)
 	out := {}
 	
 	; Validation
+	_ManValidateField(out, man, "id")
+	if !_IsValidAHKIdentifier(out.id)
+		throw Exception("Invalid package identifier (should be a valid AHK identifier): '" out.id "'")
 	_ManValidateField(out, man, "name")
-	if !_IsValidAHKIdentifier(out.name)
-		throw Exception("Invalid package name (should be a valid AHK identifier): '" out.name "'")
 	_ManValidateField(out, man, "version")
 	_ManValidateField(out, man, "type")
 	_ManValidateField(out, man, "ahkbranch")
 	_ManValidateField(out, man, "ahkversion")
 	_ManValidateField(out, man, "ahkflavour")
-	_ManValidateField(out, man, "fullname")
 	_ManValidateField(out, man, "author")
 	_ManOptionalField(out, man, "description")
 	_ManOptionalField(out, man, "license", "ASPDM Default License")

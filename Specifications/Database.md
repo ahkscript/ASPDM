@@ -10,13 +10,13 @@ _**All attributes are mandatory, unless otherwise stated.**_
 
 | Attribute     | Description                                                                            |
 |---------------|----------------------------------------------------------------------------------------|
-| name          | A short/abbreviated version of the full name (Should be a valid AutoHotkey identifier) |
+| id            |A short name used for identification purposes (Should be a valid AutoHotkey identifier) |
 | version       | Package version (must follow AHK-flavored Semantic Versioning)                         |
 | type          | Package type (`lib`, `tool`, `other`)                                                  |
 | ahkbranch     | AutoHotkey branch the package is developed for (`v1.1`, `v2-alpha`, `ahk_h`, ...)      |
 | ahkversion    | Version number of AutoHotkey the package was developed with                            |
 | ahkflavour    | Comma-separated list of supported AutoHotkey flavours (`a32`, `u32`, `u64`)            |
-| fullname      | The full human-friendly name of the package                                            |
+| name          | The human-friendly name of the package                                                 |
 | description   | Description of the package                                                             |
 | author        | The author(s) of the package                                                           |
 | license       | (**Optional**) Name of the license under which the package is released                 |
