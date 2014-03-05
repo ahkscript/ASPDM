@@ -43,10 +43,11 @@ Submission
 ----------
 
 - Any package can be submitted to the repository, and should meet all mandatory requirements in the Package Quality Guidelines section.
-- All packages should be submitted with a license. Those submitted without a license are assumed to be released under the ahkscript.org Default Package License.
+- All packages should be submitted with a license. Those submitted without a license are assumed to be released under the [ahkscript.org Default Package License](License.md).
 - Package author is included in the package metadata.
 - (In case of moderation queue):
   - Moderators will peer review the package for the above guidelines.
+  - Package Metadata will be updated if need be (e.g. `isstdlib`).
   - Any issues found can be fixed and the package reevaluated.
   - Two peer reviews to make sure any errors are caught early on.
   - Eighty (?) percent majority approval for new packages to be added into ahkscript.org repository.

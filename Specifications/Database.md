@@ -24,7 +24,7 @@ _**All attributes are mandatory, unless otherwise stated.**_
 | forumurl      | (**Optional**, **Recommended**) ahkscript.org forum topic URL                            |
 | screenshot    | (**Optional**) Filename of the screenshot to be displayed                                |
 
-_**Licenses:**_ packages submitted to ahkscript.org without the license attribute filled in are assumed to be released under the ahkscript.org Default Package License.
+_**Licenses:**_ packages submitted to ahkscript.org without the license attribute filled in are assumed to be released under the [ahkscript.org Default Package License](License.md).
 
 ### Package Repository-only attributes
 
@@ -54,5 +54,7 @@ _**Licenses:**_ packages submitted to ahkscript.org without the license attribut
 Package File Format
 -------------------
 
-[to do] .ahkp file extension, etc...
-Compression method?...
+The packages will have the `.ahkp` file extension.
+The compression format is `LZNT` (a.k.a [LZ compression](http://msdn.microsoft.com/library/ff552127)).
+The [Magic Number](https://en.wikipedia.org/wiki/Magic_number_(programming)) is `AHKPKG00`.
+The uncompressed `JSON` metadata is stored at offset `0xC`, with its string length stored as a `UInt` at offset `0x8` (Right after the magic number).
