@@ -122,8 +122,11 @@ try {
 	// You should name it uniquely.
 	// DO NOT USE $_FILES['file']['name'] WITHOUT ANY VALIDATION !!
 	// On this example, obtain safe unique name from its binary data.
-	$filename = sprintf('%s.%s',sha1_file($_FILES['file']['tmp_name']),$ext);
-	echo 'File is uploaded successfully.';
+	$filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
+	if (move_uploaded_file($_FILES['file']['tmp_name'],"../tmp_packs/" . $filename))
+		echo 'File is uploaded successfully.';
+	else
+		throw new RuntimeException('FileMove error.');
 
 } catch (RuntimeException $e) {
 
