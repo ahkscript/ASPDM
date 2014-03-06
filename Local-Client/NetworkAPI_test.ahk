@@ -38,7 +38,7 @@ API_info(file,item="") {
 }
 
 API_Get(file) {
-	URLDownloadToFile,http://packs.aspdm.1eko.com/%file%, % t:=Util_TempFile()
+	DownloadFile("http://packs.aspdm.1eko.com/" file,t:=Util_TempFile())
 	return t
 }
 
@@ -52,12 +52,17 @@ LV_ModifyCol(3,"80")
 LV_ModifyCol(4,"290")
 packs:=API_list()
 total:=packs.MaxIndex()
+Progress CWFDFDB1 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
+Progress Show
 Loop % total
 {
 	info:=JSON_ToObj(API_info(packs[A_Index]))
 	LV_Add("",packs[A_Index],info["name"],info["author"],info["description"])
+	load_progress(packs[A_Index],A_Index,total)
 }
 LV_Delete(1)
+Sleep 100
+Progress, Off
 return
 
 ListViewEvents:
@@ -88,4 +93,9 @@ return
 
 GuiClose:
 ExitApp
+
+load_progress(t,c,f) {
+	p:=Round((c/f)*100)
+	Progress, %p% , Loading:  %c% / %f% items  [ %p%`% ] , %t%
+}
 
