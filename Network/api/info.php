@@ -4,18 +4,14 @@
 			echo "ERROR: Invalid parameters";
 			return 0;
 		}
-		$handle = fopen("../packs/" . str_replace("./","",$file), "r");
-		fseek($handle,8);
-		$bytes = strrev(fread($handle,4));
-		
-		$size = "0x";
-		for ($i = 0; $i < 4; $i++) {
-			$v = dechex(ord($bytes[$i]));
-			if (strlen($v)==1)
-				$v = "0" . $v;
-			$size = $size . $v;
+		$file = "../packs/" . str_replace("./","",$file);
+		if (!file_exists($file)) {
+			echo "ERROR: File does not exist.";
+			return 0;
 		}
-		$size = hexdec($size);
+		$handle = fopen($file, "r");
+		fseek($handle,8);
+		$size = fread_UINT($handle);
 		if ($content_item==NULL)
 			echo fread($handle,$size);
 		else
@@ -28,6 +24,18 @@
 				echo $j_item;
 		}
 		return 1;
+	}
+	
+	function fread_UINT($handle) {
+		$bytes = strrev(fread($handle,4));
+		$size = "0x";
+		for ($i = 0; $i < 4; $i++) {
+			$v = dechex(ord($bytes[$i]));
+			if (strlen($v)==1)
+				$v = "0" . $v;
+			$size = $size . $v;
+		}
+		return hexdec($size);
 	}
 	
 	$f = (isset($_GET["f"])) ? htmlspecialchars($_GET["f"]) : NULL;
