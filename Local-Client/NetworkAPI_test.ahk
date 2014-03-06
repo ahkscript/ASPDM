@@ -50,6 +50,10 @@ LV_ModifyCol(1,"100")
 LV_ModifyCol(2,"120")
 LV_ModifyCol(3,"80")
 LV_ModifyCol(4,"290")
+if !Ping() {
+	MsgBox, 16, , Network Error : Check your internet connection.`nThe program will now exit.
+	ExitApp
+}
 packs:=API_list()
 total:=packs.MaxIndex()
 Progress CWFDFDB1 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
