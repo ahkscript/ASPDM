@@ -24,7 +24,7 @@ u2v(u){
 	URLDownloadToFile,%u%, % t:=Util_TempFile()
 	FileRead,x,%t%
 	FileDelete,%t%
-	return %x%
+	return x
 }
 
 API_list() {
@@ -37,7 +37,55 @@ API_info(file,item="") {
 	return u2v("http://api-php.aspdm.1eko.com/info.php?f=" . file . "&c=" . item)
 }
 
+API_Get(file) {
+	URLDownloadToFile,http://packs.aspdm.1eko.com/%file%, % t:=Util_TempFile()
+	return t
+}
+
+Gui, Add, ListView, x4 y4 w500 h250 gListViewEvents, File|Name|Author|Description
+Gui, Show
+
+LV_Add("","Downloading...")
+LV_ModifyCol(1,"100")
+LV_ModifyCol(2,"120")
+LV_ModifyCol(3,"80")
+LV_ModifyCol(4,"290")
 packs:=API_list()
 total:=packs.MaxIndex()
-item:=API_info(packs[1],"id")
-MsgBox There is currently a total of %total% package(s).`nThe 'id' of the first item in the package list is : %item%
+Loop % total
+{
+	info:=JSON_ToObj(API_info(packs[A_Index]))
+	LV_Add("",packs[A_Index],info["name"],info["author"],info["description"])
+}
+LV_Delete(1)
+return
+
+ListViewEvents:
+if A_GuiEvent = DoubleClick
+{
+	LV_GetText(FileName,A_EventInfo,1)
+	LV_GetText(pack_name,A_EventInfo,2)
+	LV_GetText(pack_desc,A_EventInfo,4)
+	MsgBox, 68, , Download Package?`nName: %pack_name%`nDesc: %pack_desc%
+	IfMsgBox, Yes
+	{
+		Gui +OwnDialogs
+		FileSelectFile, _SelectedFile, S18, %FileName%, Save package, AHKP file (*.ahkp)
+		if _SelectedFile =
+			MsgBox, 64, , Package file was not saved.
+		else
+		{
+			tmp_file:=API_Get(FileName)
+			FileMove,%tmp_file%,%_SelectedFile%,1
+			if ( (!FileExist(tmp_file)) && (FileExist(_SelectedFile)) )
+				MsgBox, 64, , Download Successful
+			else
+				MsgBox, 16, , Error: Download Unsuccessful
+		}
+	}
+}
+return
+
+GuiClose:
+ExitApp
+

@@ -12,7 +12,7 @@ Util_ShortPath(p,l=50) {
 Util_TempDir(outDir="")
 {
 	Loop
-		tempName := "~temp" A_TickCount ".tmp", tempDir := ((!outDir)?A_WorkingDir:outDir) "\" tempName
+		tempName := "~temp" A_TickCount ".tmp", tempDir := ((!outDir)?A_Temp:outDir) "\" tempName
 	until !FileExist(tempDir)
 	return tempDir
 }
@@ -20,7 +20,7 @@ Util_TempDir(outDir="")
 Util_TempFile()
 {
 	Loop
-		tempName := "~temp" A_TickCount ".tmp"
+		tempName := A_Temp "\~temp" A_TickCount ".tmp"
 	until !FileExist(tempName)
 	return tempName
 }
