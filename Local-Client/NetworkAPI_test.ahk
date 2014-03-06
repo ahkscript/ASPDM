@@ -43,7 +43,7 @@ API_Get(file) {
 }
 
 Gui, Add, ListView, x4 y4 w500 h250 gListViewEvents, File|Name|Author|Description
-Gui, Show
+Gui, Show,,%A_scriptName% - DoubleClick to Download...
 
 LV_Add("","Downloading...")
 LV_ModifyCol(1,"100")
