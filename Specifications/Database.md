@@ -37,19 +37,19 @@ _**Licenses:**_ packages submitted to ahkscript.org without the license attribut
 
 | Categories  |             |                      |
 |-------------|-------------|----------------------|
-| Arrays      | Graphics    | Objects              |
-| Call        | Gui         | Parser               |
-| COM         | INI         | Process              |
-| Console     | Hardware    | Regular Expressions  |
-| Control     | Hash        | Sound                |
-| Dynamic     | Hotstrings  | Strings              |
-| Database    | JSON        | System               |
-| DateTime    | Keyboard    | Text                 |
-| Editor      | Math        | Variables            |
-| Encryption  | Media       | Window               |
-| File        | Memory      | Windows              |
+| Arrays      | Graphics    | Network              |
+| Call        | Gui         | Objects              |
+| COM         | INI         | Parser               |
+| Console     | Hardware    | Process              |
+| Control     | Hash        | Regular Expressions  |
+| Dynamic     | Hotstrings  | Sound                |
+| Database    | JSON        | Strings              |
+| DateTime    | Keyboard    | System               |
+| Editor      | Math        | Text                 |
+| Encryption  | Media       | Variables            |
+| File        | Memory      | Window               |
 | FileSystem  | Menu        | YAML                 |
-| Format      | Network     | Other                |
+| Format      | MS Windows  | Other                |
 
 Package File Format
 -------------------

@@ -30,8 +30,8 @@ Categories =
 Arrays|Call|COM|Console|Control|Dynamic|Database|DateTime|
 Editor|Encryption|File|FileSystem|Format|Graphics|Gui|INI|
 Hardware|Hash|Hotstrings|JSON|Keyboard|Math|Media|Memory|
-Menu|Network|Objects|Parser|Process|Regular Expressions|Sound|
-Strings|System|Text|Variables|Window|Windows|YAML|Other
+Menu|MS Windows|Network|Objects|Parser|Process|Regular Expressions|
+Sound|Strings|System|Text|Variables|Window|YAML|Other
 )
 
 ; "Standard" ASPDM Header
