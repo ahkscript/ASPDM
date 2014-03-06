@@ -4,7 +4,7 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 outP := A_ScriptDir "\package_test.ahkp"
-testDir := A_ScriptDir "\package_test"
+testDir := A_ScriptDir "\Test_Packages\samples"
 tempDir := Util_TempDir()
 
 Package_Build(outP, testDir)
