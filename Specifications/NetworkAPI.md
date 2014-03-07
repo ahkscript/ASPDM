@@ -11,7 +11,7 @@ See https://trello.com/c/V27ITnHO/16-web-server-api
 	
 `list.php` - _List all files in "packs/"_  
 	**Usage:** no arguments  
-	Returns a list of all packages seperated by ``n`  
+	Returns a list of all packages seperated by `\n` (line feed)  
 	
 `submit.php` - _Used for the online upload form_  
 	**Usage:** no arguments  
