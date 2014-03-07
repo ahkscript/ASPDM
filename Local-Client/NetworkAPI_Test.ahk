@@ -55,7 +55,7 @@ if !Ping() {
 	MsgBox, 16, , Network Error : Check your internet connection.`nThe program will now exit.
 	ExitApp
 }
-Progress CWFDFDB1 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
+Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
 Progress Show
 packs:=API_list()
 total:=packs.MaxIndex()
