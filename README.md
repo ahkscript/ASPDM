@@ -7,13 +7,14 @@ http://ahkscript.github.io/ASPDM/Network/
 **Quick Info**  
 
 _Local-Client_ : The local package manager  
-_Network_ : The Web Frontend  
+_Network_ : The Web Frontend and NetworkAPI  
   
 **Specifications**  
 
 _Guidelines_ : [Specifications/Guidelines.md](Specifications/Guidelines.md)  
 _Database_ : [Specifications/Database.md](Specifications/Database.md)  
 _License_ : [Specifications/License.md](Specifications/License.md)  
+_NetworkAPI_ : [Specifications/NetworkAPI.md](Specifications/NetworkAPI.md)  
   
 **Join the Conversation!**  
   

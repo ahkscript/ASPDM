@@ -24,7 +24,7 @@ DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True) {
           ;Store the header which holds the file size in a variable:
             FinalSize := WebRequest.GetResponseHeader("Content-Length")
           ;Create the progressbar and the timer
-            Progress, CWFDFDB1 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, , Downloading..., %_surl%
+            Progress, CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, , Downloading..., %_surl%
             SetTimer, __UpdateProgressBar, 100
       }
     ;Download the file

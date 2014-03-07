@@ -1,25 +1,9 @@
-﻿;placeholder script
-;SHould maybe, be made as fork, mod pAHKLight?
+﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+#Warn  ; Recommended for catching common errors.
+SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+#Include Lib\NetworkAPI.ahk
 #Include Lib\LV_Colors.ahk
-
-data =
-(join`n
-Package A00001	Bob	2013-12-08 21:18	176 Kb
-Package B00002	Jack	2013-12-08 21:18	224 Kb
-Package C00003	George	2013-12-08 21:20	172 Kb
-Package D00004	Sarah	2013-12-08 21:20	216 Kb
-Package E00005	John	2013-10-11 17:46	176 Kb
-Package F00006	Lisa	2013-10-11 17:45	224 Kb
-Package G00007	Charles	2013-10-11 17:44	172 Kb
-Package H00008	Jacob	2013-10-11 17:44	172 Kb
-Package I00009	Alexandra	2013-10-11 17:44	172 Kb
-Package J00010	Andy	2013-10-11 17:44	216 Kb
-Package K00011	Lisa	2013-10-11 17:45	224 Kb
-Package L00012	Andy	2013-10-11 17:44	216 Kb
-Package M00013	Charles	2013-10-11 17:44	172 Kb
-Package N00014	George	2013-12-08 21:20	172 Kb
-Package O00015	Jack	2013-12-08 21:18	224 Kb
-)
 
 CheckedItems:=0
 
@@ -34,17 +18,17 @@ Gui, +hwndhGUI +Resize +MinSize480x304
 
 ;gui tabs
 Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|Settings
-	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid gListView_Events vLV_A hwndhLV_A, Name|Maintainer|Last modified|Size
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_A hwndhLV_A, File|Name|Version|Author|Description
 	Gui, Add, Button, y+4 w80 vInstallButton Disabled, Install
 	Gui, Add, Button, yp x+2 vInstallFileButton, Install from file...
 	Gui, Add, Text, yp+6 x+172 vPackageCounter_A +Right, Loading packages...
 Gui, Tab, Updates
-	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid vLV_U hwndhLV_U, Updates
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi vLV_U hwndhLV_U, File|Name|Installed Version|Latest Version
 	Gui, Add, Button, y+4 w80 Disabled vUpdateButton, Update
 	Gui, Add, Button, yp x+2 vUpdateFileButton, Update from file...
 	Gui, Add, Text, yp+6 x+172 +Right vPackageCounter_U, Loading packages...
 Gui, Tab, Installed
-	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid vLV_I hwndhLV_I, Installed
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi vLV_I hwndhLV_I, File|Name|Installed Version
 	Gui, Add, Button, y+4 w80 Disabled vRemoveButton, Remove
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
@@ -59,24 +43,63 @@ Gui, Tab,
 
 Gui, Show, w480, ASPDM - Package Listing
 
+Gui, ListView, LV_U
+LV_ModifyCol(1,"100")
+LV_ModifyCol(2,"170")
+LV_ModifyCol(3,"90")
+LV_ModifyCol(4,"80")
+Gui, ListView, LV_I
+LV_ModifyCol(1,"100")
+LV_ModifyCol(2,"250")
+LV_ModifyCol(3,"90")
 Gui, ListView, LV_A
 _selectedlist:="LV_A"
 _selectedlistH:=hLV_A
-LV_ModifyCol(1,"144")
-LV_ModifyCol(2,"100")
-LV_ModifyCol(3,"100")
-LV_ModifyCol(4,"Right 64")
-Loop, Parse, data, `n
-{
-	a:=StrSplit(A_LoopField,A_Tab)
-	LV_Add("",a[1],a[2],a[3],a[4],a[5])
-	TotalItems:=LV_GetCount()
+LV_Add("","Downloading...")
+LV_ModifyCol(1,"100")
+LV_ModifyCol(2,"120")
+LV_ModifyCol(3,"60")
+LV_ModifyCol(4,"80")
+LV_ModifyCol(5,"300")
+if Ping() {
+	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
+	Progress Show
+	packs:=API_list()
+	TotalItems:=packs.MaxIndex()
+	Loop % TotalItems
+	{
+		info:=JSON_ToObj(API_info(packs[A_Index]))
+		LV_Add("",packs[A_Index],info["name"],info["version"],info["author"],info["description"])
+		load_progress(packs[A_Index],A_Index,TotalItems)
+	}
 	GuiControl,,PackageCounter_A, %TotalItems% Packages
+	LV_Delete(1)
+	Sleep 100
+	Progress, Off
+	LV_Colors.OnMessage()
+	LV_Colors.Attach(hLV_A,1,0,0)
+	LV_Colors.Attach(hLV_U,1,0,0)
 }
-LV_Colors.OnMessage()
-LV_Colors.Attach(hLV_A,1,0)
-LV_Colors.Attach(hLV_U,1,0)
-LV_Colors.Attach(hLV_I,1,0)
+else
+{
+	LV_Delete(1)
+	LV_Colors.OnMessage()
+	tmp__:="AU"
+	Loop, Parse, tmp__
+	{
+		Gui, ListView, LV_%A_loopField%
+		GuiControl,-Checked,LV_%A_loopField%
+		LV_Add("","Offline mode, No internet connection detected...")
+		LV_ModifyCol(1,"300")
+		LV_ModifyCol(2,"0")
+		LV_ModifyCol(3,"0")
+		LV_ModifyCol(4,"0")
+		LV_ModifyCol(5,"0")
+		LV_Colors.Attach(hLV_%A_loopfield%,1,0,1)
+	}
+	Gui, ListView, LV_A
+}
+LV_Colors.Attach(hLV_I,1,0,0)
 return
 
 ListView_Events:
@@ -86,10 +109,11 @@ if A_GuiEvent = I
 		CheckedItems+=1
 	if InStr(ErrorLevel, "c", true)
 		CheckedItems-=1
-	if (CheckedItems) {
+	if (CheckedItems>0) {
 		GuiControl,Enable,InstallButton
 		GuiControl,,InstallButton,Install (%CheckedItems%)
 	} else {
+		CheckedItems:=0
 		GuiControl,Disable,InstallButton
 		GuiControl,,InstallButton,Install
 	}
@@ -126,10 +150,13 @@ Search:
 		{
 			LV_GetText(ltmpA, A_Index,1)
 			LV_GetText(ltmpB, A_Index,2)
+			LV_GetText(ltmpC, A_Index,3)
+			LV_GetText(ltmpD, A_Index,4)
+			LV_GetText(ltmpE, A_Index,5)
 			Query_Item_match:=0
 			for each, Query_Item in QueryList
 			{
-				if InStr(ltmpA ltmpB, Query_Item, 0)
+				if InStr(ltmpA ltmpB ltmpC ltmpD ltmpE, Query_Item, 0)
 				{
 					Query_Item_match+=1
 				}
@@ -161,3 +188,9 @@ return
 
 GuiClose:
 ExitApp
+
+load_progress(t,c,f) {
+	p:=Round((c/f)*100)
+	Progress, %p% , Loading:  %c% / %f% items  [ %p%`% ] , %t%
+}
+

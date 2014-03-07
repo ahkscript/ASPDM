@@ -75,7 +75,7 @@ if A_GuiEvent = DoubleClick
 {
 	LV_GetText(FileName,A_EventInfo,1)
 	LV_GetText(pack_name,A_EventInfo,2)
-	LV_GetText(pack_desc,A_EventInfo,4)
+	LV_GetText(pack_desc,A_EventInfo,5)
 	MsgBox, 68, , Download Package?`nName: %pack_name%`nDesc: %pack_desc%
 	IfMsgBox, Yes
 	{
