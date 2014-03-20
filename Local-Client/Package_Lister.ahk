@@ -19,17 +19,17 @@ Gui, +hwndhGUI +Resize +MinSize480x304
 ;gui tabs
 Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|Settings
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_A hwndhLV_A, File|Name|Version|Author|Description
-	Gui, Add, Button, y+4 w80 vInstallButton Disabled, Install
-	Gui, Add, Button, yp x+2 vInstallFileButton, Install from file...
+	Gui, Add, Button, y+4 w80 vInstallButton Disabled gInstall, Install
+	Gui, Add, Button, yp x+2 vInstallFileButton gInstallFile, Install from file...
 	Gui, Add, Text, yp+6 x+172 vPackageCounter_A +Right, Loading packages...
 Gui, Tab, Updates
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi vLV_U hwndhLV_U, File|Name|Installed Version|Latest Version
-	Gui, Add, Button, y+4 w80 Disabled vUpdateButton, Update
-	Gui, Add, Button, yp x+2 vUpdateFileButton, Update from file...
+	Gui, Add, Button, y+4 w80 Disabled vUpdateButton gUpdate, Update
+	Gui, Add, Button, yp x+2 vUpdateFileButton gUpdateFile, Update from file...
 	Gui, Add, Text, yp+6 x+172 +Right vPackageCounter_U, Loading packages...
 Gui, Tab, Installed
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi vLV_I hwndhLV_I, File|Name|Installed Version
-	Gui, Add, Button, y+4 w80 Disabled vRemoveButton, Remove
+	Gui, Add, Button, y+4 w80 Disabled vRemoveButton gRemove, Remove
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
 	Gui, Add, Checkbox, y78 x20 Checked, Hide Installed Packages in Available tab
@@ -89,6 +89,7 @@ else
 	{
 		Gui, ListView, LV_%A_loopField%
 		GuiControl,-Checked,LV_%A_loopField%
+		GuiControl,,PackageCounter_%A_loopField%, Offline mode
 		LV_Add("","Offline mode, No internet connection detected...")
 		LV_ModifyCol(1,"300")
 		LV_ModifyCol(2,"0")
@@ -188,6 +189,16 @@ return
 
 GuiClose:
 ExitApp
+
+Install:
+InstallFile:
+Update:
+UpdateFile:
+/*
+	Installation process
+*/
+Remove:
+return
 
 load_progress(t,c,f) {
 	p:=Round((c/f)*100)
