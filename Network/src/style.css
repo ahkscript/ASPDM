@@ -70,11 +70,6 @@ h1 {
 	height: 48px;
 }
 
-#logolink {
-	border:0;
-	padding:0;
-}
-
 a {
 	text-decoration: none;
 }
@@ -85,7 +80,7 @@ a:active {
 }
 
 a:hover {
-	background-color: #D0D0FF;
+	background-color: #848484;
 }
 
 #headerlinks {
