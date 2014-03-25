@@ -196,3 +196,11 @@ input.big:active {
 	position:relative;
 	z-index:2;
 }
+
+.dialog_description {
+	height:128px;
+	overflow:auto;
+	background-color:beige;
+	padding: 4px;
+}
+

@@ -21,6 +21,21 @@
 				Avgrund.hide();
 			}
 		</script>
+		<style>
+			/* popup styling */
+			.avgrund-popup p {
+				margin: 0 0 4px;
+			}
+			
+			.dialog_description {
+				margin-top: 8px !important;
+			}
+		
+			/* avgrund has bugs... this is a temp bugfix */
+			.avgrund-popup-animate {
+				z-index: 99;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -46,7 +61,7 @@
                     $j_id = $obj->id;
                     $j_type = $obj->type;
                     $j_category = $obj->category;
-                    $j_description = $obj->description;
+                    $j_description = html_linefmt($obj->description);
                     $j_size = formatSizeUnits(filesize($file));
     ?>
     	<aside id="<?=$j_id?>" class="avgrund-popup">
@@ -55,7 +70,7 @@
             <p>Type              : <?=$j_type?></p>
             <p>Category          : <?=$j_category?></p>
             <p>Size              : <?=$j_size?></p>
-            <p><?=$j_description?></p>
+            <p class="dialog_description"><?=$j_description?></p>
 <!--<button style:"text-align: right;" onclick="javascript:closeDialog();">Close</button>-->
 		</aside>
     <?php
@@ -184,7 +199,14 @@
 		}
 		return hexdec($size);
 	}
-
+	
+	function html_linefmt($str) {
+		$order   = array("\r\n", "\n", "\r");
+		$replace = '<br />';
+		// Processes \r\n's first so they aren't converted twice.
+		return str_replace($order, $replace, $str);
+	}
+	
     function formatSizeUnits($bytes) {
 		if ($bytes >= 1073741824)
 		{
