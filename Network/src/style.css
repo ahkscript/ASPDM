@@ -79,9 +79,12 @@ a:active {
 	top: 1px;
 }
 
+/*
 a:hover {
+	background-color: #D0D0FF;
 	background-color: #848484;
 }
+*/
 
 #headerlinks {
 	float: right;
