@@ -69,7 +69,7 @@
         
 		<div class="container">
 			
-			<h1><img id="logo" src="src/ahk.png"> ahkscript.org - Package/StdLib Distribution and Management</h1>
+			<h1><a href="http://ahkscript.org" id="logolink"><img id="logo" src="src/ahk.png"></a> ahkscript.org - Package/StdLib Distribution and Management</h1>
 			<div id="body">
 
 				<div id="headerlinks">
