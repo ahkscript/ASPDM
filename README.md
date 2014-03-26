@@ -24,4 +24,4 @@ _NetworkAPI_ : [Specifications/NetworkAPI.md](Specifications/NetworkAPI.md)
   
 **Contributors (Thanks)**  
   
-@george2, @perfaram, @fincs, @joedf
+[george2](https://github.com/george2), [perfaram](https://github.com/perfaram), [fincs](https://github.com/fincs), [joedf](https://github.com/joedf)
