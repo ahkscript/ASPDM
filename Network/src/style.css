@@ -198,7 +198,7 @@ input.big:active {
 }
 
 .dialog_description {
-	height:128px;
+	height:230px;
 	overflow:auto;
 	background-color:beige;
 	padding: 4px;
