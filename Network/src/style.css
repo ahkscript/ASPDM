@@ -208,5 +208,4 @@ input.big:active {
 p.important {
 	font-style: italic;
 	color: red;
-	text-transform: capitalize;
 }
