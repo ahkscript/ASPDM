@@ -156,7 +156,7 @@ Save:
 		Gui, Submit, NoHide
 		;this part is redundant...
 		;suggest Manifest_FromObj()
-		mdata:=JSON_FromObj(Manifest_FromStr(JSON_FromObj({id: id
+		mdata:=JSON_FromObj(Manifest_FromStr(JSON_FromObj({id: RegExReplace(id,"\W")
 			,version: version
 			,name: name
 			,ahkbranch: ahkbranch
@@ -219,7 +219,9 @@ Build:
 		MsgBox, 64, , Please save the current JSON file to your package folder first.`n`nPlease try again.
 	else
 	{
-		FileSelectFile, outP, S18, package.ahkp, Save the built package file, AHKP file (*.ahkp)
+		jdata:=Manifest_FromFile(SelectedFile)
+		_package_out_name := RegExReplace(jdata.id,"\W")
+		FileSelectFile, outP, S18, %_package_out_name%.ahkp, Save the built package file, AHKP file (*.ahkp)
 		if outP =
 			MsgBox, 64, , Package build canceled.
 		else

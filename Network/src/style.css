@@ -198,9 +198,15 @@ input.big:active {
 }
 
 .dialog_description {
-	height:230px;
+	height:206px;
 	overflow:auto;
 	background-color:beige;
 	padding: 4px;
+	border-radius: 4px;
 }
 
+p.important {
+	font-style: italic;
+	color: red;
+	text-transform: capitalize;
+}

@@ -61,6 +61,7 @@
                     $j_id = $obj->id;
                     $j_type = $obj->type;
                     $j_category = $obj->category;
+                    $j_required = (strlen($obj->required) ? $obj->required : "none");
                     $j_description = html_linefmt($obj->description);
                     $j_size = formatSizeUnits(filesize($file));
     ?>
@@ -70,6 +71,7 @@
             <p>Type              : <?=$j_type?></p>
             <p>Category          : <?=$j_category?></p>
             <p>Size              : <?=$j_size?></p>
+			<p class="important">Required Packages : <?=$j_required?></p>
             <p class="dialog_description"><?=$j_description?></p>
 <!--<button style:"text-align: right;" onclick="javascript:closeDialog();">Close</button>-->
 		</aside>
