@@ -2,7 +2,7 @@ ASPDM
 =====  
   
 AHKScript.org's Package/StdLib Distribution and Management  
-http://ahkscript.github.io/ASPDM/Network/  
+http://aspdm.1eko.com/  
   
 **Quick Info**  
 
@@ -21,3 +21,7 @@ _NetworkAPI_ : [Specifications/NetworkAPI.md](Specifications/NetworkAPI.md)
 - Trello : http://ahkscript.org/boards/viewtopic.php?f=17&t=1853
 - GitHub : http://ahkscript.org/boards/viewtopic.php?f=17&t=936
 - Forum : http://ahkscript.org/boards/viewtopic.php?f=6&t=1241
+  
+**Contributors (Thanks)**  
+  
+@george2, @perfaram, @fincs, @joedf
