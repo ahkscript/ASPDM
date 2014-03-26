@@ -122,22 +122,20 @@ try {
 	// You should name it uniquely.
 	// DO NOT USE $_FILES['file']['name'] WITHOUT ANY VALIDATION !!
 	// On this example, obtain safe unique name from its binary data.
-	$filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
-	if (move_uploaded_file($_FILES['file']['tmp_name'],"../packs/tmp/" . $filename)) {
-		if (file_exists("../packs/" . $_FILES['file']['name'])) {
-			throw new RuntimeException('The same package has already been uploaded !');
-			echo 'The same package has already been uploaded';
-		} else {
-    			rename("../packs/tmp/" . $filename, "../packs/" . $_FILES['file']['name']);
-		};
-		echo 'File is uploaded successfully.';
-	} else {
-		throw new RuntimeException('FileMove error.');
-	};
+    $filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
+    if (move_uploaded_file($_FILES['file']['tmp_name'],"../packs/tmp/" . $filename)) {
+        if (file_exists("../packs/" . $_FILES['file']['name'])) {
+            throw new RuntimeException('The same package has already been uploaded !');
+            echo 'The same package has already been uploaded';
+        } else {
+            rename("../packs/tmp/" . $filename, "../packs/" . $_FILES['file']['name']);
+        };
+        echo 'File is uploaded successfully.';
+    } else {
+        throw new RuntimeException('FileMove error.');
+    };
 } catch (RuntimeException $e) {
-
 	echo $e->getMessage();
-
 }
 
 ?>
