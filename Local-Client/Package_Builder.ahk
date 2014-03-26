@@ -8,7 +8,7 @@ package_dir := 0
 all_vars =
 (RTrim Join
 id|version|name|ahkbranch|ahkversion|ahkflavour|description|
-author|license|forumurl|screenshot|type|category
+author|license|required|forumurl|screenshot|type|category
 )
 
 Attributes:={id:			"A short name used for identification purposes (Should be a valid AutoHotkey identifier)"
@@ -21,6 +21,7 @@ Attributes:={id:			"A short name used for identification purposes (Should be a v
 			,description:	"Description of the package"
 			,author:		"The author(s) of the package"
 			,license:		"(Optional) Name of the license under which the package is released"
+			,required:		"Comma-separated list of dependencies' package identifiers (leave empty if none)"
 			,forumurl:		"(Optional, Recommended) ahkscript.org forum topic URL"
 			,screenshot:	"(Optional) Filename of the screenshot to be displayed"}
 Categories =
@@ -53,9 +54,10 @@ Gui, Add, Edit, vahkversion %GuiDispInline% gInfoActive Limit10,
 Gui, Add, Edit, vahkflavour %GuiDispInline% gInfoActive,
 Gui, Add, Edit, vauthor %GuiDispBlock% gInfoActive,
 Gui, Add, Edit, vlicense %GuiDispInline% gInfoActive,
-Gui, Add, Edit, vforumurl %GuiDispInline% gInfoActive,
-Gui, Add, Edit, vscreenshot %GuiDispBlock% gInfoActive,
-Gui, Add, Text, yp+3 x+4, Category
+Gui, Add, Edit, vrequired %GuiDispInline% gInfoActive,
+Gui, Add, Edit, vforumurl %GuiDispBlock% gInfoActive,
+Gui, Add, Edit, vscreenshot %GuiDispInline% gInfoActive,
+Gui, Add, Text, %GuiDispBlock%, Category
 Gui, Add, DropDownList, vCategory x+4 yp-3, %Categories%
 Gui, Add, Text, x+%GuiTab% yp+3, Type
 Gui, Add, DropDownList, vtype x+4 yp-3 w64, Library|Tool|Other
@@ -76,6 +78,7 @@ Gui, Add, Button, %GuiDispInline% gBuild, Build Package
 	SetEditPlaceholder("name","name")
 	SetEditPlaceholder("author","author")
 	SetEditPlaceholder("license","license")
+	SetEditPlaceholder("required","required")
 	SetEditPlaceholder("forumurl","forumurl")
 	SetEditPlaceholder("screenshot","screenshot")
 	;SetEditPlaceholder("description","description")
@@ -162,6 +165,7 @@ Save:
 			,description: description
 			,author: author
 			,license: license
+			,required: required
 			,forumurl: forumurl
 			,screenshot: screenshot
 			,type: type

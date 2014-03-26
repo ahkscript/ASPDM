@@ -7,6 +7,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;Should specify fullpaths
 packs:="package_test.ahkp"
 
+;TODO: check for "required" aka dependencies
+
 Runwait *RunAs Package_Installer.ahk "%packs%",,UseErrorLevel
 ecode:=ErrorLevel
 if (ecode==21) ;random chosen value

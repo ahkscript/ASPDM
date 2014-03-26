@@ -46,6 +46,7 @@ Manifest_FromStr(tman)
 	_ManOptionalField(out, man, "description")
 	_ManOptionalField(out, man, "license", "ASPDM Default License")
 	_ManOptionalField(out, man, "category", "Other")
+	_ManOptionalField(out, man, "required")
 	_ManOptionalField(out, man, "forumurl")
 	_ManOptionalField(out, man, "screenshot")
 	return out
