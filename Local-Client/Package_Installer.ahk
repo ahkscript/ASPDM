@@ -3,12 +3,13 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
+#Include Lib\Install.ahk
 #Include Lib\Arguments.ahk
 
 if (!A_IsAdmin)
-   ExitApp,1
+   ExitApp, % Install.Error_NonAdministrator
 if (!args)
-	ExitApp,2
+	ExitApp, % Install.Error_InvalidParameters
 
 InstallationFolder:=RegExReplace(A_AhkPath,"\w+\.exe","lib")
 ;Should be fetched from "settings/Config" file
@@ -33,19 +34,19 @@ for Current, FilePath in packs
 	}
 	
 	if (!FileExist(FilePath))
-		ExitApp,3
+		ExitApp, % Install.Error_NonExistantFile
 
 	mdata:=JSON_ToObj(Manifest_FromPackage(FilePath))
 
 	if !Package_Extract(InstallationFolder "\" mdata["id"], FilePath)
-		ExitApp,4
+		ExitApp, % Install.Error_Extraction
 
 	load_progress(FileName,Current,TotalItems)
 }
 	Sleep 100
 	Progress, Off
 
-ExitApp,21 ;Success
+ExitApp, % Install.Success
 
 load_progress(t,c,f) {
 	p:=Round((c/f)*100)
