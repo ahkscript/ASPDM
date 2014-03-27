@@ -93,7 +93,7 @@
 							beforeSend: function() {
 								
 								progress.css("display","inline-block");
-								status.empty();
+								status.html("Please wait...");
 								var percentVal = '0%';
 								bar.width(percentVal)
 								percent.html(percentVal);
