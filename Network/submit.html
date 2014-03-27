@@ -66,26 +66,61 @@
 					<div class="fullw">
 						<label for="file">Package:</label>
 						<input type="file" name="file" id="file"><br>
+						
+						<input type="submit" value="Submit Package" class="big">
+						<div class="progress" style="display:none;">
+							<div class="bar"></div>
+							<div class="percent">0%</div>
+						</div><br>
+						
+						<!--
 						<button class="ladda-button" data-color="mint" data-style="expand-right" data-size="s">Submit</button>
 						<br>
+						-->
 						<code id="status" style="display:none;"></code>
 					</div>
 				</form>
 				<script type="text/javascript">
 					(function() {
-				        var bt = Ladda.create( document.querySelector( 'button' ) ); 
+						
+						var bar = $('.bar');
+						var progress = $('.progress');
+						var percent = $('.percent');
+						var status = $('#status');
+						
+				        //var bt = Ladda.create( document.querySelector( 'button' ) ); 
 						$('form').ajaxForm({
 							beforeSend: function() {
-								bt.start();
+								
+								progress.css("display","inline-block");
+								status.empty();
+								var percentVal = '0%';
+								bar.width(percentVal)
+								percent.html(percentVal);
+								
+								//bt.start();
 							},
 							uploadProgress: function(event, position, total, percentComplete) {
- 								bt.setProgress( percentComplete/10 );
+								
+								var percentVal = percentComplete + '%';
+								bar.width(percentVal)
+								percent.html(percentVal);
+								
+ 								//bt.setProgress( percentComplete/10 );
 							},
 							success: function() {
+								
+								var percentVal = '100%';
+								bar.width(percentVal)
+								percent.html(percentVal);
 								//Maybe, during a rainy day, I'll be less lazy than today. And, I will try making the Ladda buttons show a tick when it's done...
 							},
 							complete: function(xhr) {
-								bt.stop();
+							
+								status.html(xhr.responseText);
+								status.css("display","inline-block");
+								
+								//bt.stop();
 							}
 						}); 
 
