@@ -1,12 +1,15 @@
 <?php
 // http://www.php.net/manual/en/features.file-upload.php#114004
 // http://www.php.net/manual/en/function.mime-content-type.php#87856
+
 //header('Content-Type: text/plain; charset=utf-8');
+
 if(!function_exists('mime_content_type')) {
 
 	function mime_content_type($filename) {
 
 		$mime_types = array(
+
 			'txt' => 'text/plain',
 			'htm' => 'text/html',
 			'html' => 'text/html',
@@ -119,14 +122,20 @@ try {
 	// You should name it uniquely.
 	// DO NOT USE $_FILES['file']['name'] WITHOUT ANY VALIDATION !!
 	// On this example, obtain safe unique name from its binary data.
-	$filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
-	if (move_uploaded_file($_FILES['file']['tmp_name'],"../packs/tmp/" . $filename))
-		echo 'File is uploaded successfully.';
-	else
-		throw new RuntimeException('FileMove error.');
-		
+    $filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
+    if (move_uploaded_file($_FILES['file']['tmp_name'],"../packs/tmp/" . $filename)) {
+        if (file_exists("../packs/" . $_FILES['file']['name'])) {
+            throw new RuntimeException('The same package has already been uploaded !');
+            echo 'The same package has already been uploaded';
+        } else {
+            rename("../packs/tmp/" . $filename, "../packs/" . $_FILES['file']['name']);
+        };
+        echo 'File is uploaded successfully.';
+    } else {
+        throw new RuntimeException('FileMove error.');
+    };
 } catch (RuntimeException $e) {
-
 	echo $e->getMessage();
 }
+
 ?>

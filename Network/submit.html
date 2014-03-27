@@ -12,9 +12,11 @@
 		<link type="text/css"  href="src/bootstrap.css" rel="stylesheet">
 		<script src="src/sorttable.js"></script>
 		<script src="src/jquery-1.11.0.min.js"></script>
+		<link rel="stylesheet" href="src/ladda.min.css">
 		<script src="src/jquery.form.js"></script>
 		<link type="text/css"  href="src/style.css" rel="stylesheet">
-		
+		<script src="src/spin.min.js"></script>
+		<script src="src/ladda.min.js"></script>
 		<style>
 			.progress {
 				top: 8px;
@@ -64,43 +66,26 @@
 					<div class="fullw">
 						<label for="file">Package:</label>
 						<input type="file" name="file" id="file"><br>
-						<input type="submit" value="Submit Package" class="big">
-							<div class="progress" style="display:none;">
-								<div class="bar"></div>
-								<div class="percent">0%</div>
-							</div><br>
-							<code id="status" style="display:none;"></code>
-						</div>
+						<button class="ladda-button" data-color="mint" data-style="expand-right" data-size="s">Submit</button>
+						<br>
+						<code id="status" style="display:none;"></code>
+					</div>
 				</form>
 				<script type="text/javascript">
 					(function() {
-							
-						var bar = $('.bar');
-						var progress = $('.progress');
-						var percent = $('.percent');
-						var status = $('#status');
-						   
+				        var bt = Ladda.create( document.querySelector( 'button' ) ); 
 						$('form').ajaxForm({
 							beforeSend: function() {
-								progress.css("display","inline-block");
-								status.empty();
-								var percentVal = '0%';
-								bar.width(percentVal)
-								percent.html(percentVal);
+								bt.start();
 							},
 							uploadProgress: function(event, position, total, percentComplete) {
-								var percentVal = percentComplete + '%';
-								bar.width(percentVal)
-								percent.html(percentVal);
+ 								bt.setProgress( percentComplete/10 );
 							},
 							success: function() {
-								var percentVal = '100%';
-								bar.width(percentVal)
-								percent.html(percentVal);
+								//Maybe, during a rainy day, I'll be less lazy than today. And, I will try making the Ladda buttons show a tick when it's done...
 							},
 							complete: function(xhr) {
-								status.html(xhr.responseText);
-								status.css("display","inline-block");
+								bt.stop();
 							}
 						}); 
 
