@@ -127,9 +127,10 @@ try {
         if (file_exists("../packs/" . $_FILES['file']['name'])) {
             throw new RuntimeException('The same package has already been uploaded !');
             echo 'The same package has already been uploaded';
-        } else {
+        } /* Commented out since, packages should be checked first, so saving in tmp
+		else {
             rename("../packs/tmp/" . $filename, "../packs/" . $_FILES['file']['name']);
-        };
+        }; */
         echo 'File is uploaded successfully.';
     } else {
         throw new RuntimeException('FileMove error.');
