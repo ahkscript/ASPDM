@@ -3,3 +3,9 @@
 *.ahk text eol=crlf
 *.png binary
 *.jpg binary
+*.gif binary
+*.bmp binary
+*.otf binary
+*.ttf binary
+*.eot binary
+*.woff binary
