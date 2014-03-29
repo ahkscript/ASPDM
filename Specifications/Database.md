@@ -31,8 +31,7 @@ _**Licenses:**_ packages submitted to ahkscript.org without the license attribut
 
 | Attribute     | Description                                                                                                           |
 |---------------|-----------------------------------------------------------------------------------------------------------------------|
-| isstdlib      | (**Internal**, **Moderated**) True if the package has been selected to be part of the official StdLib distribution    |
-| filename      | Filename of the package (used during downloading)                                                                     |
+| isstdlib      | (**Internal**, **Moderated**) True if the package has been selected to be part of the official StdLib distribution  |
 
 ### Package categories
 
