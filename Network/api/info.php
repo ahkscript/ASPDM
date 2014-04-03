@@ -14,6 +14,12 @@
 		$size = fread_UINT($handle);
 		if ($content_item==NULL)
 			echo fread($handle,$size);
+		else if ( in_arrayi($content_item,array("ahkflavour","required","tags")) )
+		{
+			$obj = json_decode(fread($handle,$size));
+			$obj = json_encode($obj->$content_item);
+			echo ($obj==="{}")?"":substr($obj,1,-1);
+		}
 		else
 		{
 			$obj = json_decode(fread($handle,$size));
@@ -36,6 +42,10 @@
 			$size = $size . $v;
 		}
 		return hexdec($size);
+	}
+	
+	function in_arrayi($needle, $haystack) {
+		return in_array(strtolower($needle), array_map('strtolower', $haystack));
 	}
 
 	$f = (isset($_GET["f"])) ? htmlspecialchars($_GET["f"]) : NULL;

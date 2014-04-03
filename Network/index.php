@@ -60,8 +60,13 @@
                     $j_name = $obj->name;
                     $j_id = $obj->id;
                     $j_type = $obj->type;
-                    $j_category = $obj->category;
-                    $j_required = (strlen($obj->required) ? $obj->required : "none");
+					
+					$j_tags = json_encode($obj->tags);
+                    $j_tags = ($j_tags==="{}")?"None":substr($j_tags,1,-1);
+					
+					$j_required = json_encode($obj->required);
+                    $j_required = ($j_required==="{}")?"None":substr($j_required,1,-1);
+					
                     $j_description = html_linefmt($obj->description);
                     $j_size = formatSizeUnits(filesize($file));
     ?>
@@ -69,7 +74,7 @@
 			<h3><?=$j_name?></h3>
 			<p>Author/Maintainer : <?=$j_author?></p>
             <p>Type              : <?=$j_type?></p>
-            <p>Category          : <?=$j_category?></p>
+            <p>Tags              : <?=$j_tags?></p>
             <p>Size              : <?=$j_size?></p>
 			<p class="important">Required Packages : <?=$j_required?></p>
             <p class="dialog_description"><?=$j_description?></p>

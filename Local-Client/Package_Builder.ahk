@@ -8,7 +8,7 @@ package_dir := 0
 all_vars =
 (RTrim Join
 id|version|name|ahkbranch|ahkversion|ahkflavour|description|
-author|license|required|forumurl|screenshot|type|category
+author|license|required|forumurl|screenshot|type|tags
 )
 
 Attributes:={id:			"A short name used for identification purposes (Should be a valid AutoHotkey identifier)"
@@ -20,18 +20,11 @@ Attributes:={id:			"A short name used for identification purposes (Should be a v
 			,name:			"The human-friendly name of the package"
 			,description:	"Description of the package"
 			,author:		"The author(s) of the package"
-			,license:		"(Optional) Name of the license under which the package is released"
+			,license:		"Name of the license under which the package is released (Optional)"
 			,required:		"Comma-separated list of dependencies' package identifiers (leave empty if none)"
-			,forumurl:		"(Optional, Recommended) ahkscript.org forum topic URL"
-			,screenshot:	"(Optional) Filename of the screenshot to be displayed"}
-Categories =
-(RTrim Join
-Arrays|Call|COM|Console|Control|Dynamic|Database|DateTime|
-Editor|Encryption|File|FileSystem|Format|Graphics|Gui|INI|
-Hardware|Hash|Hotstrings|JSON|Keyboard|Math|Media|Memory|
-Menu|MS Windows|Network|Objects|Parser|Process|Regular Expressions|
-Sound|Strings|System|Text|Variables|Window|YAML|Other
-)
+			,tags:			"Comma-separated tags (Optional, Recommended)"
+			,forumurl:		"ahkscript.org forum topic URL (Optional, Recommended)"
+			,screenshot:	"Filename of the screenshot to be displayed (Optional)"}
 
 ; "Standard" ASPDM Header
 Gui, Font, s16 wBold, Arial
@@ -57,13 +50,11 @@ Gui, Add, Edit, vlicense %GuiDispInline% gInfoActive,
 Gui, Add, Edit, vrequired %GuiDispInline% gInfoActive,
 Gui, Add, Edit, vforumurl %GuiDispBlock% gInfoActive,
 Gui, Add, Edit, vscreenshot %GuiDispInline% gInfoActive,
-Gui, Add, Text, %GuiDispBlock%, Category
-Gui, Add, DropDownList, vCategory x+4 yp-3, %Categories%
 Gui, Add, Text, x+%GuiTab% yp+3, Type
-Gui, Add, DropDownList, vtype x+4 yp-3 w64, Library|Tool|Other
+Gui, Add, DropDownList, vtype x+4 yp-3 w92, Library|Tool|Other
+Gui, Add, Edit, vtags %GuiDispBlock% gInfoActive w372,
 Gui, Add, Text, %GuiDispBlock%, Description
 Gui, Add, Edit, vdescription y+4 %GuiDispBlock% gInfoActive +Multi w410 h86,
-
 Gui, Add, Button, %GuiDispBlock% Default gOpen, Open JSON
 Gui, Add, Button, %GuiDispInline% gSave, Save JSON
 Gui, Add, Button, %GuiDispInline% gBuild, Build Package
@@ -79,9 +70,10 @@ Gui, Add, Button, %GuiDispInline% gBuild, Build Package
 	SetEditPlaceholder("author","author")
 	SetEditPlaceholder("license","license")
 	SetEditPlaceholder("required","required")
+	SetEditPlaceholder("tags",Attributes.tags)
 	SetEditPlaceholder("forumurl","forumurl")
 	SetEditPlaceholder("screenshot","screenshot")
-	;SetEditPlaceholder("description","description")
+	;SetEditPlaceholder("description","Description of the package...")
 
 Gui, Add, StatusBar,,
 SB_SetParts(320)
@@ -133,8 +125,10 @@ Open:
 		oJSON:=Manifest_FromStr(json_s)
 		Loop, Parse, all_vars, |
 		{
-			if (A_LoopField = "type") or (A_LoopField = "category")
+			if (A_LoopField = "type")
 				GuiControl,ChooseString,%A_LoopField%, % oJSON[A_LoopField]
+			else if ( (A_LoopField = "tags") || (A_LoopField = "required") || (A_LoopField = "ahkflavour") )
+				GuiControl,,%A_LoopField%, % Util_TagsObj2CSV(oJSON[A_LoopField])
 			else
 				GuiControl,,%A_LoopField%, % oJSON[A_LoopField]
 		}
@@ -157,19 +151,19 @@ Save:
 		;this part is redundant...
 		;suggest Manifest_FromObj()
 		mdata:=JSON_FromObj(Manifest_FromStr(JSON_FromObj({id: RegExReplace(id,"\W")
-			,version: version
-			,name: name
-			,ahkbranch: ahkbranch
-			,ahkversion: ahkversion
-			,ahkflavour: ahkflavour
-			,description: description
-			,author: author
-			,license: license
-			,required: required
-			,forumurl: forumurl
-			,screenshot: screenshot
-			,type: type
-			,category: category})))
+			,version: 		version
+			,name: 			name
+			,ahkbranch: 	ahkbranch
+			,ahkversion: 	ahkversion
+			,ahkflavour: 	Util_CSV2TagsObj(ahkflavour)
+			,description: 	description
+			,author: 		author
+			,license: 		license
+			,required: 		Util_CSV2TagsObj(required)
+			,tags: 			Util_CSV2TagsObj(tags)
+			,forumurl: 		forumurl
+			,screenshot: 	screenshot
+			,type: 			type})))
 			
 		try
 		{

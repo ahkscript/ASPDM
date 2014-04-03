@@ -18,11 +18,11 @@ _**All attributes are mandatory, unless otherwise stated.**_
 | ahkflavour    | Comma-separated list of supported AutoHotkey flavours (`a32`, `u32`, `u64`)              |
 | required      | Comma-separated list of dependencies' package identifiers (leave empty if none)          |
 | name          | The human-friendly name of the package                                                   |
-| description   | Description of the package (**Optional**, **Recommended**)                             |
+| description   | Description of the package (**Optional**, **Recommended**)                               |
 | author        | The author(s) of the package                                                             |
 | license       | (**Optional**) Name of the license under which the package is released                   |
-| category      | See "**Package categories**" below                                                       |
-| forumurl      | (**Optional**, **Recommended**) ahkscript.org forum topic URL                          |
+| tags          | Comma-separated tags (**Optional**, **Recommended**)                                     |
+| forumurl      | (**Optional**, **Recommended**) ahkscript.org forum topic URL                            |
 | screenshot    | (**Optional**) Filename of the screenshot to be displayed                                |
 
 _**Licenses:**_ packages submitted to ahkscript.org without the license attribute filled in are assumed to be released under the [ahkscript.org Default Package License](License.md).
@@ -31,9 +31,9 @@ _**Licenses:**_ packages submitted to ahkscript.org without the license attribut
 
 | Attribute     | Description                                                                                                           |
 |---------------|-----------------------------------------------------------------------------------------------------------------------|
-| isstdlib      | (**Internal**, **Moderated**) True if the package has been selected to be part of the official StdLib distribution  |
+| isstdlib      | (**Internal**, **Moderated**) True if the package has been selected to be part of the official StdLib distribution    |
 
-### Package categories
+### Recommended tags (Examples)
 
 | Categories  |             |                      |
 |-------------|-------------|----------------------|

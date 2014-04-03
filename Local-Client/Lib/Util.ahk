@@ -1,4 +1,23 @@
 ﻿
+;Rename this Function. I don't have a good name for it now...
+Util_CSV2TagsObj(rawCSV:="") {
+	obj:=Object()
+	Loop, Parse, rawCSV, CSV
+		if ( (k:=Trim(A_LoopField)) != "")
+			obj.Insert(k)
+	return obj
+}
+
+Util_TagsObj2CSV(TagsObj:="") {
+	if !IsObject(TagsObj)
+		return ""
+	CSV:=""
+	for index, tag in TagsObj
+		if ( (k:=Trim(tag)) != "")
+			CSV := CSV k ","
+	return SubStr(CSV,1,-1)
+}
+
 Util_ShortPath(p,l=50) {
 	VarSetCapacity(_p, (A_IsUnicode?2:1)*StrLen(p) )
 	DllCall("shlwapi\PathCompactPathEx"
