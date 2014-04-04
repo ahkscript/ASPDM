@@ -2,6 +2,7 @@
 #Warn  ; Recommended for catching common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+#Include Lib\NetworkAPI.ahk
 
 /*
 	API temporarily hosted @ api-php.aspdm.1eko.com
@@ -19,29 +20,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	submit.php	--	Used for the online upload form
 		no arguments
 */
-
-u2v(u){
-	URLDownloadToFile,%u%, % t:=Util_TempFile()
-	FileRead,x,%t%
-	FileDelete,%t%
-	return x
-}
-
-API_list() {
-	l:=StrSplit(u2v("http://api-php.aspdm.1eko.com/list.php"),"`n")
-	l.Remove(l.MaxIndex())
-	return l
-}
-
-API_info(file,item="") {
-	return u2v("http://api-php.aspdm.1eko.com/info.php?f=" . file . "&c=" . item)
-}
-
-API_Get(file) {
-	DownloadFile("http://packs.aspdm.1eko.com/" file,t:=Util_TempFile())
-	return t
-}
-
+CheckUpdate("0.9.0.0",-1)
 Gui, Add, ListView, x4 y4 w500 h250 gListViewEvents, File|Name|Version|Author|Description
 Gui, Show,,%A_scriptName% - DoubleClick to Download...
 
