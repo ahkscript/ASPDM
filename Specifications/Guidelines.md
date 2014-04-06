@@ -65,4 +65,6 @@ Users and moderators
 
 - The ahkscript.org repository account is the same as the forum account, and the same for moderators (?)
 - Moderators should seek public opinion on key decisions whenever possible.
+- Moderators must have a reasonable amount of experience with AutoHotkey.
+- Moderators should be just and a dedicated team.
 - ...more?
