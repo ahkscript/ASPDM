@@ -1,4 +1,6 @@
 ﻿<?php
+	include 'utils.php';
+
 	function print_metadata($file,$content_item) {
 		if ($file == NULL) {
 			echo "ERROR: Invalid parameters";
@@ -30,22 +32,6 @@
 				echo $j_item;
 		}
 		return 1;
-	}
-
-	function fread_UINT($handle) {
-		$bytes = strrev(fread($handle,4));
-		$size = "0x";
-		for ($i = 0; $i < 4; $i++) {
-			$v = dechex(ord($bytes[$i]));
-			if (strlen($v)==1)
-				$v = "0" . $v;
-			$size = $size . $v;
-		}
-		return hexdec($size);
-	}
-	
-	function in_arrayi($needle, $haystack) {
-		return in_array(strtolower($needle), array_map('strtolower', $haystack));
 	}
 
 	$f = (isset($_GET["f"])) ? htmlspecialchars($_GET["f"]) : NULL;

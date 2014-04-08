@@ -39,6 +39,9 @@
 	</head>
 
 	<body>
+    <?php
+		include 'api/utils.php';
+	?>
     <?php	
     $num = 0;
 	if ($handled = opendir('packs')) {
@@ -193,18 +196,6 @@
 				echo $j_item;
 		}
 		return $jsondata;
-	}
-	
-	function fread_UINT($handle) {
-		$bytes = strrev(fread($handle,4));
-		$size = "0x";
-		for ($i = 0; $i < 4; $i++) {
-			$v = dechex(ord($bytes[$i]));
-			if (strlen($v)==1)
-				$v = "0" . $v;
-			$size = $size . $v;
-		}
-		return hexdec($size);
 	}
 	
 	function html_linefmt($str) {

@@ -4,6 +4,8 @@
 
 //header('Content-Type: text/plain; charset=utf-8');
 
+include 'utils.php';
+
 if(!function_exists('mime_content_type')) {
 
 	function mime_content_type($filename) {
@@ -112,19 +114,20 @@ try {
 	$ext = pathinfo($_FILES['file']['tmp_name'], PATHINFO_EXTENSION);
 	// DO NOT TRUST $_FILES['file']['mime'] VALUE !!
 	// Check MIME Type by yourself.
-	if (
-		(mime_content_type($_FILES['file']['tmp_name']) != "application/octet-stream") &&
-		($ext != "ahkp")
-	) {
+	if ( (mime_content_type($_FILES['file']['tmp_name']) != "application/octet-stream") && ($ext != "ahkp") )
+	{
 		throw new RuntimeException('Invalid file format.');
 	}
-
+	
+	if (!valid_ahkp($_FILES['file']['tmp_name']))
+		throw new RuntimeException('Invalid file format.');
+	
 	// You should name it uniquely.
 	// DO NOT USE $_FILES['file']['name'] WITHOUT ANY VALIDATION !!
 	// On this example, obtain safe unique name from its binary data.
     $filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
     if (move_uploaded_file($_FILES['file']['tmp_name'],"../packs/tmp/" . $filename)) {
-        if (file_exists("../packs/" . $_FILES['file']['name'])) {
+        if (file_exists("../packs/tmp/" . $filename)) {
             throw new RuntimeException('The same package has already been uploaded !');
             echo 'The same package has already been uploaded';
         } /* Commented out since, packages should be checked first, so saving in tmp
