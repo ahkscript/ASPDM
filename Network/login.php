@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="src/font-awesome-4.0.3/css/font-awesome.min.css">
 		<link type="text/css"  href="src/bootstrap.css" rel="stylesheet">
 		<script src="src/sorttable.js"></script>
+		<script src="src/ValidateForm.js"></script>
 		<link type="text/css"  href="src/style.css" rel="stylesheet">
 		
 		<script type="text/javascript">
@@ -37,15 +38,40 @@
 
 			<h2>Log in with an AHKScript.org account</h2>
 			
-			<div style="position:absolute;top:33%;left:0;width:100%;text-align:center;z-index:99;font-size:72px;color:rgba(128,128,128,0.6);">PREVIEW</div>
+			<div style="position:absolute;top:72px;right:0;display:block;z-index:99;font-size:36px;color:rgba(128,128,128,0.7);transform:rotate(45deg);-ms-transform:rotate(45deg);-webkit-transform:rotate(45deg);">PREVIEW</div>
 			
 			<div class="center" style="width:340px;">
-				<form action="api/login.php" method="get">
+				<form action="p_login.php" method="post">
 					<h4>Enter your account info:</h4>
+					<?php
+					if(isset($_GET["i"])) {
+						$i = strtolower($_GET["i"]);
+						if ($i === "u")
+							echo "<div class=\"fullw\" style=\"color:red;font-weight:bold\">User not found.</div>";
+						if ($i === "p")
+							echo "<div class=\"fullw\" style=\"color:red;font-weight:bold\">Incorrect password.</div>";
+						if ($i === "n")
+							echo "<div class=\"fullw\" style=\"color:red;font-weight:bold\">Please write your login information.</div>";
+					}
+					?>
+						<!--
 						<div class="fullw">
-							User Name: <input type="text" name="user" placeholder="Username"></div>
+							User Name: <input type="text" name="username" placeholder="Username"></div>
 						<div class="fullw">
-							&nbsp;Password: <input type="password" name="pass" placeholder="********"></div>
+							&nbsp;Password: <input type="password" name="password" placeholder="********"></div> -->
+						
+						<table class="form">
+							<tr>
+								<td style="text-align:right">User Name:</td>
+								<td><input type="text" name="username" placeholder="Username"></td>
+							</tr>
+							<tr>
+								<td style="text-align:right">Password:</td>
+								<td><input type="password" name="password" placeholder="********"></td>
+							</tr>
+						</table>
+							
+							
 						<div class="fullw" style="height:32px;">
 							<div onmouseover="remember_me_tip(1)" onmouseout="remember_me_tip(0)">
 								<label><input type="checkbox" name="remember" value="yes"> Remember me</label>
@@ -54,7 +80,7 @@
 								Remember my login session for <b>two weeks</b> so that I can come back without logging in.
 							</div>
 						</div>
-					<input type="Submit" value="Sign In" class="big">
+					<input type="Submit" value="Sign In" class="big" onclick="return ValidateForm(this.form)">
 				</form>
 				<div class="infobox" style="margin-top:16px;display:block">
 					<a href="http://ahkscript.org/boards/ucp.php?mode=sendpassword">Forgot your password?</a><br>

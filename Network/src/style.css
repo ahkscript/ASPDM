@@ -17,6 +17,11 @@ table {
 	width: 100%;
 }
 
+table.form,
+table.form * {
+	background-color: transparent !important;
+}
+
 th {
 	border-top: 0 none;
 }

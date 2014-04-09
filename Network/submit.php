@@ -4,7 +4,7 @@
 
 //header('Content-Type: text/plain; charset=utf-8');
 
-include 'utils.php';
+include 'api/utils.php';
 
 if(!function_exists('mime_content_type')) {
 
@@ -126,8 +126,8 @@ try {
 	// DO NOT USE $_FILES['file']['name'] WITHOUT ANY VALIDATION !!
 	// On this example, obtain safe unique name from its binary data.
     $filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
-    if (move_uploaded_file($_FILES['file']['tmp_name'],"../packs/tmp/" . $filename)) {
-        if (file_exists("../packs/tmp/" . $filename)) {
+    if (move_uploaded_file($_FILES['file']['tmp_name'],"./packs/tmp/" . $filename)) {
+        if (file_exists("./packs/tmp/" . $filename)) {
             throw new RuntimeException('The same package has already been uploaded !');
             echo 'The same package has already been uploaded';
         } /* Commented out since, packages should be checked first, so saving in tmp
