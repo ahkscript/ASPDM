@@ -126,14 +126,14 @@ try {
 	// DO NOT USE $_FILES['file']['name'] WITHOUT ANY VALIDATION !!
 	// On this example, obtain safe unique name from its binary data.
     $filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
-    if (move_uploaded_file($_FILES['file']['tmp_name'],"./packs/tmp/" . $filename)) {
-        if (file_exists("./packs/tmp/" . $filename)) {
-            throw new RuntimeException('The same package has already been uploaded !');
-            echo 'The same package has already been uploaded';
-        } /* Commented out since, packages should be checked first, so saving in tmp
-		else {
-            rename("../packs/tmp/" . $filename, "../packs/" . $_FILES['file']['name']);
-        }; */
+	
+	if (file_exists("./packs/tmp/" . $filename))
+	{
+		throw new RuntimeException('The same package has already been uploaded !');
+	}
+	
+    if (move_uploaded_file($_FILES['file']['tmp_name'],"./packs/tmp/" . $filename))
+	{
         echo 'File is uploaded successfully.';
     } else {
         throw new RuntimeException('FileMove error.');
