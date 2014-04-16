@@ -56,9 +56,9 @@ Package Structure
 
 Lib packages should have a standard package structure consisting of the following folders:
 
-    - `Lib\` (*Mandatory*) : StdLib files
-    - `Doc\` : Documentation
-    - Root folder : Examples, etc.
+- `Lib\` (*Mandatory*) : StdLib files
+- `Doc\` : Documentation
+- Root folder : Examples, etc.
 
 _Note:_ When installing a package into a StdLib folder, the files in the package's `Lib\` folder would be copied to it.
 
