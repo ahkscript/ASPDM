@@ -54,7 +54,7 @@ _**Licenses :**_ packages submitted to ahkscript.org without the license attribu
 Package Structure
 -------------------
 
-Lib packages should have a standard package structure consisting of the following folders:
+Library packages should have a standard package structure consisting of the following folders:
 
 - `Lib\` (*Mandatory*) : StdLib files
 - `Doc\` : Documentation
