@@ -43,6 +43,7 @@ Submission
 ----------
 
 - Any package can be submitted to the repository, and should meet all mandatory requirements in the Package Quality Guidelines section.
+- All packages must have the mandatory `Lib\` folder. See [Package Structure](Database.md)
 - All packages should be submitted with a license. Those submitted without a license are assumed to be released under the [ahkscript.org Default Package License](License.md).
 - Package author is included in the package metadata.
 - (In case of moderation queue):
@@ -50,7 +51,7 @@ Submission
   - Package Metadata will be updated if need be (e.g. `isstdlib`).
   - Any issues found can be fixed and the package reevaluated.
   - Two peer reviews to make sure any errors are caught early on.
-  - Eighty (?) percent majority approval for new packages to be added into ahkscript.org repository.
+  - Eighty (?) percent majority approval for new packages to be added into the ahkscript.org repository.
 
 Repository
 ----------
@@ -66,5 +67,5 @@ Users and moderators
 - The ahkscript.org repository account is the same as the forum account, and the same for moderators (?)
 - Moderators should seek public opinion on key decisions whenever possible.
 - Moderators must have a reasonable amount of experience with AutoHotkey.
-- Moderators should be a just and dedicated team.
+- Moderators should be a fair and dedicated team.
 - ...more?
