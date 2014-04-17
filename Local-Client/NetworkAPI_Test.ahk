@@ -3,7 +3,6 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include Lib\NetworkAPI.ahk
-
 /*
 	API temporarily hosted @ api-php.aspdm.1eko.com
 	See https://trello.com/c/V27ITnHO/16-web-server-api
@@ -16,9 +15,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	list.php	--	List all files in "packs/"
 		Usage: no arguments
 		Returns a list of all packages seperated by '`n'
-		
-	submit.php	--	Used for the online upload form
-		no arguments
 */
 CheckUpdate("0.9.0.0",-1)
 Gui, Add, ListView, x4 y4 w500 h250 gListViewEvents, File|Name|Version|Author|Description
