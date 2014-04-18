@@ -182,9 +182,10 @@ Save:
 				throw "Could not write/parse JSON!"
 			else
 			{
-				if (safety_bkp)
+				if (safety_bkp) {
 					;copy was successful, delete backup
 					FileDelete,%tmpfile%
+				}
 			}
 		}
 		catch e
@@ -194,7 +195,7 @@ Save:
 				FileMove,%tmpfile%,%_SelectedFile%,1
 				FileGetSize,sz,%_SelectedFile%
 				if (sz != safety_bkp_sz)
-					MsgBox, 16, , All data was lost.`nErrorlevel: %nErrorlevel%
+					MsgBox, 16, , All data was lost.`nErrorlevel: %Errorlevel%
 			}
 			throw e
 		}

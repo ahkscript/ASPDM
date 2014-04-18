@@ -1,4 +1,5 @@
-﻿#Include WinFade.ahk
+﻿; Uncomment if WinFade.ahk is not in your stdlib
+;#Include WinFade.ahk
 
 ;http://www.autohotkey.com/board/topic/72536-solved-click-through-a-gui/
 SetWinDelay, 0
