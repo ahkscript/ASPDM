@@ -6,23 +6,24 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include Lib\NetworkAPI.ahk
 
 ; Custom URI Documentation : http://msdn.microsoft.com/en-us/library/ie/aa767914
-/*
+
 if (!A_IsCompiled) {
 	MsgBox, 48, , Please run "CustomURI_Test-SetupURI.ahk" first.
 	ExitApp
 }
-
+/*
 if (!A_IsAdmin) {
 	MsgBox, 16, , Error: Please run as Administrator.
 	ExitApp
 }
-
+*/
 if (!args) {
 	MsgBox, 16, , Error: no args
 	ExitApp
 }
+
 URI_str:=RegExReplace(args[1],"(aspdm:|\/+)") ; ex:  aspdm://samples.ahkp/ or aspdm:samples.ahkp
-*/
+
 if !Ping() {
 	MsgBox, 16, , Network Error : Check your internet connection.`nThe program will now exit.
 	ExitApp
