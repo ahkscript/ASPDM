@@ -6,22 +6,23 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include Lib\NetworkAPI.ahk
 
 ; Custom URI Documentation : http://msdn.microsoft.com/en-us/library/ie/aa767914
-
+/*
 if (!A_IsCompiled) {
 	MsgBox, 48, , Please run "CustomURI_Test-SetupURI.ahk" first.
 	ExitApp
 }
-/*
+
 if (!A_IsAdmin) {
 	MsgBox, 16, , Error: Please run as Administrator.
 	ExitApp
 }
-*/
+
 if (!args) {
 	MsgBox, 16, , Error: no args
 	ExitApp
 }
 URI_str:=RegExReplace(args[1],"(aspdm:|\/+)") ; ex:  aspdm://samples.ahkp/ or aspdm:samples.ahkp
+*/
 if !Ping() {
 	MsgBox, 16, , Network Error : Check your internet connection.`nThe program will now exit.
 	ExitApp
@@ -29,6 +30,11 @@ if !Ping() {
 Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
 Progress Show
 info:=JSON_ToObj(API_info(URI_str)) ;assuming only one package. Future: CSV Elements -> Loop for each
+if (!info.MaxIndex()) {
+	Progress, Off
+	MsgBox, 48, , The ASPDM API is not responding.`nThe server might be down.`n`nPlease try again in while (5 min).
+	ExitApp
+}
 pack_id:=info["id"]
 pack_name:=info["name"]
 pack_copy:=info["license"]
