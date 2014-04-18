@@ -65,6 +65,13 @@ if Ping() {
 	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
 	Progress Show
 	packs:=API_list()
+	if (!packs.MaxIndex()) {
+		Progress, Off
+		ListView_OfflineMsg:="Offline mode, ASPDM API is not responding."
+		gosub, ListView_Offline
+		MsgBox, 48, , The ASPDM API is not responding.`nThe server might be down.`n`nPlease try again in while (5 min).
+		return
+	}
 	TotalItems:=packs.MaxIndex()
 	Loop % TotalItems
 	{
@@ -82,6 +89,13 @@ if Ping() {
 }
 else
 {
+	ListView_OfflineMsg:="Offline mode, No internet connection detected..."
+	gosub, ListView_Offline
+}
+LV_Colors.Attach(hLV_I,1,0,0)
+return
+
+ListView_Offline:
 	LV_Delete(1)
 	LV_Colors.OnMessage()
 	tmp__:="AU"
@@ -90,7 +104,7 @@ else
 		Gui, ListView, LV_%A_loopField%
 		GuiControl,-Checked,LV_%A_loopField%
 		GuiControl,,PackageCounter_%A_loopField%, Offline mode
-		LV_Add("","Offline mode, No internet connection detected...")
+		LV_Add("",ListView_OfflineMsg)
 		LV_ModifyCol(1,"300")
 		LV_ModifyCol(2,"0")
 		LV_ModifyCol(3,"0")
@@ -99,8 +113,6 @@ else
 		LV_Colors.Attach(hLV_%A_loopfield%,1,0,1)
 	}
 	Gui, ListView, LV_A
-}
-LV_Colors.Attach(hLV_I,1,0,0)
 return
 
 ListView_Events:
