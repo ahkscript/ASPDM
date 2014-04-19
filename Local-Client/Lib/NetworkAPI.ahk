@@ -1,4 +1,5 @@
-﻿
+﻿API_Source:="http://api-php.aspdm.1eko.com"
+
 CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.1eko.com/update.ini") {
 	URLDownloadToFile,%Update_URL%, % tempupdatefile:=Util_TempFile()
 	IniRead,NewVersion,%tempupdatefile%,Update,Version,NULL (Error)
@@ -39,13 +40,15 @@ u2v(u){
 }
 
 API_List() {
-	l:=StrSplit(u2v("http://api-php.aspdm.1eko.com/list.php"),"`n")
+	global API_Source
+	l:=StrSplit(u2v(API_Source "/list.php"),"`n")
 	l.Remove(l.MaxIndex())
 	return l
 }
 
 API_Info(file,item="") {
-	return u2v("http://api-php.aspdm.1eko.com/info.php?f=" . file . "&c=" . item)
+	global API_Source
+	return u2v(API_Source "/info.php?f=" . file . "&c=" . item)
 }
 
 API_Get(file) {

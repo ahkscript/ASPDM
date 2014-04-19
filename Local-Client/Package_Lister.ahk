@@ -1,11 +1,16 @@
 ﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-#Warn  ; Recommended for catching common errors.
+;#Warn  ; Recommended for catching common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include Lib\NetworkAPI.ahk
 #Include Lib\LV_Colors.ahk
 
 CheckedItems:=0
+
+;get settings
+Settings:=Settings_Get()
+Hide_Installed:=(!(!(Settings.hide_installed)))+0
+Only_Show_StdLib:=(!(!(Settings.only_show_stdlib)))+0
 
 ; "Standard" ASPDM Header
 Gui, Font, s16 wBold, Arial
@@ -32,11 +37,13 @@ Gui, Tab, Installed
 	Gui, Add, Button, y+4 w80 Disabled vRemoveButton gRemove, Remove
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
-	Gui, Add, Checkbox, y78 x20 Checked, Hide Installed Packages in Available tab
-	Gui, Add, Checkbox, y+4 xp, Only show StdLib Packages
+	Gui, Add, Checkbox, y78 x20 vHide_Installed, Hide Installed Packages in Available tab
+	Gui, Add, Checkbox, y+4 xp vOnly_Show_StdLib, Only show StdLib Packages
+	GuiControl,,Hide_Installed, % Hide_Installed
+	GuiControl,,Only_Show_StdLib, % Only_Show_StdLib
 	Gui, Add, Text, y+10 xp, StdLib Installation folder
 	Gui, Add, Button, yp-5 x+4, Browse...
-	Gui, Add, Edit, yp+1 x+4 w250 Disabled, % RegExReplace(A_AhkPath,"\w+\.exe","lib") ;temporary
+	Gui, Add, Edit, yp+1 x+4 w250 Disabled, % Settings.stdlib_folder ;temporary
 Gui, Tab,
 	Gui, Add, Edit, vSearchBar gSearch y44 x272 w250,
 	SetEditPlaceholder("SearchBar","Search...")
