@@ -2,7 +2,7 @@ ASPDM
 =====  
   
 AHKScript.org's Package/StdLib Distribution and Management  
-http://aspdm.1eko.com/  
+http://aspdm.cu.cc/  
   
 **Quick Info**  
 
