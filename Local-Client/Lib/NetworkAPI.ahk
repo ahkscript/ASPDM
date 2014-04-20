@@ -1,6 +1,7 @@
-﻿API_Source:="http://api-php.aspdm.1eko.com"
+﻿Packs_Source:="http://packs.aspdm.cu.cc"
+API_Source:="http://api-php.aspdm.cu.cc"
 
-CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.1eko.com/update.ini") {
+CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.cu.cc/update.ini") {
 	URLDownloadToFile,%Update_URL%, % tempupdatefile:=Util_TempFile()
 	IniRead,NewVersion,%tempupdatefile%,Update,Version,NULL (Error)
 	IniRead,__URL,%tempupdatefile%,Update,URL
@@ -39,20 +40,25 @@ u2v(u){
 	return x
 }
 
+u2v_clean(u){ ;the new free host adds junk, this filters it out
+	return k:=RegExReplace(u2v(u),"s)<!--.*")
+}
+
 API_List() {
 	global API_Source
-	l:=StrSplit(u2v(API_Source "/list.php"),"`n")
+	l:=StrSplit(u2v_clean(API_Source "/list.php"),"`n")
 	l.Remove(l.MaxIndex())
 	return l
 }
 
 API_Info(file,item="") {
 	global API_Source
-	return u2v(API_Source "/info.php?f=" . file . "&c=" . item)
+	return u2v_clean(API_Source "/info.php?f=" . file . "&c=" . item)
 }
 
 API_Get(file) {
-	DownloadFile("http://packs.aspdm.1eko.com/" file,t:=Util_TempFile())
+	global Packs_Source
+	DownloadFile(Packs_Source "/" file,t:=Util_TempFile())
 	return t
 }
 
