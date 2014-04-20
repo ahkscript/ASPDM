@@ -41,7 +41,8 @@ u2v(u){
 }
 
 u2v_clean(u){ ;the new free host adds junk, this filters it out
-	return k:=RegExReplace(u2v(u),"s)<!--.*")
+	j:=substr(k:=RegExReplace(u2v(u),"s)<!--.*"),1,1)
+	return ((j=="?")?SubStr(k,2):k)
 }
 
 API_List() {

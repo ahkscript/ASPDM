@@ -31,7 +31,7 @@ if !Ping() {
 Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
 Progress Show
 info:=JSON_ToObj(API_info(URI_str)) ;assuming only one package. Future: CSV Elements -> Loop for each
-if (!info.MaxIndex()) {
+if (!strlen(info["id"])) {
 	Progress, Off
 	MsgBox, 48, , The ASPDM API is not responding.`nThe server might be down.`n`nPlease try again in while (5 min).
 	ExitApp
