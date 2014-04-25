@@ -1,7 +1,16 @@
-﻿Packs_Source:="http://packs.aspdm.cu.cc"
-API_Source:="http://api-php.aspdm.cu.cc"
+﻿Packs_Source:="http://packs.aspdm.tk"
+API_Source:="http://api-php.aspdm.tk"
 
-CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.cu.cc/update.ini") {
+; Other servers - [old servers]
+; --------------------------------------------
+; Packs_Source:="http://packs.aspdm.cu.cc"
+; API_Source:="http://api-php.aspdm.cu.cc"
+;
+; Packs_Source:="http://packs.aspdm.1eko.com"
+; API_Source:="http://api-php.aspdm.1eko.com"
+; --------------------------------------------
+
+CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.tk/update.ini") {
 	URLDownloadToFile,%Update_URL%, % tempupdatefile:=Util_TempFile()
 	IniRead,NewVersion,%tempupdatefile%,Update,Version,NULL (Error)
 	IniRead,__URL,%tempupdatefile%,Update,URL

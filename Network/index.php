@@ -40,7 +40,10 @@
 
 	<body>
     <?php
-		include 'api/utils.php';
+		if (file_exists("api/utils.php"))
+			include 'api/utils.php';
+		else
+			include 'api-php/utils.php';
 	?>
     <?php	
     $num = 0;
@@ -158,7 +161,7 @@
 				</p>
 			</div>
 			<div id="footer">
-				<p>Hosted by <a href="http://github.com">GitHub</a>
+				<p>Hosted by <a href="http://www.2freehosting.com/"><img src="src/2fh_icon.png" alt="2FH"></a>
 				-
 				<a href="http://joedf.users.sourceforge.net/"> Joe DF</a>
 				-
