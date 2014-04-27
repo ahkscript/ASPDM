@@ -211,3 +211,7 @@ input.big:active {
 	font-style: italic;
 	color: red;
 }
+
+body div.container {
+	margin-top:20px;
+}

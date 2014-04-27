@@ -29,6 +29,9 @@
 			 * See here:  http://coding.abel.nu/2013/02/prevent-page-behind-jquery-ui-dialog-from-scrolling */
 			#full_wrapper { overflow-y:scroll;height:100%; }
 			html, body { margin:0;overflow:hidden;height:100%; }
+			
+			/* Align webpage height, Weird... caused by avgrund? */
+			.container { margin-top:0 !important; }
 		
 			/* Extra popup styling */
 			.avgrund-popup p { margin: 0 0 4px; }
