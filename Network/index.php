@@ -10,6 +10,9 @@
 		<link type="image/png" href="src/ahk.png" rel="icon">
 		<link rel="stylesheet" href="src/font-awesome-4.0.3/css/font-awesome.min.css">
 		<link type="text/css"  href="src/bootstrap.css" rel="stylesheet">
+		<link type="text/css"  href="src/bootstrap_buttons.min.css" rel="stylesheet">
+		<link type="text/css"  href="src/bootstrap_buttons-theme.min.css" rel="stylesheet">
+		<script src="src/jquery-1.11.0.min.js"></script>
 		<script src="src/sorttable.js"></script>
 		<link type="text/css"  href="src/style.css" rel="stylesheet">
         <link type="text/css"  href="src/modal.css" rel="stylesheet">
@@ -22,30 +25,59 @@
 			}
 		</script>
 		<style>
-			/* popup styling */
-			.avgrund-popup p {
-				margin: 0 0 4px;
+			/* Special Modal "anti-body-scroll" trick
+			 * See here:  http://coding.abel.nu/2013/02/prevent-page-behind-jquery-ui-dialog-from-scrolling */
+			#full_wrapper { overflow-y:scroll;height:100%; }
+			html, body { margin:0;overflow:hidden;height:100%; }
+		
+			/* Extra popup styling */
+			.avgrund-popup p { margin: 0 0 4px; }
+			.avgrund-popup .close { position: absolute; right: 8px; top: 4px; }
+			.dialog_description { margin-top: 8px !important; }
+			.dialog_button { display: inline-block !important; }
+			.avgrund-popup .packname { margin-bottom: -6px; }
+			.avgrund-popup th, .avgrund-popup td { padding-left: 8px; }
+			.avgrund-popup .h {
+				display: inline-block;
+				margin-left: 4px;
+				vertical-align: middle;
+			}
+			.avgrund-popup .h h3 {
+				line-height: 16px;
+				display: inline-block;
+			}
+			.avgrund-popup .h .hsub {
+				position: relative;
+				top: -16px;
+				font-size:11px;
+				display:block
+			}
+			.avgrund-popup table {
+				margin: 0;
+				font-size: 11px;
+			}
+			.avgrund-popup th {
+				color: #FEFEFE;
+				background-color: #1691BE !important;
+			}
+			.avgrund-popup td {
+				border-top: 1px solid #DDDDDD;
+				border-bottom: 1px solid #DDDDDD;
 			}
 			
-			.dialog_description {
-				margin-top: 8px !important;
-			}
-		
 			/* avgrund has bugs... this is a temp bugfix */
-			.avgrund-popup-animate {
-				z-index: 99;
-			}
+			.avgrund-popup-animate { z-index: 99; }
 		</style>
 	</head>
 
 	<body>
+	<div id="full_wrapper">
     <?php
 		if (file_exists("api/utils.php"))
 			include 'api/utils.php';
 		else
 			include 'api-php/utils.php';
-	?>
-    <?php	
+	
     $num = 0;
 	if ($handled = opendir('packs')) {
 		while (false !== ($entry = readdir($handled))) {
@@ -67,6 +99,9 @@
                     $j_id = $obj->id;
                     $j_type = $obj->type;
 					
+					$h_forumurl = $obj->forumurl;
+                    $h_forumurl = (strlen($h_forumurl))?(" (<a href=\"" . $h_forumurl . "\">View forum topic</a>)"):"";
+					
 					$j_tags = json_encode($obj->tags);
                     $j_tags = ($j_tags==="{}")?"None":substr($j_tags,1,-1);
 					
@@ -74,17 +109,26 @@
                     $j_required = ($j_required==="{}")?"None":substr($j_required,1,-1);
 					
                     $j_description = html_linefmt($obj->description);
+                    $j_description = (strlen($j_description))?$j_description:"No description.";
+					
                     $j_size = formatSizeUnits(filesize($file));
     ?>
     	<aside id="<?=$j_id?>" class="avgrund-popup">
-			<h3><?=$j_name?></h3>
-			<p>Author/Maintainer : <?=$j_author?></p>
-            <p>Type              : <?=$j_type?></p>
-            <p>Tags              : <?=$j_tags?></p>
-            <p>Size              : <?=$j_size?></p>
-			<p class="important">Required Packages : <?=$j_required?></p>
+			<button type="button" class="close" aria-hidden="true" onclick="closeDialog()">&times;</button>
+			
+			<div class="packname">
+				<a href="<?=$file?>" class="btn btn-sm btn-success dialog_button" type="button">Download</a>
+				<div class="h"><h3><?=$j_name?></h3><span class="hsub">by <?=$j_author?><?=$h_forumurl?></span></div>
+			</div>
+			
+			<table class="sortable">
+				<tr><th colspan="2">Information</th><tr>
+				<tr><td>Type              : </td><td><?=$j_type?></td></tr>
+				<tr><td>Tags              : </td><td><?=$j_tags?></td></tr>
+				<tr><td>Size              : </td><td><?=$j_size?></td></tr>
+				<tr><td class="important">Required Packages : </td><td><?=$j_required?></td></tr>
+			</table>
             <p class="dialog_description"><?=$j_description?></p>
-<!--<button style:"text-align: right;" onclick="javascript:closeDialog();">Close</button>-->
 		</aside>
     <?php
                     $num=$num+1;
@@ -93,7 +137,7 @@
 		}
 		closedir($handled);
 	};
-?>
+	?>
         
 		<div class="container">
 			
@@ -132,12 +176,15 @@
                     $j_id = $obj->id;
                     $j_type = $obj->type;
                     $j_size = formatSizeUnits(filesize($file));
+					
+					$j_forum = $obj->forumurl;
+                    $j_forum = (strlen($j_forum))?$j_forum:"#";
     ?>
     					<tr><td><a href="#"><?=$j_type?></a></td>
                         <td><a href="#" onclick="javascript:openDialog('<?=$j_id?>');"><?=$j_name?></a></td>
 						<td align="right">
 							<a href="#" onclick="javascript:openDialog('<?=$j_id?>');" title="Information"><i class="fa fa-info-circle"></i></a>
-							<a href="#" title="License"><i class="fa fa-file"></i></a>
+							<a href="<?=$j_forum?>" title="Forum"><i class="fa fa-comments"></i></a>
 							<a href="<?=$file?>" title="Download"><i class="fa fa-cloud-download"></i></a></td>
 						<td align="right"><a href="#"><?=$j_author?></a></td>
 						<td align="right"><?=$date?></td>
@@ -170,9 +217,11 @@
 			</div>
 		</div>
 		<div class="avgrund-cover"></div>
-<script type="text/javascript" src="src/modal.js"></script>
+	<script type="text/javascript" src="src/modal.js"></script>
+	</div>
 	</body>
 </html>
+
 ﻿<?php
 	function print_metadata($file,$content_item) {
 		if ($file == NULL) {

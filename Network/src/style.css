@@ -182,10 +182,6 @@ input.big:active {
 	width: 33%;
 } 
 
-.infobox {
-	
-}
-
 .center, div.center , form.center {
 	display:block;
 	text-align:center;
@@ -205,12 +201,13 @@ input.big:active {
 .dialog_description {
 	height:206px;
 	overflow:auto;
-	background-color:beige;
+	background-color:#F7F7F9;
 	padding: 4px;
 	border-radius: 4px;
+	border: 1px solid #DDDDDD;
 }
 
-p.important {
+.important {
 	font-style: italic;
 	color: red;
 }

@@ -63,7 +63,8 @@
 						<table class="form">
 							<tr>
 								<td style="text-align:right">User Name:</td>
-								<td><input type="text" name="username" placeholder="Username"></td>
+								<td><input type="text" name="username" placeholder="Username" 
+									<?php if(isset($_GET["u"])) {echo "value=\"" . strtolower($_GET["u"]) . "\"";} ?> ></td>
 							</tr>
 							<tr>
 								<td style="text-align:right">Password:</td>

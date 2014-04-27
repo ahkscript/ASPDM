@@ -5,7 +5,7 @@ session_start();
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-$host = "mysql.3owl.com";
+$host = "mysql.2freehosting.com";
 $db_user = "******************";
 $db_pass = "******************";
 $db_name = "******************";
@@ -34,7 +34,7 @@ $hash = hash('sha256', $password);
 
 if($hash != $userData['password']) // Incorrect password. So, redirect to login_form again.
 {
-	header('Location: login.php?i=p');
+	header('Location: login.php?i=p&u=' . $username);
 }else{ // Redirect to home page after successful login.
 	session_regenerate_id();
 	$_SESSION['sess_user_id'] = $userData['id'];
