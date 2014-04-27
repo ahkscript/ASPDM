@@ -198,8 +198,7 @@ input.big:active {
 	z-index:2;
 }
 
-.dialog_description {
-	height:206px;
+.description {
 	overflow:auto;
 	background-color:#F7F7F9;
 	padding: 4px;
@@ -210,6 +209,11 @@ input.big:active {
 .important {
 	font-style: italic;
 	color: red;
+}
+
+.important_blue {
+	font-style: italic;
+	color: blue;
 }
 
 body div.container {

@@ -36,7 +36,7 @@
 			/* Extra popup styling */
 			.avgrund-popup p { margin: 0 0 4px; }
 			.avgrund-popup .close { position: absolute; right: 8px; top: 4px; }
-			.dialog_description { margin-top: 8px !important; }
+			.avgrund-popup .description { margin-top: 8px !important; height:184px; line-height: 17px; }
 			.dialog_button { display: inline-block !important; }
 			.avgrund-popup .packname { margin-bottom: -6px; }
 			.avgrund-popup th, .avgrund-popup td { padding-left: 8px; }
@@ -115,6 +115,8 @@
                     $j_description = (strlen($j_description))?$j_description:"No description.";
 					
                     $j_size = formatSizeUnits(filesize($file));
+					
+					$a_license = html_licensefmt($obj->license);
     ?>
     	<aside id="<?=$j_id?>" class="avgrund-popup">
 			<button type="button" class="close" aria-hidden="true" onclick="closeDialog()">&times;</button>
@@ -130,8 +132,9 @@
 				<tr><td>Tags              : </td><td><?=$j_tags?></td></tr>
 				<tr><td>Size              : </td><td><?=$j_size?></td></tr>
 				<tr><td class="important">Required Packages : </td><td><?=$j_required?></td></tr>
+				<tr><td class="important_blue">License : </td><td><?=$a_license?></td></tr>
 			</table>
-            <p class="dialog_description"><?=$j_description?></p>
+            <p class="description"><?=$j_description?></p>
 		</aside>
     <?php
                     $num=$num+1;
@@ -258,6 +261,30 @@
 		$replace = '<br />';
 		// Processes \r\n's first so they aren't converted twice.
 		return str_replace($order, $replace, $str);
+	}
+	
+	function html_licensefmt($str) {
+		$str = trim($str);
+		if ( (strlen($str)<2) || (stristr($str,"ASPDM")) )
+			return "<a href=\"https://github.com/ahkscript/ASPDM/blob/master/Specifications/License.md\">ASPDM Default License</a>";
+		if (stristr($str,"MIT"))
+			return "<a href=\"http://opensource.org/licenses/MIT\">" . $str . "</a>";
+		if (stristr($str,"BSD"))
+			if (stristr($str,"2"))
+				return "<a href=\"http://opensource.org/licenses/BSD-2-Clause\">" . $str . "</a>";
+			else
+				return "<a href=\"http://opensource.org/licenses/BSD-3-Clause\">" . $str . "</a>";
+		if (stristr($str,"LGPL"))
+			return "<a href=\"http://opensource.org/licenses/lgpl-license\">" . $str . "</a>";
+		if (stristr($str,"GPL"))
+			return "<a href=\"http://opensource.org/licenses/gpl-license\">" . $str . "</a>";
+		if (stristr($str,"Apache"))
+			return "<a href=\"http://opensource.org/licenses/Apache-2.0\">" . $str . "</a>";
+		if (stristr($str,"CC0"))
+			return "<a href=\"http://creativecommons.org/publicdomain/zero/1.0\">" . $str . "</a>";
+		if ( (stristr($str,"CC")) || (stristr($str,"creative")) || (stristr($str,"commons")) )
+			return "<a href=\"http://creativecommons.org/licenses\">" . $str . "</a>";
+		return $str;
 	}
 	
     function formatSizeUnits($bytes) {
