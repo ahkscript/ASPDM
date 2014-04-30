@@ -89,7 +89,10 @@ API_ListNum(limits) {
 
 API_ListAll() {
 	global API_Source
-	return JSON_ToObj(u2v_clean(API_Source "/list.php?full"))
+	k:=u2v_clean(API_Source "/list.php?full")
+	if (!InStr(SubStr(k,1,3),"{")) ;avoid javascript from error page to be considered as JSON
+		return ""
+	return JSON_ToObj(k)
 }
 
 API_Info(file,item="") {

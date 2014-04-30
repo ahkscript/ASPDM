@@ -71,21 +71,17 @@ LV_ModifyCol(5,"300")
 if Ping() {
 	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
 	Progress Show
-	packs:=API_list()
-	if (!packs.MaxIndex()) {
+	packs:=API_ListAll()
+	if (!IsObject(packs)) {
 		Progress, Off
 		ListView_OfflineMsg:="Offline mode, ASPDM API is not responding."
 		gosub, ListView_Offline
 		MsgBox, 48, , The ASPDM API is not responding.`nThe server might be down.`n`nPlease try again in while (5 min).
 		return
 	}
-	TotalItems:=packs.MaxIndex()
-	Loop % TotalItems
-	{
-		info:=JSON_ToObj(API_info(packs[A_Index]))
-		LV_Add("",packs[A_Index],info["name"],info["version"],info["author"],info["description"])
-		load_progress(packs[A_Index],A_Index,TotalItems)
-	}
+	TotalItems:=Util_ObjCount(packs)
+	for each, info in packs
+		LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
 	GuiControl,,PackageCounter_A, %TotalItems% Packages
 	LV_Delete(1)
 	Sleep 100

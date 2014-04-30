@@ -18,6 +18,15 @@ Util_TagsObj2CSV(TagsObj:="") {
 	return SubStr(CSV,1,-1)
 }
 
+Util_ObjCount(Obj) {
+	if (!IsObject(Obj))
+		return 0
+	z:=0
+	for k in Obj
+		z+=1 ;or z:=A_Index
+	return z
+}
+
 Util_ShortPath(p,l=50) {
 	VarSetCapacity(_p, (A_IsUnicode?2:1)*StrLen(p) )
 	DllCall("shlwapi\PathCompactPathEx"

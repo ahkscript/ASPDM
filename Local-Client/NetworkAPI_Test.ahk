@@ -45,7 +45,7 @@ Loop % total
 }
 */
 packs:=API_ListAll()
-total:=packs.MaxIndex()
+total:=Util_ObjCount(packs)
 for each, info in packs
 	LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
 LV_Delete(1)
