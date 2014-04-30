@@ -15,11 +15,10 @@ Package_Build(outFile, baseDir, jfile="")
 Package_Validate(fIn) {
 	pFile := FileOpen(fIn,"r","UTF-8-RAW")
 	if !IsObject(pFile) {
-		MsgBox Can't open "%FileName%" for writing.
+		MsgBox Can't open "%fIn%" for writing.
 		return 0
 	}
-	if ( pFile.RawRead(magic,8) != 8 )
-		return 0
+	magic:=pFile.Read(8)
 	if ( (m_int := pFile.ReadUInt()) < 80 )
 		return 0
 	m_st := pFile.Read(1)
