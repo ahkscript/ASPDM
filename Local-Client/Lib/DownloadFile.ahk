@@ -6,10 +6,11 @@
 ;           - Changed Display Information
 ;           - Commented-out Size calculation
 ;           - Added ShortURL()
-;           - added short delay 100 ms to show the progress bar if download was too fast
+;           - Added short delay 100 ms to show the progress bar if download was too fast
+;           - Added ProgressBarTitle
 ; ----------------------------------------------------------------------------------
 
-DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True) {
+DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True, ProgressBarTitle:="Downloading...") {
     ;Check if the file already exists and if we must not overwrite it
       If (!Overwrite && FileExist(SaveFileAs))
           Return
@@ -24,7 +25,7 @@ DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True) {
           ;Store the header which holds the file size in a variable:
             FinalSize := WebRequest.GetResponseHeader("Content-Length")
           ;Create the progressbar and the timer
-            Progress, CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, , Downloading..., %_surl%
+            Progress, CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, , %ProgressBarTitle%, %_surl%
             SetTimer, __UpdateProgressBar, 100
       }
     ;Download the file

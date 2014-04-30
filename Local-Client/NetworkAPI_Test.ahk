@@ -32,14 +32,22 @@ if !Ping() {
 }
 Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
 Progress Show
+/*
 packs:=API_list()
 total:=packs.MaxIndex()
 Loop % total
 {
-	info:=JSON_ToObj(API_info(packs[A_Index]))
+	info:=JSON_ToObj(raw:=API_info(packs[A_Index]))
+	if InStr(raw,"error")
+		info:={name:raw}
 	LV_Add("",packs[A_Index],info["name"],info["version"],info["author"],info["description"])
 	load_progress(packs[A_Index],A_Index,total)
 }
+*/
+packs:=API_ListAll()
+total:=packs.MaxIndex()
+for each, info in packs
+	LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
 LV_Delete(1)
 Sleep 100
 Progress, Off

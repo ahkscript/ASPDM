@@ -12,6 +12,24 @@ Package_Build(outFile, baseDir, jfile="")
 	_Package_Compress(outFile, outFile, JSON_FromObj(man))
 }
 
+Package_Validate(fIn) {
+	pFile := FileOpen(fIn,"r","UTF-8-RAW")
+	if !IsObject(pFile) {
+		MsgBox Can't open "%FileName%" for writing.
+		return 0
+	}
+	if ( pFile.RawRead(magic,8) != 8 )
+		return 0
+	if ( (m_int := pFile.ReadUInt()) < 80 )
+		return 0
+	m_st := pFile.Read(1)
+	pFile.Seek(0x0B+m_int)
+	m_en := pFile.Read(1)
+	pFile.Close()
+	;msgbox % "[" . magic . "|" . m_int . "|" . m_st . "|" . m_en . "]"
+	return ( (magic == "AHKPKG00") && (m_int >= 80) && (m_int<5242880) && (m_st == "{") && (m_en == "}") )
+}
+
 Package_Extract(dir, inFile)
 {
 	FileGetSize, dataSize, %inFile%
