@@ -71,7 +71,7 @@ u2v_clean(u){ ;the new free host adds junk, this filters it out
 	global API_u2vClean
 	if (API_u2vClean)
 		return v_clean(u2v(u))
-	return u
+	return u2v(u)
 }
 
 API_List() {
