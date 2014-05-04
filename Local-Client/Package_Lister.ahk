@@ -239,6 +239,7 @@ GuiClose:
 ExitApp
 
 Install:
+	Gui +Disabled
 	;Installation process
 	;TODO: check for "required" aka dependencies
 	
@@ -286,6 +287,7 @@ Install:
 	else
 		MsgBox, 16, , % "An installation error occured.`n(ExitCode: " ecode " [""" Install_ExitCode(ecode) """])"
 	
+	Gui -Disabled
 return
 
 InstallFile:
@@ -294,6 +296,7 @@ UpdateFile:
 return
 
 Remove:
+	Gui +Disabled
 	Remove_packs := ""
 	Remove_packs_rows := ""
 	r_check:=0
@@ -335,6 +338,7 @@ Remove:
 	else
 		MsgBox, 16, , % "An uninstallation error occured.`n(ExitCode: " ecode " [""" Install_ExitCode(ecode) """])"
 	
+	Gui -Disabled
 return
 
 load_progress(t,c,f) {
