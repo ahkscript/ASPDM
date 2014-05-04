@@ -33,66 +33,51 @@ InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Con
 packs:=StrSplit(args[1],"|")
 TotalItems:=packs.MaxIndex()
 	
-;Install Packages
-	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Installing Packages...
+;Remove Packages
+	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Removing Packages...
 	Progress Show
-for Current, FilePath in packs
+for Current, id_akhp in packs
 {
-	;Validate File Paths
-	SplitPath,FilePath,FileName,FileDir
-	if !StrLen(FileDir)	{
-		FileDir:=A_WorkingDir
-		FilePath:=FileDir "\" FileName
-	}
+	arch_file := Local_Archive "\" id_akhp ;Rename : [ID].ahkp
 	
 	;Assure file existance
-	if (!FileExist(FilePath))
+	if (!FileExist(arch_file))
 		ExitApp, % Install.Error_NonExistantFile
 	
 	;Get package ID from metadata
-	mdata:=JSON_ToObj(Manifest_FromPackage(FilePath))
+	mdata:=JSON_ToObj(Manifest_FromPackage(arch_file))
 	
-	;Make backup copy to asdpm\archive\*.ahkp
-	arch_file := Local_Archive "\" mdata["id"] ".ahkp" ;Rename : [ID].ahkp
-	if (!FileExist(arch_file))
+	;Setup Deletion Lists
+	RepoSubDir := Local_Repo "\" mdata["id"]
+	RepoSubDirLib := RepoSubDir "\Lib"
+	if (!FileExist(RepoSubDirLib))
+		ExitApp, % Install.Error_NonExistantDir
+	RemList:=Object()
+	Loop, %RepoSubDirLib%\*, 1, 0
 	{
-		FileCopy,%FilePath%,%arch_file%,1
-		if ErrorLevel
-			ExitApp, % Install.Error_ArchiveBackup
+		RemList.Insert(A_LoopFileName)
 	}
-	else
+	
+	;Delete files in StdLib folder
+	For each, file in RemList
 	{
-		FileGetSize,file_Sz,%FilePath%
-		FileGetSize,arch_Sz,%arch_file%
-		if (file_Sz!=arch_Sz) {
-			FileCopy,%FilePath%,%arch_file%,1
+		if (FileExist(InstallationFolder "\" file))
+		{
+			FileDelete,%InstallationFolder%\%file%
 			if ErrorLevel
-				ExitApp, % Install.Error_ArchiveBackup
+				ExitApp, % Install.Error_DeleteStdLib
 		}
 	}
 	
-	;Setup Extraction Dirs
-	FileCreateDir, % ExtractDir := Local_Repo "\" mdata["id"]
+	;Delete data in local repo "[ID]\"
+	FileRemoveDir,%RepoSubDir%,1
 	if ErrorLevel
-		ExitApp, % Install.Error_CreateRepoSubDir
-	RepoSubDir := ExtractDir "\Lib"
+		ExitApp, % Install.Error_DeleteRepoSubDir
 	
-	;Extract package to local repo
-	if !Package_Extract(ExtractDir, FilePath)
-		ExitApp, % Install.Error_Extraction
-	
-	;Copy data from local repo "Lib\" to StdLib "Lib\"
-	FileCopyDir,%RepoSubDir%,%InstallationFolder%,1
-	if ErrorLevel
-		ExitApp, % Install.Error_CopyToStdLib
-	
-	;delete key in case of "double-install"
+	;Remove Package ID from "Installed" in Settings
 	for x, installed in Settings.installed
 		if (installed==mdata["id"])
 			Settings.installed.Remove(x)
-	
-	;Append Package ID to "Installed" in Settings
-	Settings.installed.Insert(mdata["id"])
 	
 	;Increment progress bar
 	load_progress(mdata["id"],Current,TotalItems)
@@ -106,6 +91,6 @@ ExitApp, % Install.Success
 
 load_progress(t,c,f) {
 	p:=Round((c/f)*100)
-	Progress, %p% , Installing:  %c% / %f% items  [ %p%`% ] , %t%
+	Progress, %p% , Removing:  %c% / %f% items  [ %p%`% ] , %t%
 }
 

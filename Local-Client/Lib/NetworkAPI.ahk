@@ -4,8 +4,8 @@ API_u2vClean:=1 ;enable u2v_clean()
 
 ; Other/mirror servers - [not always updated]
 ; --------------------------------------------
- Packs_Source:="http://packs.ahk.cu.cc" ;or same server : "http://packs.aspdm.cf"
- API_Source:="http://api-php.ahk.cu.cc" ;or : "http://api-php.aspdm.cf"
+; Packs_Source:="http://packs.ahk.cu.cc"
+; API_Source:="http://api-php.ahk.cu.cc"
 ;
 ; Packs_Source:="http://packs.aspdm.cu.cc"
 ; API_Source:="http://api-php.aspdm.cu.cc"

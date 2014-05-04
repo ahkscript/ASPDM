@@ -2,6 +2,7 @@
 ;#Warn  ; Recommended for catching common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+#Include Lib\Install.ahk
 #Include Lib\NetworkAPI.ahk
 #Include Lib\LV_Colors.ahk
 
@@ -9,6 +10,8 @@ CheckedItems:=0
 
 ;get settings
 Settings:=Settings_Get()
+Local_Repo:=Settings.Local_Repo
+Local_Archive:=Settings.Local_Archive
 Hide_Installed:=(!(!(Settings.hide_installed)))+0
 Only_Show_StdLib:=(!(!(Settings.only_show_stdlib)))+0
 
@@ -33,7 +36,7 @@ Gui, Tab, Updates
 	Gui, Add, Button, yp x+2 vUpdateFileButton gUpdateFile, Update from file...
 	Gui, Add, Text, yp+6 x+172 +Right vPackageCounter_U, Loading packages...
 Gui, Tab, Installed
-	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi vLV_I hwndhLV_I, File|Name|Installed Version
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_I hwndhLV_I, File|Name|Installed Version
 	Gui, Add, Button, y+4 w80 Disabled vRemoveButton gRemove, Remove
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
@@ -95,7 +98,22 @@ else
 	ListView_OfflineMsg:="Offline mode, No internet connection detected..."
 	gosub, ListView_Offline
 }
+;List installed packs
+gosub,List_Installed
 LV_Colors.Attach(hLV_I,1,0,0)
+Gui, ListView, LV_A
+return
+
+List_Installed:
+	Gui, ListView, LV_I
+	for each, IPacks in Settings.Installed
+	{
+		i_pack:=Local_Archive "\" IPacks ".ahkp"
+		i_info:=JSON_ToObj(Manifest_FromPackage(i_pack))
+		LV_Add("",i_info["id"] ".ahkp",i_info["name"],i_info["version"])
+	}
+	TotalItems_I := Util_ObjCount(Settings.Installed)
+	GuiControl,,PackageCounter_I, %TotalItems_I% Packages
 return
 
 ListView_Offline:
@@ -115,23 +133,38 @@ ListView_Offline:
 		LV_ModifyCol(5,"0")
 		LV_Colors.Attach(hLV_%A_loopfield%,1,0,1)
 	}
-	Gui, ListView, LV_A
 return
 
 ListView_Events:
 if A_GuiEvent = I
 {
 	if InStr(ErrorLevel, "C", true)
-		CheckedItems+=1
+		CheckedItems%_selectedlist%+=1
 	if InStr(ErrorLevel, "c", true)
-		CheckedItems-=1
-	if (CheckedItems>0) {
-		GuiControl,Enable,InstallButton
-		GuiControl,,InstallButton,Install (%CheckedItems%)
+		CheckedItems%_selectedlist%-=1
+	if (CheckedItems%_selectedlist%>0) {
+		if (_selectedlist == "LV_A")
+		{
+			GuiControl,Enable,InstallButton
+			GuiControl,,InstallButton,Install (%CheckedItemsLV_A%)
+		}
+		if (_selectedlist == "LV_I")
+		{
+			GuiControl,Enable,RemoveButton
+			GuiControl,,RemoveButton,Remove (%CheckedItemsLV_I%)
+		}
 	} else {
-		CheckedItems:=0
-		GuiControl,Disable,InstallButton
-		GuiControl,,InstallButton,Install
+		CheckedItems%_selectedlist%:=0
+		if (_selectedlist == "LV_A")
+		{
+			GuiControl,Disable,InstallButton
+			GuiControl,,InstallButton,Install
+		}
+		if (_selectedlist == "LV_I")
+		{
+			GuiControl,Disable,RemoveButton
+			GuiControl,,RemoveButton,Remove
+		}
 	}
 }
 return
@@ -206,13 +239,102 @@ GuiClose:
 ExitApp
 
 Install:
+	;Installation process
+	;TODO: check for "required" aka dependencies
+	
+	;example - Install_packs:="~built_packs~\winfade.ahkp"
+	Install_packs := ""
+	Install_packs_rows := ""
+	r_check:=0
+	Loop
+	{
+		r_check := LV_GetNext(r_check,"Checked")
+		if (!r_check)
+		break
+		LV_GetText(r_item,r_check,1)
+		r_path:=API_Get(r_item) ;download the package
+		Install_packs.= r_path "|"
+		Install_packs_rows.= r_check "|"
+	}
+	Install_packs:=SubStr(Install_packs,1,-1)
+	Install_packs_rows:=SubStr(Install_packs_rows,1,-1)
+	;Note WinXP Command-line 8191 chars limitation
+	;  http://support.microsoft.com/kb/830473
+	;Assuming approximately 50 each file path, should be around 114 packages with "|" delimiters
+	Runwait *RunAs Package_Installer.ahk "%Install_packs%",,UseErrorLevel
+	if ( (ecode:=ErrorLevel)==Install.Success )
+	{
+		;Update list
+		/* TODO : hide installed Option
+		Install_packs_list:=StrSplit(Install_packs_rows,"|")
+		for x, Install_packs_row in Install_packs_list
+			LV_Delete(Install_packs_row+0)
+		CheckedItems%_selectedlist%:=0
+		GuiControl,Disable,InstallButton
+		GuiControl,,InstallButton,Install
+		*/
+		
+		;Update "Installed" list - full-blown list update
+		Settings:=Settings_Get()
+		Gui, ListView, LV_I
+		LV_Delete()
+		gosub,List_Installed
+		Gui, ListView, LV_A
+		
+		MsgBox, 64, , Installation finished successfully.
+	}
+	else
+		MsgBox, 16, , % "An installation error occured.`n(ExitCode: " ecode " [""" Install_ExitCode(ecode) """])"
+	
+return
+
 InstallFile:
 Update:
 UpdateFile:
-/*
-	Installation process
-*/
+return
+
 Remove:
+	Remove_packs := ""
+	Remove_packs_rows := ""
+	r_check:=0
+	Loop
+	{
+		r_check := LV_GetNext(r_check,"Checked")
+		if (!r_check)
+		break
+		LV_GetText(r_item,r_check,1)
+		Remove_packs.= r_item "|"
+		Remove_packs_rows.= r_check "|"
+	}
+	Remove_packs:=SubStr(Remove_packs,1,-1)
+	Remove_packs_rows:=SubStr(Remove_packs_rows,1,-1)
+	
+	Runwait *RunAs Package_Remover.ahk "%Remove_packs%",,UseErrorLevel
+	if ( (ecode:=ErrorLevel)==Install.Success )
+	{
+		;Update list
+		/*MsgBox % Remove_packs_rows
+		Remove_packs_list:=StrSplit(Remove_packs_rows,"|")
+		for x, Remove_packs_row in Remove_packs_list
+			LV_Delete(Remove_packs_row+0)
+		*/
+		;full-blown list update
+		Settings:=Settings_Get()
+		Gui, ListView, LV_I
+		LV_Delete()
+		gosub,List_Installed
+		Gui, ListView, LV_I
+		
+		;Update Button
+		CheckedItems%_selectedlist%:=0
+		GuiControl,Disable,RemoveButton
+		GuiControl,,RemoveButton,Remove
+		
+		MsgBox, 64, , Removal finished successfully.
+	}
+	else
+		MsgBox, 16, , % "An uninstallation error occured.`n(ExitCode: " ecode " [""" Install_ExitCode(ecode) """])"
+	
 return
 
 load_progress(t,c,f) {
