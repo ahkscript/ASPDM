@@ -79,6 +79,9 @@ for Current, id_akhp in packs
 		if (installed==mdata["id"])
 			Settings.installed.Remove(x)
 	
+	;Save settings right-away in case of error-exit
+	Settings_Save(Settings)
+	
 	;Increment progress bar
 	load_progress(mdata["id"],Current,TotalItems)
 }

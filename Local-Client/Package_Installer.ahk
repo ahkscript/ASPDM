@@ -94,6 +94,9 @@ for Current, FilePath in packs
 	;Append Package ID to "Installed" in Settings
 	Settings.installed.Insert(mdata["id"])
 	
+	;Save settings right-away in case of error-exit
+	Settings_Save(Settings)
+	
 	;Increment progress bar
 	load_progress(mdata["id"],Current,TotalItems)
 }
