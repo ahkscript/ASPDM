@@ -94,9 +94,9 @@ JSON_Beautify(JSON, gap, fork:=0) {
 		} else {
 			_JSON .= indent """" key """" ":"
 			if (val.MaxIndex()!="")
-				_JSON .= "[`n" JSON_Beautify(val,indent indent,1) indent "],`n"
+				_JSON .= "[`n" %A_thisFunc%(val,indent indent,1) indent "],`n"
 			else
-				_JSON .= "{`n" JSON_Beautify(val,indent indent,1) indent "},`n"
+				_JSON .= "{`n" %A_thisFunc%(val,indent indent,1) indent "},`n"
 		}
 	}
 	_JSON:=SubStr(_JSON,1,-2) "`n"
