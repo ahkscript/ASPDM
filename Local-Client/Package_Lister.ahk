@@ -240,6 +240,7 @@ ExitApp
 
 Install:
 	Gui +Disabled
+	Gui +OwnDialogs
 	;Installation process
 	;TODO: check for "required" aka dependencies
 	
@@ -259,6 +260,8 @@ Install:
 	}
 	Install_packs:=SubStr(Install_packs,1,-1)
 	Install_packs_rows:=SubStr(Install_packs_rows,1,-1)
+	
+	_Install:
 	;Note WinXP Command-line 8191 chars limitation
 	;  http://support.microsoft.com/kb/830473
 	;Assuming approximately 50 each file path, should be around 114 packages with "|" delimiters
@@ -291,12 +294,24 @@ Install:
 return
 
 InstallFile:
+	Gui +Disabled
+	Gui +OwnDialogs
+	FileSelectFile, _SelectedPack, 3, , Install a package, AHKP file (*.ahkp)
+	if _SelectedPack is not space
+	{
+		Install_packs:=_SelectedPack
+		gosub,_Install
+	}
+	Gui -Disabled
+return
+
 Update:
 UpdateFile:
 return
 
 Remove:
 	Gui +Disabled
+	Gui +OwnDialogs
 	Remove_packs := ""
 	Remove_packs_rows := ""
 	r_check:=0

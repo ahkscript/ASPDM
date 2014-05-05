@@ -40,19 +40,11 @@ JSON_Uglify(JSON) {
 }
 
 JSON_Beautify(JSON, gap, fork:=0) {
-
-	if JSON is space
-		return ""
-	
-	if (!IsObject(JSON))
-		JSON:=JSON_ToObj(JSON)
-	
 	if (!fork) {
-		i := 0
-		indent := ""
+		if JSON is space
+			return ""
+		i:=0, indent:="", sp:=""
 		_JSON := "{`n"
-		sp := ""
-
 		if gap is number
 		{
 			i :=0
@@ -66,15 +58,14 @@ JSON_Beautify(JSON, gap, fork:=0) {
 	} else {
 		indent := gap
 	}
-	
+	if (!IsObject(JSON))
+		JSON:=JSON_ToObj(JSON)
 	for key, val in JSON
 	{
 		if (!IsObject(val))
 		{
 			_JSON .= indent """"
-			
 			ch:=val
-			
 			; JSON_Encode(ch) {
 				; from VxE's JSON_FromObj
 				; Encode control characters, starting with backslash.
@@ -95,14 +86,11 @@ JSON_Beautify(JSON, gap, fork:=0) {
 							. Chr( ( sss & 15 ) + ( ( sss & 15 ) < 10 ? 48 : 55 ) )
 					StringReplace, ch, ch, % kk, % vv, A
 				}
-			; Return ch
+			;   Return ch
 			; }
-			
 			if key is not number
-				_JSON .= key """" ":" """" ch
-			else
-				_JSON .= ch
-			_JSON .= """" ",`n"
+				_JSON .= key """" ":" """"
+			_JSON .= ch """" ",`n"
 		} else {
 			_JSON .= indent """" key """" ":"
 			if (val.MaxIndex()!="")
@@ -112,7 +100,6 @@ JSON_Beautify(JSON, gap, fork:=0) {
 		}
 	}
 	_JSON:=SubStr(_JSON,1,-2) "`n"
-	
 	if (!fork)
 		return _JSON "}"
 	else
