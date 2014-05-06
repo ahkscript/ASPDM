@@ -24,7 +24,7 @@ Settings_Get() {
 
 Settings_Validate(j) {
 	j_default:=Settings_Default()
-	vars:="stdlib_folder|local_repo|hide_installed|only_show_stdlib|installed"
+	vars:="stdlib_folder|local_repo|local_archive|hide_installed|only_show_stdlib|installed"
 	loop,Parse,vars,`|
 		if (!j.Haskey(A_LoopField))
 			j[A_LoopField]:=j_default[A_LoopField]

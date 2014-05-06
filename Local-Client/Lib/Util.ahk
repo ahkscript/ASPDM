@@ -99,15 +99,14 @@ Util_DirTree(dir)
 
 Util_isASCII(s)
 {
-	i:=0
-	Loop, % k:=StrLen(s)
+	Loop, Parse, s
 	{
-		z:=Asc(SubStr(s,A_Index,1))
+		z:=Asc(A_LoopField)
 		;if ( (z<=8) || (z==11) || (z==12) || (z==127) || ((z>=14) && (z<=31)) )
 		if ( z==0x09 || z==0x0A || z==0x0D || (0x20 <= z && z <= 0x7E) )
-			i+=1
+			continue
 		else
-			i-=1
+			return 0
 	}
-	return (((k)?k:-i)==i)
+	return 1
 }
