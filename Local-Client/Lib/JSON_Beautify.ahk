@@ -1,107 +1,86 @@
 ﻿/*
- *    "JSON_Beautify.ahk" by Joe DF
- *    __________________________________________________________________________________
+ *    "JSON_Beautify.ahk" by Joe DF (joedf@users.sourceforge.net)
+ *    ______________________________________________________________________
  *    "Transform Objects & JSON strings into nice or ugly JSON strings."
+ *    Uses VxE's JSON_FromObj()
  *    
- *    Uses VxE's JSON_FromObj() & JSON_ToObj()
- *    Released under MIT License : Basically, just leave this header intact.
- *    ____
- * 
- *    The MIT License (MIT)
- * 
- *    Copyright (c) Joe DF (joedf@users.sourceforge.net)
- * 
- *        Permission is hereby granted, free of charge, to any person obtaining a copy
- *        of this software and associated documentation files (the "Software"), to deal
- *        in the Software without restriction, including without limitation the rights
- *        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *        copies of the Software, and to permit persons to whom the Software is
- *        furnished to do so, subject to the following conditions:
- * 
- *    The above copyright notice and this permission notice shall be included in
- *    all copies or substantial portions of the Software.
- * 
- *        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
- *        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
- *        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
- *        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *        SOFTWARE.
+ *    Released under The MIT License (MIT)
+ *    ______________________________________________________________________
+ *    
 */
 
 JSON_Uglify(JSON) {
 	if JSON is space
 		return ""
 	if (!IsObject(JSON))
-		return JSON_FromObj(JSON_ToObj(JSON))
+	{
+		StringReplace,JSON,JSON, `n,,A
+		StringReplace,JSON,JSON, `r,,A
+		StringReplace,JSON,JSON, % A_Tab,,A
+		StringReplace,JSON,JSON, % Chr(08),,A
+		StringReplace,JSON,JSON, % Chr(12),,A
+		_JSON:="", in_str:=0
+		Loop, Parse, JSON
+		{
+			if ( (!in_str) && (asc(A_LoopField)==0x20) )
+				continue
+			if( (asc(A_LoopField)==0x22) && (asc(l_char)!=0x5C) )
+				in_str := !in_str
+			_JSON .= (l_char:=A_LoopField)
+		}
+		return _JSON
+	}
 	else
 		return JSON_FromObj(JSON)
 }
 
-JSON_Beautify(JSON, gap, fork:=0) {
-	if (!fork) {
-		if JSON is space
-			return ""
-		i:=0, indent:="", sp:=""
-		_JSON := "{`n"
-		if gap is number
-		{
-			i :=0
-			while (i < gap) {
-				indent .= " "
-				i+=1
-			}
-		} else {
-			indent := gap
+JSON_Beautify(JSON, gap) {
+	;fork of http://pastebin.com/xB0fG9py
+	JSON:=JSON_Uglify(JSON)
+	
+	i:=0, indent:=""
+	
+	if gap is number
+	{
+		i :=0
+		while (i < gap) {
+			indent .= " "
+			i+=1
 		}
 	} else {
 		indent := gap
 	}
-	if (!IsObject(JSON))
-		JSON:=JSON_ToObj(JSON)
-	for key, val in JSON
+	
+	_JSON:="", in_str:=0, k:=0, l_char:=""
+	
+	Loop, Parse, JSON
 	{
-		if (!IsObject(val))
-		{
-			_JSON .= indent """"
-			ch:=val
-			; JSON_Encode(ch) {
-				; from VxE's JSON_FromObj
-				; Encode control characters, starting with backslash.
-				StringReplace, ch, ch, \, \\, A
-				StringReplace, ch, ch, % Chr(08), \b, A
-				StringReplace, ch, ch, % A_Tab, \t, A
-				StringReplace, ch, ch, `n, \n, A
-				StringReplace, ch, ch, % Chr(12), \f, A
-				StringReplace, ch, ch, `r, \r, A
-				StringReplace, ch, ch, ", \", A
-				StringReplace, ch, ch, /, \/, A
-				While RegexMatch( ch, "[^\x20-\x7e]", kk )
-				{
-					sss := Asc( kk )
-					vv := "\u" . Chr( ( ( sss >> 12 ) & 15 ) + ( ( ( s >> 12 ) & 15 ) < 10 ? 48 : 55 ) )
-							. Chr( ( ( sss >> 8 ) & 15 ) + ( ( ( sss >> 8 ) & 15 ) < 10 ? 48 : 55 ) )
-							. Chr( ( ( sss >> 4 ) & 15 ) + ( ( ( sss >> 4 ) & 15 ) < 10 ? 48 : 55 ) )
-							. Chr( ( sss & 15 ) + ( ( sss & 15 ) < 10 ? 48 : 55 ) )
-					StringReplace, ch, ch, % kk, % vv, A
-				}
-			;   Return ch
-			; }
-			if key is not number
-				_JSON .= key """" ":" """"
-			_JSON .= ch """" ",`n"
-		} else {
-			_JSON .= indent """" key """" ":"
-			if (val.MaxIndex()!="")
-				_JSON .= "[`n" %A_thisFunc%(val,indent indent,1) indent "],`n"
-			else
-				_JSON .= "{`n" %A_thisFunc%(val,indent indent,1) indent "},`n"
+		if (!in_str) {
+			if ( (A_LoopField=="{") || (A_LoopField=="[") ) {
+				_s:=""
+				Loop % ++k
+					_s.=indent
+				_JSON .= A_LoopField "`n" _s
+				continue
+			}
+			else if ( (A_LoopField=="}") || (A_LoopField=="]") ) {
+				_s:=""
+				Loop % --k
+					_s.=indent
+				_JSON .= "`n" _s A_LoopField
+				continue
+			}
+			else if ( (A_LoopField==",") ) {
+				_s:=""
+				Loop % k
+					_s.=indent
+				_JSON .= A_LoopField "`n" _s
+				continue
+			}
 		}
+		if( (asc(A_LoopField)==0x22) && (asc(l_char)!=0x5C) )
+			in_str := !in_str
+		_JSON .= (l_char:=A_LoopField)
 	}
-	_JSON:=SubStr(_JSON,1,-2) "`n"
-	if (!fork)
-		return _JSON "}"
-	else
-		return _JSON
+	return _JSON
 }
