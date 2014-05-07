@@ -19,7 +19,7 @@ JSON_Uglify(JSON) {
 		StringReplace,JSON,JSON, % A_Tab,,A
 		StringReplace,JSON,JSON, % Chr(08),,A
 		StringReplace,JSON,JSON, % Chr(12),,A
-		_JSON:="", in_str:=0
+		_JSON:="", in_str:=0, l_char:=""
 		Loop, Parse, JSON
 		{
 			if ( (!in_str) && (asc(A_LoopField)==0x20) )
@@ -38,7 +38,7 @@ JSON_Beautify(JSON, gap) {
 	;fork of http://pastebin.com/xB0fG9py
 	JSON:=JSON_Uglify(JSON)
 	
-	i:=0, indent:=""
+	indent:=""
 	
 	if gap is number
 	{

@@ -4,10 +4,7 @@
 
 //header('Content-Type: text/plain; charset=utf-8');
 
-if (file_exists("api/utils.php"))
-	include 'api/utils.php';
-else
-	include 'api-php/utils.php';
+	include 'lib/utils.php';
 
 if(!function_exists('mime_content_type')) {
 

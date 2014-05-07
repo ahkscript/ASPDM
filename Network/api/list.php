@@ -1,5 +1,5 @@
 ﻿<?php
-	include 'utils.php';
+	include '../lib/utils.php';
 
 	if (isset($_GET["full"]))
 	{

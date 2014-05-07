@@ -76,10 +76,7 @@
 	<body>
 	<div id="full_wrapper">
     <?php
-		if (file_exists("api/utils.php"))
-			include 'api/utils.php';
-		else
-			include 'api-php/utils.php';
+		include 'lib/utils.php';
 	
     $num = 0;
 	if ($handled = opendir('packs')) {
