@@ -6,7 +6,7 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 ;Should specify fullpaths
-packs:="package_test.ahkp"
+packs:="~built_packs~\winfade.ahkp"
 
 ;TODO: check for "required" aka dependencies
 
