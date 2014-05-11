@@ -164,7 +164,9 @@ Save:
 			,forumurl: 		forumurl
 			,screenshot: 	screenshot
 			,type: 			type})))
-			
+		
+		mdata:=JSON_Beautify(mdata)
+		
 		try
 		{
 			;Overwrite "safely"

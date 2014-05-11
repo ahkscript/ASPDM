@@ -1,1 +1,28 @@
-{"ahkbranch":"v1.1","ahkflavour":["a32","u32","u64"],"ahkversion":"1.1.13.01","author":"Bentschi","description":"","forumurl":"http:\/\/www.autohotkey.com\/board\/topic\/90266-funktionen-loadlibrary-freelibrary-schnellere-dllcalls\/","id":"loadlibrary","license":"ASPDM Default License","name":"LoadLibrary & FreeLibrary for easier DLLCalls","required":{},"screenshot":"","tags":["dllcall","winapi","loadlibrary","freelibrary","object"],"type":"Library","version":"1.0.0.0"}
+{
+	"ahkbranch":"v1.1",
+	"ahkflavour":[
+		"a32",
+		"u32",
+		"u64"
+	],
+	"ahkversion":"1.1.13.01",
+	"author":"Bentschi",
+	"description":"",
+	"forumurl":"http:\/\/www.autohotkey.com\/board\/topic\/90266-funktionen-loadlibrary-freelibrary-schnellere-dllcalls\/",
+	"id":"loadlibrary",
+	"license":"ASPDM Default License",
+	"name":"LoadLibrary & FreeLibrary for easier DLLCalls",
+	"required":{
+		
+	},
+	"screenshot":"",
+	"tags":[
+		"dllcall",
+		"winapi",
+		"loadlibrary",
+		"freelibrary",
+		"object"
+	],
+	"type":"Library",
+	"version":"1.0.0.0"
+}

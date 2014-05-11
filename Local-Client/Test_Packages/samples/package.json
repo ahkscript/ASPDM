@@ -1,6 +1,10 @@
 {
 	"ahkbranch":"v1.1",
-	"ahkflavour":["a32","u32","u64"],
+	"ahkflavour":[
+		"a32",
+		"u32",
+		"u64"
+	],
 	"ahkversion":"1.1.13.01",
 	"author":"Joe DF",
 	"description":"This is a sample description.\nThis is the second sentence of this description.",
@@ -8,9 +12,19 @@
 	"id":"samples",
 	"license":"ASPDM Default License",
 	"name":"Sample files in C, Lua, AHK, Batch, AutoIt",
-	"required":["ReqLib001","LibRequired2"],
+	"required":[
+		"ReqLib001",
+		"LibRequired2"
+	],
 	"screenshot":"http:\/\/example.com\/preview.png",
-	"tags":["file","sample","lua","test","package","example"],
+	"tags":[
+		"file",
+		"sample",
+		"lua",
+		"test",
+		"package",
+		"example"
+	],
 	"type":"Library",
 	"version":"1.0.0.0"
 }

@@ -10,6 +10,7 @@
 			,Error_ArchiveBackup:		0x0A
 			,Error_DeleteStdLib:		0x0B
 			,Error_DeleteRepoSubDir:	0x0C
+			,Error_NoAction:			0x0D
 			,Error_RunInstaller: "ERROR"
 			,Success: 0x21 } ;random chosen value
 Install_ExitCode(e) {

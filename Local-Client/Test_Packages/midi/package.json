@@ -1,1 +1,29 @@
-{"ahkbranch":"v1.1","ahkflavour":["a32","u32","u64"],"ahkversion":"1.1.13.01","author":"Bentschi","description":"","forumurl":"http:\/\/www.autohotkey.com\/board\/topic\/91046-midi-library-midiout\/","id":"midi","license":"ASPDM Default License","name":"MIDI Library (MidiOut)","required":{},"screenshot":"","tags":["midi","music","sound","interface","class","object"],"type":"Library","version":"1.0.0.0"}
+{
+	"ahkbranch":"v1.1",
+	"ahkflavour":[
+		"a32",
+		"u32",
+		"u64"
+	],
+	"ahkversion":"1.1.13.01",
+	"author":"Bentschi",
+	"description":"",
+	"forumurl":"http:\/\/www.autohotkey.com\/board\/topic\/91046-midi-library-midiout\/",
+	"id":"midi",
+	"license":"ASPDM Default License",
+	"name":"MIDI Library (MidiOut)",
+	"required":{
+		
+	},
+	"screenshot":"",
+	"tags":[
+		"midi",
+		"music",
+		"sound",
+		"interface",
+		"class",
+		"object"
+	],
+	"type":"Library",
+	"version":"1.0.0.0"
+}

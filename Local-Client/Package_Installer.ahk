@@ -31,7 +31,8 @@ InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Con
 */
 
 packs:=StrSplit(args[1],"|")
-TotalItems:=packs.MaxIndex()
+if (!IsObject(TotalItems:=packs.MaxIndex()))
+	ExitApp, % Install.Error_NoAction
 	
 ;Install Packages
 	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Installing Packages...

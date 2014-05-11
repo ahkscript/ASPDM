@@ -1,1 +1,29 @@
-{"ahkbranch":"v1.0,v1.1","ahkflavour":["a32","u32","u64"],"ahkversion":"1.0.48.05","author":"tic (Tariq Porter)","description":"Package includes Gdip.ahk, Gdip_All.ahk and all the given examples.\n\nFull featured gdi+ library with examples by me tic (Tariq Porter)\nSupports AHK and AHK_L\n\nThis library can be distributed for commercial and non-commercial use and I actively encourage both. I would appreciate it if people give acknowledgement for my work and would be nice to have pasted once at the top of your script something similar to:\n\nThanks to tic (Tariq Porter) for his GDI+ Library\nhttp:\/\/www.autohotkey.com\/forum\/viewtopic.php?t=32238\n\nor anything more elaborate if you feel like it!","forumurl":"http:\/\/www.autohotkey.com\/forum\/viewtopic.php?t=32238","id":"gdip","license":"ASPDM Default License","name":"GDI+ standard library","required":{},"screenshot":"","tags":["gdip","graphics","image","stdlib","draw","animation"],"type":"Library","version":"1.45.0.0"}
+{
+	"ahkbranch":"v1.0,v1.1",
+	"ahkflavour":[
+		"a32",
+		"u32",
+		"u64"
+	],
+	"ahkversion":"1.0.48.05",
+	"author":"tic (Tariq Porter)",
+	"description":"Package includes Gdip.ahk, Gdip_All.ahk and all the given examples.\n\nFull featured gdi+ library with examples by me tic (Tariq Porter)\nSupports AHK and AHK_L\n\nThis library can be distributed for commercial and non-commercial use and I actively encourage both. I would appreciate it if people give acknowledgement for my work and would be nice to have pasted once at the top of your script something similar to:\n\nThanks to tic (Tariq Porter) for his GDI+ Library\nhttp:\/\/www.autohotkey.com\/forum\/viewtopic.php?t=32238\n\nor anything more elaborate if you feel like it!",
+	"forumurl":"http:\/\/www.autohotkey.com\/forum\/viewtopic.php?t=32238",
+	"id":"gdip",
+	"license":"ASPDM Default License",
+	"name":"GDI+ standard library",
+	"required":{
+		
+	},
+	"screenshot":"",
+	"tags":[
+		"gdip",
+		"graphics",
+		"image",
+		"stdlib",
+		"draw",
+		"animation"
+	],
+	"type":"Library",
+	"version":"1.45.0.0"
+}

@@ -1,1 +1,30 @@
-{"ahkbranch":"v1.1","ahkflavour":["a32","u32","u64"],"ahkversion":"1.1.14.03","author":"polyethene","description":"Revised version for 64-bit\/unicode - author unknown \/\/ posted by uname\nhttp:\/\/www.autohotkey.com\/board\/topic\/91997-gui-anchor-for-current-version-of-ahk\/?p=580170\n\n\nFunction: Anchor\n\tDefines how controls should be automatically positioned relative to the new dimensions of a window when resized.\n\nParameters:\n\tcl - a control HWND, associated variable name or ClassNN to operate on\n\ta - (optional) one or more of the anchors: 'x', 'y', 'w' (width) and 'h' (height),\n\t\toptionally followed by a relative factor, e.g. \"x h0.5\"\n\tr - (optional) true to redraw controls, recommended for GroupBox and Button types\n\nExamples:\n\t> \"xy\" ; bounds a control to the bottom-left edge of the window\n\t> \"w0.5\" ; any change in the width of the window will resize the width of the control on a 2:1 ratio\n\t> \"h\" ; similar to above but directrly proportional to height\n\nRemarks:\n\tTo assume the current window size for the new bounds of a control (i.e. resetting) simply omit the second and third parameters.\n\tHowever if the control had been created with DllCall() and has its own parent window,\n\t\tthe container AutoHotkey created GUI must be made default with the +LastFound option prior to the call.\n\tFor a complete example see anchor-example.ahk.\n\nLicense:\n\t- Version 4.60a <http:\/\/www.autohotkey.net\/~polyethene\/#anchor>\n\t- Dedicated to the public domain (CC0 1.0) <http:\/\/creativecommons.org\/publicdomain\/zero\/1.0\/>","forumurl":"http:\/\/www.autohotkey.com\/board\/topic\/4105-control-anchoring-v4-for-resizing-windows\/","id":"anchor","license":"Public domain (CC0 1.0)","name":"Anchor","required":{},"screenshot":"","tags":["window","GUI","position","size","sizing","dimensions","controls"],"type":"Library","version":"4.60.1.0"}
+{
+	"ahkbranch":"v1.1",
+	"ahkflavour":[
+		"a32",
+		"u32",
+		"u64"
+	],
+	"ahkversion":"1.1.14.03",
+	"author":"polyethene",
+	"description":"Revised version for 64-bit\/unicode - author unknown \/\/ posted by uname\nhttp:\/\/www.autohotkey.com\/board\/topic\/91997-gui-anchor-for-current-version-of-ahk\/?p=580170\n\n\nFunction: Anchor\n\tDefines how controls should be automatically positioned relative to the new dimensions of a window when resized.\n\nParameters:\n\tcl - a control HWND, associated variable name or ClassNN to operate on\n\ta - (optional) one or more of the anchors: 'x', 'y', 'w' (width) and 'h' (height),\n\t\toptionally followed by a relative factor, e.g. \"x h0.5\"\n\tr - (optional) true to redraw controls, recommended for GroupBox and Button types\n\nExamples:\n\t> \"xy\" ; bounds a control to the bottom-left edge of the window\n\t> \"w0.5\" ; any change in the width of the window will resize the width of the control on a 2:1 ratio\n\t> \"h\" ; similar to above but directrly proportional to height\n\nRemarks:\n\tTo assume the current window size for the new bounds of a control (i.e. resetting) simply omit the second and third parameters.\n\tHowever if the control had been created with DllCall() and has its own parent window,\n\t\tthe container AutoHotkey created GUI must be made default with the +LastFound option prior to the call.\n\tFor a complete example see anchor-example.ahk.\n\nLicense:\n\t- Version 4.60a <http:\/\/www.autohotkey.net\/~polyethene\/#anchor>\n\t- Dedicated to the public domain (CC0 1.0) <http:\/\/creativecommons.org\/publicdomain\/zero\/1.0\/>",
+	"forumurl":"http:\/\/www.autohotkey.com\/board\/topic\/4105-control-anchoring-v4-for-resizing-windows\/",
+	"id":"anchor",
+	"license":"Public domain (CC0 1.0)",
+	"name":"Anchor",
+	"required":{
+		
+	},
+	"screenshot":"",
+	"tags":[
+		"window",
+		"GUI",
+		"position",
+		"size",
+		"sizing",
+		"dimensions",
+		"controls"
+	],
+	"type":"Library",
+	"version":"4.60.1.0"
+}

@@ -1,1 +1,30 @@
-{"ahkbranch":"v1.1","ahkflavour":["a32","u32","u64"],"ahkversion":"1.1.13.01","author":"Bentschi","description":"","forumurl":"http:\/\/www.autohotkey.com\/board\/topic\/94376-socket-class-%C3%BCberarbeitet\/","id":"socket_class","license":"ASPDM Default License","name":"Socket Class","required":{},"screenshot":"","tags":["internet","socket","connection","server","client","class","object"],"type":"Library","version":"1.0.0.0"}
+{
+	"ahkbranch":"v1.1",
+	"ahkflavour":[
+		"a32",
+		"u32",
+		"u64"
+	],
+	"ahkversion":"1.1.13.01",
+	"author":"Bentschi",
+	"description":"",
+	"forumurl":"http:\/\/www.autohotkey.com\/board\/topic\/94376-socket-class-%C3%BCberarbeitet\/",
+	"id":"socket_class",
+	"license":"ASPDM Default License",
+	"name":"Socket Class",
+	"required":{
+		
+	},
+	"screenshot":"",
+	"tags":[
+		"internet",
+		"socket",
+		"connection",
+		"server",
+		"client",
+		"class",
+		"object"
+	],
+	"type":"Library",
+	"version":"1.0.0.0"
+}

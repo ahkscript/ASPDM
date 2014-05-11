@@ -1,1 +1,28 @@
-{"ahkbranch":"v1.1","ahkflavour":["a32","u32","u64"],"ahkversion":"1.1.13.01","author":"joedf","description":"[Function] Smart WinFade[In|Out]\n----------------------------------------------------------------\n\nArguments\nw : wintitle\nt : final transparency\ni : increment\nd : delay (between each increment)\n\nBehaviour\nif : t > current, increases current transparency [i+]\nif : t < current, decreases current transparency [i-]","forumurl":"http:\/\/ahkscript.org\/boards\/viewtopic.php?f=6&t=512","id":"winfade","license":"MIT License","name":"Smart WinFade","required":{},"screenshot":"","tags":["window manipulation","animation","fade","window","gui"],"type":"Other","version":"1.0.0.0"}
+{
+	"ahkbranch":"v1.1",
+	"ahkflavour":[
+		"a32",
+		"u32",
+		"u64"
+	],
+	"ahkversion":"1.1.13.01",
+	"author":"joedf",
+	"description":"[Function] Smart WinFade[In|Out]\n----------------------------------------------------------------\n\nArguments\nw : wintitle\nt : final transparency\ni : increment\nd : delay (between each increment)\n\nBehaviour\nif : t > current, increases current transparency [i+]\nif : t < current, decreases current transparency [i-]",
+	"forumurl":"http:\/\/ahkscript.org\/boards\/viewtopic.php?f=6&t=512",
+	"id":"winfade",
+	"license":"MIT License",
+	"name":"Smart WinFade",
+	"required":{
+		
+	},
+	"screenshot":"",
+	"tags":[
+		"window manipulation",
+		"animation",
+		"fade",
+		"window",
+		"gui"
+	],
+	"type":"Other",
+	"version":"1.0.0.0"
+}

@@ -34,7 +34,7 @@ JSON_Uglify(JSON) {
 		return JSON_FromObj(JSON)
 }
 
-JSON_Beautify(JSON, gap) {
+JSON_Beautify(JSON, gap:="`t") {
 	;fork of http://pastebin.com/xB0fG9py
 	JSON:=JSON_Uglify(JSON)
 	
