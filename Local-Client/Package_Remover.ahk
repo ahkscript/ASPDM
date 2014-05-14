@@ -31,7 +31,7 @@ InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Con
 */
 
 packs:=StrSplit(args[1],"|")
-if (!IsObject(TotalItems:=packs.MaxIndex()))
+if (!IsObject(packs))
 	ExitApp, % Install.Error_NoAction
 	
 ;Remove Packages
