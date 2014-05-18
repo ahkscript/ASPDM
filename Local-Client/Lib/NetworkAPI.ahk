@@ -73,23 +73,21 @@ u2v_clean(u){ ;the new free host adds junk, this filters it out
 	return u2v(u)
 }
 
-API_List() {
+API_List(sort:=0) {
 	global API_Source
-	l:=StrSplit(u2v_clean(API_Source "/list.php"),"`n")
+	l:=StrSplit(u2v_clean(API_Source "/list.php" ((sort)?"&sort":"") ),"`n")
 	l.Remove(l.MaxIndex())
 	return l
 }
 
-/* Not available yet
-API_ListNum(limits) {
+API_ListNum(lim,origin:=0,sort:=0) {
 	global API_Source
-	return JSON_ToObj(u2v_clean(API_Source "/list.php?lim=" n))
+	return JSON_ToObj(u2v_clean(API_Source "/list.php?lim=" lim ((origin) ? "&origin=" origin : "") ((sort)?"&sort":"") ))
 }
-*/
 
-API_ListAll() {
+API_ListAll(sort:=0) {
 	global API_Source
-	k:=u2v_clean(API_Source "/list.php?full")
+	k:=u2v_clean(API_Source "/list.php?full" ((sort)?"&sort":"") )
 	if (!InStr(SubStr(k,1,3),"{")) ;avoid javascript from error page to be considered as JSON
 		return ""
 	return JSON_ToObj(k)
