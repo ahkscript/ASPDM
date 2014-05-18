@@ -6,13 +6,33 @@
 		echo "{";
 		$i = 0;
 		if ($handle = opendir('../packs')) {
-			while (false !== ($entry = readdir($handle))) {
-				if ($entry != "." && $entry != ".." && $entry != "tmp") {
+			if (isset($_GET["sort"]))
+			{
+				$files = array();
+				while(false != ($entry = readdir($handle))) {
+					if ($entry != "." && $entry != ".." && $entry != "tmp") {
+						$files[] = $entry; // put in array.
+					}   
+				}
+				natcasesort($files); // natural sort array
+				foreach($files as $entry) {
 					$i = $i + 1;
 					if ($i>1)
 						echo ',';
 					echo '"'.$entry.'":';
 					print_metadata($entry,NULL);
+				}
+			}
+			else
+			{
+				while (false !== ($entry = readdir($handle))) {
+					if ($entry != "." && $entry != ".." && $entry != "tmp") {
+						$i = $i + 1;
+						if ($i>1)
+							echo ',';
+						echo '"'.$entry.'":';
+						print_metadata($entry,NULL);
+					}
 				}
 			}
 			closedir($handle);
