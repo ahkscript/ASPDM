@@ -1,7 +1,7 @@
 ASPDM Network API (WIP)
 ==========================
 
-API temporarily hosted @ `api-php.aspdm.tk`  
+API temporarily hosted @ `api-php.aspdm.tk` or `aspdm.tk/api-php`  
 See https://trello.com/c/V27ITnHO/16-web-server-api  
   
 `info.php` - _Get JSON info from a package in "packs/"_  
@@ -17,5 +17,5 @@ See https://trello.com/c/V27ITnHO/16-web-server-api
 	In any case, `?sort` can be used for [Natural sorting](http://www.php.net/manual/en/function.natsort.php).  
 	By default, packages are sorted by modification date.  
   
-Packages are temporarily hosted @ `packs.aspdm.tk`  
-Packages that are waiting to be "validated" are stored @ `packs.aspdm.tk/tmp`
+Packages are temporarily hosted @ `packs.aspdm.tk` or `aspdm.tk/packs`  
+Packages that are waiting to be "validated" are stored @ `packs.aspdm.tk/tmp` or `aspdm.tk/packs/tmp`
