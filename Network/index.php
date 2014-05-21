@@ -104,6 +104,8 @@
 					
 					$j_tags = json_encode($obj->tags);
                     $j_tags = ($j_tags==="{}")?"None":substr($j_tags,1,-1);
+                    $j_tags = str_replace('"', '', $j_tags);
+                    $j_tags = str_replace(',', ', ', $j_tags);
 					
 					$j_required = json_encode($obj->required);
                     $j_required = ($j_required==="{}")?"None":substr($j_required,1,-1);
