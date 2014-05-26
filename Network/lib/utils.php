@@ -21,7 +21,7 @@
 			echo "ERROR: Invalid parameters";
 			return 0;
 		}
-		$file = "../packs/" . str_replace("./","",$file);
+		$file = "../packs/" . str_replace("/","",strtolower($file)); //Remove '/' to avoid exploit
 		if (!file_exists($file)) {
 			echo "ERROR: File does not exist.";
 			return 0;
