@@ -138,35 +138,56 @@ return
 ListView_Events:
 if A_GuiEvent = I
 {
-	if InStr(ErrorLevel, "C", true)
-		CheckedItems%_selectedlist%+=1
-	if InStr(ErrorLevel, "c", true)
-		CheckedItems%_selectedlist%-=1
-	if (CheckedItems%_selectedlist%>0) {
+	if InStr(ErrorLevel,"C")
+		gosub, ListView_Events_checkedList
+}
+else if A_GuiEvent = DoubleClick
+{
+	if (!A_EventInfo)
+		return
+	
+	if (_selectedlist == "LV_A")
+	{
+		Gui +Disabled
+		Gui +OwnDialogs
+		LV_GetText(pack_id,A_EventInfo,1)
+		LV_GetText(pack_name,A_EventInfo,2)
+		;LV_GetText(pack_ver,A_EventInfo,3)
+		LV_GetText(pack_auth,A_EventInfo,4)
+		LV_GetText(pack_desc,A_EventInfo,5)
+		SplitPath,pack_id,,,,pack_id
+		pack_desc:=(StrLen(pack_desc))?pack_desc:"No description."
+		MsgBox, 64, , Package Information`nID: `t%pack_id%`nName: `t%pack_name%`nAuthor: `t%pack_auth%`n`nDescription: `n%pack_desc%
+		gosub, ListView_Events_checkedList ;quick Bugfix "doubleclick on checkbox"
+		Gui -Disabled
+	}
+}
+return
+
+ListView_Events_checkedList:
+	if ((CheckedItems:=LV_GetCheckedCount())>0) {
 		if (_selectedlist == "LV_A")
 		{
 			GuiControl,Enable,InstallButton
-			GuiControl,,InstallButton,Install (%CheckedItemsLV_A%)
+			GuiControl,,InstallButton,Install (%CheckedItems%)
 		}
-		if (_selectedlist == "LV_I")
+		else if (_selectedlist == "LV_I")
 		{
 			GuiControl,Enable,RemoveButton
-			GuiControl,,RemoveButton,Remove (%CheckedItemsLV_I%)
+			GuiControl,,RemoveButton,Remove (%CheckedItems%)
 		}
 	} else {
-		CheckedItems%_selectedlist%:=0
 		if (_selectedlist == "LV_A")
 		{
 			GuiControl,Disable,InstallButton
 			GuiControl,,InstallButton,Install
 		}
-		if (_selectedlist == "LV_I")
+		else if (_selectedlist == "LV_I")
 		{
 			GuiControl,Disable,RemoveButton
 			GuiControl,,RemoveButton,Remove
 		}
 	}
-}
 return
 
 TabSwitch:
@@ -359,5 +380,11 @@ return
 load_progress(t,c,f) {
 	p:=Round((c/f)*100)
 	Progress, %p% , Loading:  %c% / %f% items  [ %p%`% ] , %t%
+}
+
+LV_GetCheckedCount() {
+	Loop
+		if (!(checked := LV_GetNext(checked,"Checked")))
+			return (A_Index-1)
 }
 
