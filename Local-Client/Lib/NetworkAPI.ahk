@@ -104,12 +104,12 @@ API_Get(file) {
 	return t
 }
 
-API_UpdateExists(file) {
-	SplitPath,file,packname
-	server:=API_Info(packname,"version")
-	_local:=JSON_ToObj(Manifest_FromPackage(file))
-	if (server > _local["version"])
-		return server
+API_UpdateExists(name,ver_local:="") {
+	ver_server:=API_Info(name,"version")
+	if !StrLen(ver_local)
+		ver_local:=JSON_ToObj(Manifest_FromPackage(name)).version
+	if (ver_server > ver_local)
+		return ver_server
 	return 0
 }
 

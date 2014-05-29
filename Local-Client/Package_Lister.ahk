@@ -31,7 +31,7 @@ Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|
 	Gui, Add, Button, yp x+2 vInstallFileButton gInstallFile, Install from file...
 	Gui, Add, Text, yp+6 x+172 vPackageCounter_A +Right, Loading packages...
 Gui, Tab, Updates
-	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi vLV_U hwndhLV_U, File|Name|Installed Version|Latest Version
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_U hwndhLV_U, File|Name|Installed Version|Latest Version
 	Gui, Add, Button, y+4 w80 Disabled vUpdateButton gUpdate, Update
 	Gui, Add, Button, yp x+2 vUpdateFileButton gUpdateFile, Update from file...
 	Gui, Add, Text, yp+6 x+172 +Right vPackageCounter_U, Loading packages...
@@ -84,7 +84,16 @@ if Ping() {
 	}
 	TotalItems:=Util_ObjCount(packs)
 	for each, info in packs
-		LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
+	{
+		/*  Commented-out for the moment being, waiting for the "save settings" button
+		if (Settings.hide_installed) {
+			if (!array_has_value(Settings.Installed,info["id"]))
+				LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
+		}
+		else
+		*/
+			LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
+	}
 	GuiControl,,PackageCounter_A, %TotalItems% Packages
 	LV_Delete(1)
 	Sleep 100
@@ -104,14 +113,25 @@ LV_Colors.Attach(hLV_I,1,0,0)
 Gui, ListView, LV_A
 return
 
-List_Installed:
+List_Installed: ;and Updates List
+	Gui, ListView, LV_U
+	LV_Delete()
+	TotalItems_U:=0
 	Gui, ListView, LV_I
+	LV_Delete()
 	for each, IPacks in Settings.Installed
 	{
 		i_pack:=Local_Archive "\" IPacks ".ahkp"
 		i_info:=JSON_ToObj(Manifest_FromPackage(i_pack))
 		LV_Add("",i_info["id"] ".ahkp",i_info["name"],i_info["version"])
+		if (_isUpdate:=API_UpdateExists(i_info["id"] ".ahkp",i_info["version"])) {
+			Gui, ListView, LV_U
+			LV_Add("",i_info["id"] ".ahkp",i_info["name"],i_info["version"],_isUpdate)
+			TotalItems_U+=1
+			Gui, ListView, LV_I
+		}
 	}
+	GuiControl,,PackageCounter_U, %TotalItems_U% Packages
 	TotalItems_I := Util_ObjCount(Settings.Installed)
 	GuiControl,,PackageCounter_I, %TotalItems_I% Packages
 return
@@ -176,6 +196,11 @@ ListView_Events_checkedList:
 			GuiControl,Enable,RemoveButton
 			GuiControl,,RemoveButton,Remove (%CheckedItems%)
 		}
+		else if (_selectedlist == "LV_U")
+		{
+			GuiControl,Enable,UpdateButton
+			GuiControl,,UpdateButton,Update (%CheckedItems%)
+		}
 	} else {
 		if (_selectedlist == "LV_A")
 		{
@@ -186,6 +211,11 @@ ListView_Events_checkedList:
 		{
 			GuiControl,Disable,RemoveButton
 			GuiControl,,RemoveButton,Remove
+		}
+		else if (_selectedlist == "LV_U")
+		{
+			GuiControl,Disable,UpdateButton
+			GuiControl,,UpdateButton,Update
 		}
 	}
 return
@@ -301,8 +331,6 @@ Install:
 		
 		;Update "Installed" list - full-blown list update
 		Settings:=Settings_Get()
-		Gui, ListView, LV_I
-		LV_Delete()
 		gosub,List_Installed
 		Gui, ListView, LV_A
 		
@@ -310,6 +338,8 @@ Install:
 	}
 	else
 		MsgBox, 16, , % "An installation error occured.`n(ExitCode: " ecode " [""" Install_ExitCode(ecode) """])"
+	
+	gosub,ListView_Events_checkedList
 	
 	Gui -Disabled
 return
@@ -327,7 +357,13 @@ InstallFile:
 return
 
 Update:
+gosub,Install
+Gui, ListView, LV_U
+return
+
 UpdateFile:
+gosub,InstallFile
+Gui, ListView, LV_U
 return
 
 Remove:
@@ -359,8 +395,6 @@ Remove:
 		*/
 		;full-blown list update
 		Settings:=Settings_Get()
-		Gui, ListView, LV_I
-		LV_Delete()
 		gosub,List_Installed
 		Gui, ListView, LV_I
 		
@@ -376,6 +410,13 @@ Remove:
 	
 	Gui -Disabled
 return
+
+array_has_value(arr,value) {
+	for each, item in arr
+		if (item=value)
+			return 1
+	return 0
+}
 
 load_progress(t,c,f) {
 	p:=Round((c/f)*100)
