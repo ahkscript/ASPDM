@@ -71,6 +71,7 @@ LV_ModifyCol(2,"120")
 LV_ModifyCol(3,"60")
 LV_ModifyCol(4,"80")
 LV_ModifyCol(5,"300")
+ListView_Offline:=0
 if Ping() {
 	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
 	Progress Show
@@ -78,6 +79,7 @@ if Ping() {
 	if (!IsObject(packs)) {
 		Progress, Off
 		ListView_OfflineMsg:="Offline mode, ASPDM API is not responding."
+		ListView_Offline:=1
 		gosub, ListView_Offline
 		MsgBox, 48, , The ASPDM API is not responding.`nThe server might be down.`n`nPlease try again in while (5 min).
 		return
@@ -104,6 +106,7 @@ if Ping() {
 }
 else
 {
+	ListView_Offline:=1
 	ListView_OfflineMsg:="Offline mode, No internet connection detected..."
 	gosub, ListView_Offline
 }
@@ -115,7 +118,8 @@ return
 
 List_Installed: ;and Updates List
 	Gui, ListView, LV_U
-	LV_Delete()
+	if (!ListView_Offline)
+		LV_Delete()
 	TotalItems_U:=0
 	Gui, ListView, LV_I
 	LV_Delete()
@@ -124,14 +128,17 @@ List_Installed: ;and Updates List
 		i_pack:=Local_Archive "\" IPacks ".ahkp"
 		i_info:=JSON_ToObj(Manifest_FromPackage(i_pack))
 		LV_Add("",i_info["id"] ".ahkp",i_info["name"],i_info["version"])
-		if (_isUpdate:=API_UpdateExists(i_info["id"] ".ahkp",i_info["version"])) {
-			Gui, ListView, LV_U
-			LV_Add("",i_info["id"] ".ahkp",i_info["name"],i_info["version"],_isUpdate)
-			TotalItems_U+=1
-			Gui, ListView, LV_I
+		if (!ListView_Offline) {
+			if (_isUpdate:=API_UpdateExists(i_info["id"] ".ahkp",i_info["version"])) {
+				Gui, ListView, LV_U
+				LV_Add("",i_info["id"] ".ahkp",i_info["name"],i_info["version"],_isUpdate)
+				TotalItems_U+=1
+				Gui, ListView, LV_I
+			}
 		}
 	}
-	GuiControl,,PackageCounter_U, %TotalItems_U% Packages
+	if (!ListView_Offline)
+		GuiControl,,PackageCounter_U, %TotalItems_U% Packages
 	TotalItems_I := Util_ObjCount(Settings.Installed)
 	GuiControl,,PackageCounter_I, %TotalItems_I% Packages
 return
