@@ -272,6 +272,8 @@
 			return "<a href=\"http://opensource.org/licenses/gpl-license\">" . $str . "</a>";
 		if (stristr($str,"Apache"))
 			return "<a href=\"http://opensource.org/licenses/Apache-2.0\">" . $str . "</a>";
+		if (stristr($str,"MPL") || stristr($str,"Mozilla"))
+			return "<a href=\"http://opensource.org/licenses/MPL-2.0\">" . $str . "</a>";
 		if (stristr($str,"CC0"))
 			return "<a href=\"http://creativecommons.org/publicdomain/zero/1.0\">" . $str . "</a>";
 		if ( (stristr($str,"CC")) || (stristr($str,"creative")) || (stristr($str,"commons")) )
