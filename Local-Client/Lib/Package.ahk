@@ -13,9 +13,13 @@ Package_Build(outFile, baseDir, jfile="")
 }
 
 Package_Validate(fIn) {
+	if !FileExist(fIn) {
+		MsgBox Validation Error: Non-existant file.
+		return 0
+	}
 	pFile := FileOpen(fIn,"r","UTF-8-RAW")
 	if !IsObject(pFile) {
-		MsgBox Can't open "%fIn%" for writing.
+		MsgBox Can't open "%fIn%" for validation.
 		return 0
 	}
 	magic:=pFile.Read(8)
