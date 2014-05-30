@@ -1,4 +1,5 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+﻿#SingleInstance, Ignore
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ;#Warn  ; Recommended for catching common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
@@ -10,10 +11,6 @@ CheckedItems:=0
 
 ;get settings
 Settings:=Settings_Get()
-Local_Repo:=Settings.Local_Repo
-Local_Archive:=Settings.Local_Archive
-Hide_Installed:=(!(!(Settings.hide_installed)))+0
-Only_Show_StdLib:=(!(!(Settings.only_show_stdlib)))+0
 
 ; "Standard" ASPDM Header
 Gui, Font, s16 wBold, Arial
@@ -41,17 +38,21 @@ Gui, Tab, Installed
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
 	Gui, Add, Checkbox, y78 x20 vHide_Installed, Hide Installed Packages in Available tab
-	Gui, Add, Checkbox, y+4 xp vOnly_Show_StdLib, Only show StdLib Packages
-	GuiControl,,Hide_Installed, % Hide_Installed
-	GuiControl,,Only_Show_StdLib, % Only_Show_StdLib
+	Gui, Add, Checkbox, y+4 xp vOnly_Show_StdLib Disabled, Only show StdLib Packages
+	Gui, Add, Checkbox, y+4 xp vPortable_Mode Disabled, Portable Mode
+	GuiControl,,Hide_Installed, % (!(!(Settings.hide_installed)))+0
+	GuiControl,,Only_Show_StdLib, % (!(!(Settings.only_show_stdlib)))+0
+	GuiControl,,Portable_Mode, % (!(!(Settings.Portable_Mode)))+0
 	Gui, Add, Text, y+10 xp, StdLib Installation folder
-	Gui, Add, Button, yp-5 x+4, Browse...
-	Gui, Add, Edit, yp+1 x+4 w250 Disabled, % Settings.stdlib_folder ;temporary
+	Gui, Add, Button, yp-5 x+4 Disabled, Browse...
+	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_folder, % Settings.stdlib_folder
+	Gui, Add, Button, y278 x16 w80 vSaveSettingsButton gSaveSettings, Save Settings
+	Gui, Add, Button, y278 x+2 vResetSettingsButton gResetSettings, Reset Settings
 Gui, Tab,
 	Gui, Add, Edit, vSearchBar gSearch y44 x272 w250,
 	SetEditPlaceholder("SearchBar","Search...")
 
-Gui, Show, w480, ASPDM - Package Listing
+Gui, Show, w480 h322, ASPDM - Package Listing
 
 Gui, ListView, LV_U
 LV_ModifyCol(1,"100")
@@ -87,14 +88,17 @@ if Ping() {
 	TotalItems:=Util_ObjCount(packs)
 	for each, info in packs
 	{
-		/*  Commented-out for the moment being, waiting for the "save settings" button
 		if (Settings.hide_installed) {
 			if (!array_has_value(Settings.Installed,info["id"]))
 				LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
 		}
 		else
-		*/
-			LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
+		{
+			if (StrLen(info["id"]))
+				LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
+			else
+				LV_Add("","ERROR: Unable to load package(s)")
+		}
 	}
 	GuiControl,,PackageCounter_A, %TotalItems% Packages
 	LV_Delete(1)
@@ -114,6 +118,13 @@ else
 gosub,List_Installed
 LV_Colors.Attach(hLV_I,1,0,0)
 Gui, ListView, LV_A
+
+if (ListView_Offline)
+{
+	MsgBox, 52, , The program is currently running in Offline mode.`nDo you want the program to reload and try again?
+	IfMsgBox,Yes
+		Reload
+}
 return
 
 List_Installed: ;and Updates List
@@ -125,7 +136,7 @@ List_Installed: ;and Updates List
 	LV_Delete()
 	for each, IPacks in Settings.Installed
 	{
-		i_pack:=Local_Archive "\" IPacks ".ahkp"
+		i_pack:=Settings.Local_Archive "\" IPacks ".ahkp"
 		i_info:=JSON_ToObj(Manifest_FromPackage(i_pack))
 		LV_Add("",i_info["id"] ".ahkp",i_info["name"],i_info["version"])
 		if (!ListView_Offline) {
@@ -288,13 +299,51 @@ GuiSize:
 		GuiControl,move,LV_%A_LoopField%, % "w" (A_GuiWidth-32) " h" (A_GuiHeight-124)
 		GuiControl,move,PackageCounter_%A_LoopField%, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-118)
 	}
-	GuiSize_list:="Install|InstallFile|Update|UpdateFile|Remove"
+	GuiSize_list:="Install|InstallFile|Update|UpdateFile|Remove|SaveSettings|ResetSettings"
 	Loop, Parse, GuiSize_list, |
 		GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-44)
 return
 
 GuiClose:
 ExitApp
+
+SaveSettings:
+	MsgBox, 36, , Are you sure you want to save these settings?
+	IfMsgBox,Yes
+	{
+		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|Portable_Mode|stdlib_folder"
+		Loop, Parse, _list_SaveSettings, |
+		{
+			GuiControlGet, %A_LoopField%
+			Settings[A_LoopField] := (%A_LoopField%)
+		}
+		gosub,_SaveSettings
+	}
+return
+
+ResetSettings:
+	MsgBox, 308, , Are you sure you want to reset to default settings?`nInstallation paths will be affected.
+	IfMsgBox,Yes
+	{
+		_settings_installed_tmp:=Settings.Installed
+		Settings:=Settings_Default()
+		Settings.Installed:=_settings_installed_tmp
+		gosub,_SaveSettings
+	}
+return
+
+_SaveSettings:
+	if (Settings_Save(Settings)!=0) ;failure
+	{
+		MsgBox, 18, , Error: Could not save settings.`n(ErrorLevel = -4)
+		IfMsgBox,Retry
+			goto,SaveSettings
+	} else {
+		MsgBox, 36, , Settings were successfully saved.`nReload the program?
+		IfMsgBox,Yes
+			Reload
+	}
+return
 
 Install:
 	Gui +Disabled
@@ -406,7 +455,6 @@ Remove:
 		Gui, ListView, LV_I
 		
 		;Update Button
-		CheckedItems%_selectedlist%:=0
 		GuiControl,Disable,RemoveButton
 		GuiControl,,RemoveButton,Remove
 		
