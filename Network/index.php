@@ -137,7 +137,10 @@
 			<div class="packname">
 				<div class="h"><h3><?=$j_name?></h3><span class="hsub">by <?=$j_author?><?=$h_forumurl?></span></div>
 				<div class="setup-btns">
-					<a href="<?=$file?>" class="btn btn-sm btn-success dialog_button btn-download" type="button">Download</a>
+					
+					<!-- PHP Download script necessary for compatibility with all browsers, especially IE... -->
+					<a href="/dl_file.php?f=<?=$j_id?>.ahkp" class="btn btn-sm btn-success dialog_button btn-download" type="button">Download</a>
+
 					<a href="aspdm://<?=$j_id?>.ahkp" class="btn btn-sm btn-primary dialog_button btn-install" type="button">Install</a>
 				</div>
 			</div>

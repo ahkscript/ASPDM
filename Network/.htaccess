@@ -1,6 +1,6 @@
 Options -Indexes
 
-AddType application/octet-stream .bin .exe .ahkp
+AddType application/octet-stream .ahkp .bin .exe
 
 ErrorDocument 400 /error_docs/400.html
 ErrorDocument 401 /error_docs/401.html
