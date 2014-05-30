@@ -40,11 +40,25 @@
 			.dialog_button { display: inline-block !important; }
 			.avgrund-popup .packname { margin-bottom: -6px; }
 			.avgrund-popup th, .avgrund-popup td { padding-left: 8px; }
+			
 			.avgrund-popup .h {
 				display: inline-block;
-				margin-left: 4px;
+				/* margin-left: 4px; */
 				vertical-align: middle;
+				max-width: 456px;
 			}
+			.btn-download, .btn-install {
+				float: right;
+				margin-right: 4px;
+				position: relative;
+				top: 18px;
+			}
+			.setup-btns {
+				position: absolute;
+				display: inline;
+				right: 20px;
+			}
+			
 			.avgrund-popup .h h3 {
 				line-height: 16px;
 				display: inline-block;
@@ -121,9 +135,11 @@
 			<button type="button" class="close" aria-hidden="true" onclick="closeDialog()">&times;</button>
 			
 			<div class="packname">
-				<a href="<?=$file?>" class="btn btn-sm btn-success dialog_button" type="button">Download</a>
-				<a href="aspdm://<?=$j_id?>.ahkp" class="btn btn-sm btn-primary dialog_button" type="button">Install</a>
 				<div class="h"><h3><?=$j_name?></h3><span class="hsub">by <?=$j_author?><?=$h_forumurl?></span></div>
+				<div class="setup-btns">
+					<a href="<?=$file?>" class="btn btn-sm btn-success dialog_button btn-download" type="button">Download</a>
+					<a href="aspdm://<?=$j_id?>.ahkp" class="btn btn-sm btn-primary dialog_button btn-install" type="button">Install</a>
+				</div>
 			</div>
 			
 			<table class="sortable">
