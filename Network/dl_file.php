@@ -14,8 +14,8 @@
 
 	// get filename
 	$path_parts = pathinfo($_REQUEST['f']);
-	$pack = strtolower($path_parts['basename']);
-	$file = "packs/".$pack;
+	$pack = $path_parts['basename'];
+	$file = "packs/".strtolower($pack);
 
 	// make sure the file exists
 	if (is_file($file)) {
