@@ -122,6 +122,7 @@
 			
 			<div class="packname">
 				<a href="<?=$file?>" class="btn btn-sm btn-success dialog_button" type="button">Download</a>
+				<a href="aspdm://<?=$j_id?>.ahkp" class="btn btn-sm btn-primary dialog_button" type="button">Install</a>
 				<div class="h"><h3><?=$j_name?></h3><span class="hsub">by <?=$j_author?><?=$h_forumurl?></span></div>
 			</div>
 			
