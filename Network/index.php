@@ -210,7 +210,8 @@
 						<td align="right">
 							<a href="#" onclick="javascript:openDialog('<?=$j_id?>');" title="Information"><i class="fa fa-info-circle"></i></a>
 							<a href="<?=$j_forum?>" title="Forum"><i class="fa fa-comments"></i></a>
-							<a href="<?=$file?>" title="Download"><i class="fa fa-cloud-download"></i></a></td>
+							<!-- PHP Download script necessary for compatibility with all browsers, especially IE... -->
+							<a href="/dl_file.php?f=<?=$j_id?>.ahkp" title="Download"><i class="fa fa-cloud-download"></i></a></td>
 						<td align="right"><a href="#"><?=$j_author?></a></td>
 						<td align="right"><?=$date?></td>
 						<td align="right"><?=$j_size?></td></tr>
