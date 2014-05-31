@@ -54,6 +54,8 @@ Gui, Tab,
 
 Gui, Show, w480 h322, ASPDM - Package Listing
 
+Gui +Disabled
+
 Gui, ListView, LV_U
 LV_ModifyCol(1,"100")
 LV_ModifyCol(2,"170")
@@ -85,31 +87,13 @@ if Ping() {
 		MsgBox, 48, , The ASPDM API is not responding.`nThe server might be down.`n`nPlease try again in while (5 min).
 		return
 	}
-	TotalItems:=Util_ObjCount(packs)
-	for each, info in packs
-	{
-		if (Settings.hide_installed) {
-			if (!array_has_value(Settings.Installed,info["id"]))
-				LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
-		}
-		else
-		{
-			if (StrLen(info["id"]))
-				LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
-			else
-				LV_Add("","ERROR: Unable to load package(s)")
-		}
-	}
-	GuiControl,,PackageCounter_A, %TotalItems% Packages
-	LV_Delete(1)
+	gosub,List_Available
 	Sleep 100
 	Progress, Off
 	LV_Colors.OnMessage()
 	LV_Colors.Attach(hLV_A,1,0,0)
 	LV_Colors.Attach(hLV_U,1,0,0)
-}
-else
-{
+} else {
 	ListView_Offline:=1
 	ListView_OfflineMsg:="Offline mode, No internet connection detected..."
 	gosub, ListView_Offline
@@ -125,9 +109,44 @@ if (ListView_Offline)
 	IfMsgBox,Yes
 		Reload
 }
+Gui -Disabled
+return
+
+List_Available:
+	Gui +Disabled
+	Gui, ListView, LV_A
+	if (!ListView_Offline)
+	{
+		LV_Delete()
+		TotalItems:=Util_ObjCount(packs)
+		TotalItemsNew:=TotalItems
+		for each, info in packs
+		{
+			if (Settings.hide_installed) {
+				if (!array_has_value(Settings.Installed,info["id"])) {
+					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
+					TotalItemsNew-=1
+				}
+			}
+			else
+			{
+				if (StrLen(info["id"]))
+					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
+				else
+					LV_Add("","ERROR: Unable to load package(s)")
+			}
+		}
+		TotalItemsNew:=(TotalItemsNew<0)?0:(TotalItems-TotalItemsNew)
+		if (Settings.hide_installed)
+			GuiControl,,PackageCounter_A, %TotalItemsNew%/%TotalItems% Packages
+		else
+			GuiControl,,PackageCounter_A, %TotalItems% Packages
+	}
+	Gui -Disabled
 return
 
 List_Installed: ;and Updates List
+	Gui +Disabled
 	Gui, ListView, LV_U
 	if (!ListView_Offline)
 		LV_Delete()
@@ -152,6 +171,7 @@ List_Installed: ;and Updates List
 		GuiControl,,PackageCounter_U, %TotalItems_U% Packages
 	TotalItems_I := Util_ObjCount(Settings.Installed)
 	GuiControl,,PackageCounter_I, %TotalItems_I% Packages
+	Gui -Disabled
 return
 
 ListView_Offline:
@@ -346,6 +366,9 @@ _SaveSettings:
 return
 
 Install:
+	MsgBox, 36, , Are you sure you want to install the selected packages?
+	IfMsgBox,No
+		return
 	Gui +Disabled
 	Gui +OwnDialogs
 	;Installation process
@@ -388,6 +411,7 @@ Install:
 		;Update "Installed" list - full-blown list update
 		Settings:=Settings_Get()
 		gosub,List_Installed
+		gosub,List_Available
 		Gui, ListView, LV_A
 		
 		MsgBox, 64, , Installation finished successfully.
@@ -423,6 +447,9 @@ Gui, ListView, LV_U
 return
 
 Remove:
+	MsgBox, 52, , Are you sure you want to remove the selected packages?
+	IfMsgBox,No
+		return
 	Gui +Disabled
 	Gui +OwnDialogs
 	Remove_packs := ""
@@ -452,6 +479,7 @@ Remove:
 		;full-blown list update
 		Settings:=Settings_Get()
 		gosub,List_Installed
+		gosub,List_Available
 		Gui, ListView, LV_I
 		
 		;Update Button
