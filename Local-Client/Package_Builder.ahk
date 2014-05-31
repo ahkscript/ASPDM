@@ -163,7 +163,8 @@ Save:
 			,tags: 			Util_CSV2TagsObj(tags)
 			,forumurl: 		forumurl
 			,screenshot: 	screenshot
-			,type: 			type})))
+			,type: 			type
+			,isstdlib:		false})))
 		
 		mdata:=JSON_Beautify(mdata)
 		
