@@ -123,6 +123,8 @@
 					
 					$j_required = json_encode($obj->required);
                     $j_required = ($j_required==="{}")?"None":substr($j_required,1,-1);
+                    $j_required = str_replace('"', '', $j_required);
+                    $j_required = str_replace(',', ', ', $j_required);
 					
                     $j_description = html_linefmt($obj->description);
                     $j_description = (strlen($j_description))?$j_description:"No description.";
