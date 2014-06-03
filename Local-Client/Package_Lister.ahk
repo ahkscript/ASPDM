@@ -3,9 +3,15 @@
 ;#Warn  ; Recommended for catching common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+#Include Lib\Arguments.ahk
 #Include Lib\Install.ahk
 #Include Lib\NetworkAPI.ahk
 #Include Lib\LV_Colors.ahk
+
+if (args)
+	Start_select_pack:=args[1]
+else
+	Start_select_pack:=""
 
 CheckedItems:=0
 
@@ -89,7 +95,6 @@ if Ping() {
 	}
 	gosub,List_Available
 	Sleep 100
-	Progress, Off
 	LV_Colors.OnMessage()
 	LV_Colors.Attach(hLV_A,1,0,0)
 	LV_Colors.Attach(hLV_U,1,0,0)
@@ -102,12 +107,44 @@ if Ping() {
 gosub,List_Installed
 LV_Colors.Attach(hLV_I,1,0,0)
 Gui, ListView, LV_A
-
+Progress, Off
 if (ListView_Offline)
 {
 	MsgBox, 52, , The program is currently running in Offline mode.`nDo you want the program to reload and try again?
 	IfMsgBox,Yes
 		Reload
+}
+
+if (StrLen(Start_select_pack)) {
+	Gui +Disabled
+	Gui +OwnDialogs
+	if (!array_has_value(Settings.Installed,RegExReplace(Start_select_pack,"\.ahkp"))) {
+		Loop
+		{
+			if !LV_GetText(tmp_fpackname, A_index)
+				break
+			if InStr(tmp_fpackname,Start_select_pack) {
+				LV_Modify(A_index, "+Check")
+				gosub,ListView_Events_checkedList
+				GuiControl,,SearchBar,%Start_select_pack%
+				LV_GetText(pack_id,A_index,1)
+				LV_GetText(pack_name,A_index,2)
+				LV_GetText(pack_auth,A_index,4)
+				LV_GetText(pack_desc,A_index,5)
+				SplitPath,pack_id,,,,pack_id
+				pack_desc:=(StrLen(pack_desc))?pack_desc:"No description."
+				MsgBox, 64, , Package Information`nID: `t%pack_id%`nName: `t%pack_name%`nAuthor: `t%pack_auth%`n`nDescription: `n%pack_desc%
+				Gui -Disabled
+				return
+			}
+		}
+		MsgBox, 48, , Could not find the following package:`n%Start_select_pack%
+	} else {
+		MsgBox, 64, , The following package is already installed:`n%Start_select_pack%
+		GuiControl, Choose, Tabs, 3 ;switched to "installed" tab
+		GuiControl,,SearchBar,%Start_select_pack%
+		gosub,TabSwitch
+	}
 }
 Gui -Disabled
 return
