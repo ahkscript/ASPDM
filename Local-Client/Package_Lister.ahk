@@ -41,6 +41,7 @@ Gui, Tab, Updates
 Gui, Tab, Installed
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_I hwndhLV_I, File|Name|Installed Version
 	Gui, Add, Button, y+4 w80 Disabled vRemoveButton gRemove, Remove
+	Gui, Add, Button, yp x+2 vOpenSelectedButton gOpenSelected, Open selected
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
 	Gui, Add, Checkbox, y78 x20 vHide_Installed, Hide Installed Packages in Available tab
@@ -50,7 +51,7 @@ Gui, Tab, Settings
 	GuiControl,,Only_Show_StdLib, % (!(!(Settings.only_show_stdlib)))+0
 	GuiControl,,Portable_Mode, % (!(!(Settings.Portable_Mode)))+0
 	Gui, Add, Text, y+10 xp, StdLib Installation folder
-	Gui, Add, Button, yp-5 x+4 Disabled, Browse...
+	Gui, Add, Button, yp-5 x+4 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
 	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_folder, % Settings.stdlib_folder
 	Gui, Add, Button, y278 x16 w80 vSaveSettingsButton gSaveSettings, Save Settings
 	Gui, Add, Button, y278 x+2 vResetSettingsButton gResetSettings, Reset Settings
@@ -231,32 +232,32 @@ ListView_Offline:
 return
 
 ListView_Events:
-if A_GuiEvent = I
-{
-	if InStr(ErrorLevel,"C")
-		gosub, ListView_Events_checkedList
-}
-else if A_GuiEvent = DoubleClick
-{
-	if (!A_EventInfo)
-		return
-	
-	if (_selectedlist == "LV_A")
+	if A_GuiEvent = I
 	{
-		Gui +Disabled
-		Gui +OwnDialogs
-		LV_GetText(pack_id,A_EventInfo,1)
-		LV_GetText(pack_name,A_EventInfo,2)
-		;LV_GetText(pack_ver,A_EventInfo,3)
-		LV_GetText(pack_auth,A_EventInfo,4)
-		LV_GetText(pack_desc,A_EventInfo,5)
-		SplitPath,pack_id,,,,pack_id
-		pack_desc:=(StrLen(pack_desc))?pack_desc:"No description."
-		MsgBox, 64, , Package Information`nID: `t%pack_id%`nName: `t%pack_name%`nAuthor: `t%pack_auth%`n`nDescription: `n%pack_desc%
-		gosub, ListView_Events_checkedList ;quick Bugfix "doubleclick on checkbox"
-		Gui -Disabled
+		if InStr(ErrorLevel,"C")
+			gosub, ListView_Events_checkedList
 	}
-}
+	else if A_GuiEvent = DoubleClick
+	{
+		if (!A_EventInfo)
+			return
+		
+		if (_selectedlist == "LV_A")
+		{
+			Gui +Disabled
+			Gui +OwnDialogs
+			LV_GetText(pack_id,A_EventInfo,1)
+			LV_GetText(pack_name,A_EventInfo,2)
+			;LV_GetText(pack_ver,A_EventInfo,3)
+			LV_GetText(pack_auth,A_EventInfo,4)
+			LV_GetText(pack_desc,A_EventInfo,5)
+			SplitPath,pack_id,,,,pack_id
+			pack_desc:=(StrLen(pack_desc))?pack_desc:"No description."
+			MsgBox, 64, , Package Information`nID: `t%pack_id%`nName: `t%pack_name%`nAuthor: `t%pack_auth%`n`nDescription: `n%pack_desc%
+			gosub, ListView_Events_checkedList ;quick Bugfix "doubleclick on checkbox"
+			Gui -Disabled
+		}
+	}
 return
 
 ListView_Events_checkedList:
@@ -356,13 +357,22 @@ GuiSize:
 		GuiControl,move,LV_%A_LoopField%, % "w" (A_GuiWidth-32) " h" (A_GuiHeight-124)
 		GuiControl,move,PackageCounter_%A_LoopField%, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-118)
 	}
-	GuiSize_list:="Install|InstallFile|Update|UpdateFile|Remove|SaveSettings|ResetSettings"
+	GuiSize_list:="Install|InstallFile|Update|UpdateFile|Remove|OpenSelected|SaveSettings|ResetSettings"
 	Loop, Parse, GuiSize_list, |
 		GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-44)
 return
 
 GuiClose:
 ExitApp
+
+stdlib_folderBrowse: ;stdlib_folderBrowseButton
+	Gui +Disabled
+	Gui +OwnDialogs
+	FileSelectFolder, __tmp, %A_MyDocuments%, 3, Select the StdLib Installation folder
+	if __tmp is not Space
+		GuiControl,,stdlib_folder,%__tmp%
+	Gui -Disabled
+return
 
 SaveSettings:
 	MsgBox, 36, , Are you sure you want to save these settings?
@@ -474,13 +484,13 @@ InstallFile:
 return
 
 Update:
-gosub,Install
-Gui, ListView, LV_U
+	gosub,Install
+	Gui, ListView, LV_U
 return
 
 UpdateFile:
-gosub,InstallFile
-Gui, ListView, LV_U
+	gosub,InstallFile
+	Gui, ListView, LV_U
 return
 
 Remove:
@@ -529,6 +539,15 @@ Remove:
 		MsgBox, 16, , % "An uninstallation error occured.`n(ExitCode: " ecode " [""" Install_ExitCode(ecode) """])"
 	
 	Gui -Disabled
+return
+
+OpenSelected:
+	if (__tmp:=LV_GetNext()) {
+		__tmp_a:=Settings.Local_Repo
+		LV_GetText(__tmp_id, __tmp)
+		__tmp_id:=RegExReplace(__tmp_id,"\.ahkp")
+		run explorer.exe "%__tmp_a%\%__tmp_id%"
+	}
 return
 
 array_has_value(arr,value) {
