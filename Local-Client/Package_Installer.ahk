@@ -87,7 +87,11 @@ for Current, FilePath in packs
 	;Copy data from local repo "Lib\" to StdLib "Lib\"
 	FileCopyDir,%RepoSubDir%,%InstallationFolder%,1
 	if ErrorLevel
+	{
+		;Delete or clean before exit
+		FileRemoveDir,%ExtractDir%,1
 		ExitApp, % Install.Error_CopyToStdLib
+	}
 	
 	;delete key in case of "double-install"
 	for x, installed in Settings.installed

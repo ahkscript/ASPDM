@@ -46,10 +46,8 @@ Gui, Tab, Installed
 Gui, Tab, Settings
 	Gui, Add, Checkbox, y78 x20 vHide_Installed, Hide Installed Packages in Available tab
 	Gui, Add, Checkbox, y+4 xp vOnly_Show_StdLib Disabled, Only show StdLib Packages
-	Gui, Add, Checkbox, y+4 xp vPortable_Mode Disabled, Portable Mode
 	GuiControl,,Hide_Installed, % (!(!(Settings.hide_installed)))+0
 	GuiControl,,Only_Show_StdLib, % (!(!(Settings.only_show_stdlib)))+0
-	GuiControl,,Portable_Mode, % (!(!(Settings.Portable_Mode)))+0
 	Gui, Add, Text, y+10 xp, StdLib Installation folder
 	Gui, Add, Button, yp-5 x+4 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
 	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_folder, % Settings.stdlib_folder
@@ -378,7 +376,7 @@ SaveSettings:
 	MsgBox, 36, , Are you sure you want to save these settings?
 	IfMsgBox,Yes
 	{
-		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|Portable_Mode|stdlib_folder"
+		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|stdlib_folder"
 		Loop, Parse, _list_SaveSettings, |
 		{
 			GuiControlGet, %A_LoopField%

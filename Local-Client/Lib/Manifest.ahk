@@ -3,6 +3,8 @@ Manifest_FromPackage(fileName)
 {
 	try
 	{
+		if !FileExist(fileName)
+			throw Exception("File does not exist!")
 		FileRead, data, *c %fileName%
 		pData := &data
 		if StrGet(pData, 8, "UTF-8") != "AHKPKG00"
