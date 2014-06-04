@@ -9,10 +9,12 @@
 			,Error_CreateArchiveDir:	0x09
 			,Error_ArchiveBackup:		0x0A
 			,Error_DeleteStdLib:		0x0B
-			,Error_DeleteRepoSubDir:	0x0C
-			,Error_NoAction:			0x0D
+			,Error_DeleteStdLibSubDir:	0x0C
+			,Error_DeleteRepoSubDir:	0x0D
+			,Error_NoAction:			0x0E
 			,Error_RunInstaller: "ERROR"
-			,Success: 0x21 } ;random chosen value
+			,Success: 0xDEAD } ;random chosen value, "Maximum" value is 0x80000000
+			;see http://msdn.microsoft.com/en-us/library/system.environment.exitcode.aspx
 Install_ExitCode(e) {
 	global Install
 	for i, code in Install

@@ -63,11 +63,19 @@ for Current, id_akhp in packs
 	;Delete files in StdLib folder
 	For each, file in RemList
 	{
-		if (FileExist(InstallationFolder "\" file))
+		if (_fAttrib:=FileExist(InstallationFolder "\" file))
 		{
-			FileDelete,%InstallationFolder%\%file%
-			if ErrorLevel
-				ExitApp, % Install.Error_DeleteStdLib
+			if (InStr(_fAttrib, "D")) {
+				FileRemoveDir,%InstallationFolder%\%file%,1
+				if ErrorLevel
+					ExitApp, % Install.Error_DeleteStdLibSubDir
+			}
+			else
+			{
+				FileDelete,%InstallationFolder%\%file%
+				if ErrorLevel
+					ExitApp, % Install.Error_DeleteStdLib
+			}
 		}
 	}
 	

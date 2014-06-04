@@ -104,6 +104,19 @@ API_Get(file) {
 	return t
 }
 
+API_GetDependencies(pack_ahkp) {
+	reqCSV:=API_Info(pack_ahkp,"required")
+	reqArr:=Object()
+	Loop,Parse,reqCSV,CSV
+	{
+		reqArr.Insert(A_LoopField ".ahkp")
+		k:=API_GetDependencies(A_LoopField ".ahkp")
+		if (k.MaxIndex > 0)
+			Util_ArrayInsert(reqArr,k)
+	}
+	return reqArr
+}
+
 API_UpdateExists(name,ver_local:="") {
 	ver_server:=API_Info(name,"version")
 	if !StrLen(ver_local)

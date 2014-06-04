@@ -417,11 +417,12 @@ Install:
 	Gui +Disabled
 	Gui +OwnDialogs
 	;Installation process
-	;TODO: check for "required" aka dependencies
+	
+	;check for "required" aka dependencies
+	Install_packs_dependencies:=Object()
 	
 	;example - Install_packs:="~built_packs~\winfade.ahkp"
 	Install_packs := ""
-	Install_packs_rows := ""
 	r_check:=0
 	Loop
 	{
@@ -430,35 +431,53 @@ Install:
 		break
 		LV_GetText(r_item,r_check,1)
 		r_path:=API_Get(r_item) ;download the package
+		Util_ArrayInsert(Install_packs_dependencies,API_GetDependencies(r_item))
 		Install_packs.= r_path "|"
-		Install_packs_rows.= r_check "|"
 	}
 	Install_packs:=SubStr(Install_packs,1,-1)
-	Install_packs_rows:=SubStr(Install_packs_rows,1,-1)
+	
+	if (Install_packs_dependencies.MaxIndex() > 0)
+	{
+		Install_packs_reqList:=Util_SingleArray2Str(Install_packs_dependencies,"`n`t",1)
+		MsgBox, 51, , It seems that the selected packages have some dependencies :`n%Install_packs_reqList%`n`nSome packages may not work correctly if they are not installed.`nWould you like to install the missing packages?`nYou may click 'Cancel' to cancel the whole installation process.
+		IfMsgBox,Cancel
+		{
+			;Installation canceled, Clean temporary files
+			Loop,Parse,Install_packs,|
+				FileDelete,%A_loopField%
+			Gui -Disabled
+			return
+		}
+		IfMsgBox,Yes
+		{
+			Install_packs.= "|"
+			for _each, r_item in Install_packs_dependencies
+			{
+				SplitPath,r_item,,,,r_item_noExt
+				if (!array_has_value(Settings.Installed,r_item_noExt)) {
+					r_path:=API_Get(r_item)
+					Install_packs.= r_path "|"
+				}
+			}
+			Install_packs:=SubStr(Install_packs,1,-1)
+		}
+	}
 	
 	_Install:
 	;Note WinXP Command-line 8191 chars limitation
 	;  http://support.microsoft.com/kb/830473
 	;Assuming approximately 50 each file path, should be around 114 packages with "|" delimiters
 	Runwait *RunAs Package_Installer.ahk "%Install_packs%",,UseErrorLevel
-	if ( (ecode:=ErrorLevel)==Install.Success )
+	ecode:=ErrorLevel
+	
+	;Update "Installed" list - full-blown list update
+	Settings:=Settings_Get()
+	gosub,List_Installed
+	gosub,List_Available
+	Gui, ListView, LV_A
+	
+	if ( (ecode)==Install.Success )
 	{
-		;Update list
-		/* TODO : hide installed Option
-		Install_packs_list:=StrSplit(Install_packs_rows,"|")
-		for x, Install_packs_row in Install_packs_list
-			LV_Delete(Install_packs_row+0)
-		CheckedItems%_selectedlist%:=0
-		GuiControl,Disable,InstallButton
-		GuiControl,,InstallButton,Install
-		*/
-		
-		;Update "Installed" list - full-blown list update
-		Settings:=Settings_Get()
-		gosub,List_Installed
-		gosub,List_Available
-		Gui, ListView, LV_A
-		
 		MsgBox, 64, , Installation finished successfully.
 	}
 	else
@@ -513,20 +532,15 @@ Remove:
 	Remove_packs_rows:=SubStr(Remove_packs_rows,1,-1)
 	
 	Runwait *RunAs Package_Remover.ahk "%Remove_packs%",,UseErrorLevel
-	if ( (ecode:=ErrorLevel)==Install.Success )
-	{
-		;Update list
-		/*MsgBox % Remove_packs_rows
-		Remove_packs_list:=StrSplit(Remove_packs_rows,"|")
-		for x, Remove_packs_row in Remove_packs_list
-			LV_Delete(Remove_packs_row+0)
-		*/
-		;full-blown list update
-		Settings:=Settings_Get()
-		gosub,List_Installed
-		gosub,List_Available
-		Gui, ListView, LV_I
-		
+	ecode:=ErrorLevel
+	
+	;full-blown list update
+	Settings:=Settings_Get()
+	gosub,List_Installed
+	gosub,List_Available
+	Gui, ListView, LV_I
+	
+	if ( (ecode)==Install.Success ) {
 		;Update Button
 		GuiControl,Disable,RemoveButton
 		GuiControl,,RemoveButton,Remove

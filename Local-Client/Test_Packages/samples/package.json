@@ -13,8 +13,8 @@
 	"license":"ASPDM Default License",
 	"name":"Sample files in C, Lua, AHK, Batch, AutoIt",
 	"required":[
-		"ReqLib001",
-		"LibRequired2"
+		"isbinfile",
+		"winfade"
 	],
 	"screenshot":"http:\/\/example.com\/preview.png",
 	"tags":[

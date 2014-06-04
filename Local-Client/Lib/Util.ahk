@@ -18,6 +18,25 @@ Util_TagsObj2CSV(TagsObj:="") {
 	return SubStr(CSV,1,-1)
 }
 
+Util_SingleArray2Str(Arr,Delimiter:="",before:=0) {
+	s:=""
+	if (before) {
+		for each, item in Arr
+			s.= Delimiter item
+	} else {
+		for each, item in Arr
+			s.= item Delimiter
+		s:=SubStr(s,1,(-1*Abs(StrLen(Delimiter))))
+	}
+	return s
+}
+
+Util_ArrayInsert(ByRef Arr,InsArr) {
+	for each, item in InsArr
+		Arr.Insert(item)
+	return Arr
+}
+
 Util_ObjCount(Obj) {
 	if (!IsObject(Obj))
 		return 0
