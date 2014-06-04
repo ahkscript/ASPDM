@@ -40,8 +40,9 @@ Gui, Tab, Updates
 	Gui, Add, Text, yp+6 x+172 +Right vPackageCounter_U, Loading packages...
 Gui, Tab, Installed
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_I hwndhLV_I, File|Name|Installed Version
-	Gui, Add, Button, y+4 w80 Disabled vRemoveButton gRemove, Remove
-	Gui, Add, Button, yp x+2 vOpenSelectedButton gOpenSelected, Open selected
+	Gui, Add, Button, y+4 w80 Disabled vReinstallButton gReinstall, Reinstall
+	Gui, Add, Button, yp x+2 wp Disabled vRemoveButton gRemove, Remove
+	Gui, Add, Button, yp x+2 vOpenSelectedButton gOpenSelected, See selected package files
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
 	Gui, Add, Checkbox, y78 x20 vHide_Installed, Hide Installed Packages in Available tab
@@ -90,6 +91,7 @@ if Ping() {
 		ListView_Offline:=1
 		gosub, ListView_Offline
 		MsgBox, 48, , The ASPDM API is not responding.`nThe server might be down.`n`nPlease try again in while (5 min).
+		Gui -Disabled
 		return
 	}
 	gosub,List_Available
@@ -267,6 +269,9 @@ ListView_Events_checkedList:
 		}
 		else if (_selectedlist == "LV_I")
 		{
+			GuiControl,Enable,ReinstallButton
+			GuiControl,,ReinstallButton,Reinstall (%CheckedItems%)
+			
 			GuiControl,Enable,RemoveButton
 			GuiControl,,RemoveButton,Remove (%CheckedItems%)
 		}
@@ -283,6 +288,9 @@ ListView_Events_checkedList:
 		}
 		else if (_selectedlist == "LV_I")
 		{
+			GuiControl,Disable,ReinstallButton
+			GuiControl,,ReinstallButton,Reinstall
+			
 			GuiControl,Disable,RemoveButton
 			GuiControl,,RemoveButton,Remove
 		}
@@ -355,7 +363,7 @@ GuiSize:
 		GuiControl,move,LV_%A_LoopField%, % "w" (A_GuiWidth-32) " h" (A_GuiHeight-124)
 		GuiControl,move,PackageCounter_%A_LoopField%, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-118)
 	}
-	GuiSize_list:="Install|InstallFile|Update|UpdateFile|Remove|OpenSelected|SaveSettings|ResetSettings"
+	GuiSize_list:="Install|InstallFile|Update|UpdateFile|Reinstall|Remove|OpenSelected|SaveSettings|ResetSettings"
 	Loop, Parse, GuiSize_list, |
 		GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-44)
 return
@@ -510,6 +518,9 @@ UpdateFile:
 	Gui, ListView, LV_U
 return
 
+Reinstall:
+return
+
 Remove:
 	MsgBox, 52, , Are you sure you want to remove the selected packages?
 	IfMsgBox,No
@@ -517,7 +528,6 @@ Remove:
 	Gui +Disabled
 	Gui +OwnDialogs
 	Remove_packs := ""
-	Remove_packs_rows := ""
 	r_check:=0
 	Loop
 	{
@@ -526,10 +536,8 @@ Remove:
 		break
 		LV_GetText(r_item,r_check,1)
 		Remove_packs.= r_item "|"
-		Remove_packs_rows.= r_check "|"
 	}
 	Remove_packs:=SubStr(Remove_packs,1,-1)
-	Remove_packs_rows:=SubStr(Remove_packs_rows,1,-1)
 	
 	Runwait *RunAs Package_Remover.ahk "%Remove_packs%",,UseErrorLevel
 	ecode:=ErrorLevel
@@ -560,6 +568,8 @@ OpenSelected:
 		__tmp_id:=RegExReplace(__tmp_id,"\.ahkp")
 		run explorer.exe "%__tmp_a%\%__tmp_id%"
 	}
+	else
+		MsgBox, 48, , No package is currently selected.`nPlease select/highlight a package in the list.
 return
 
 array_has_value(arr,value) {
