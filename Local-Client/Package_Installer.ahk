@@ -67,7 +67,7 @@ for Current, FilePath in packs
 		FileGetSize,file_Sz,%FilePath%
 		FileGetSize,arch_Sz,%arch_file%
 		mdata_arch:=JSON_ToObj(Manifest_FromPackage(arch_file))
-		if ( (file_Sz!=arch_Sz) || (mdata["id"] > mdata_arch["version"]) ) {
+		if ( (file_Sz!=arch_Sz) || (mdata["id"] != mdata_arch["version"]) ) {
 			FileCopy,%FilePath%,%arch_file%,1
 			if ErrorLevel
 				ExitApp, % Install.Error_ArchiveBackup

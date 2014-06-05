@@ -523,6 +523,7 @@ Refresh:
 	Gui, ListView, LV_A
 	LV_Delete()
 	gosub,start
+	gosub,TabSwitch
 return
 
 Update:
