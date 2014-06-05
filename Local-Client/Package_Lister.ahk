@@ -32,12 +32,14 @@ Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_A hwndhLV_A, File|Name|Version|Author|Description
 	Gui, Add, Button, y+4 w80 vInstallButton Disabled gInstall, Install
 	Gui, Add, Button, yp x+2 vInstallFileButton gInstallFile, Install from file...
-	Gui, Add, Text, yp+6 x+172 vPackageCounter_A +Right, Loading packages...
+	Gui, Add, Button, yp x+2 w80 vRefresh_AButton gRefresh, Refresh
+	Gui, Add, Text, yp+6 xp+170 vPackageCounter_A +Right, Loading packages...
 Gui, Tab, Updates
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_U hwndhLV_U, File|Name|Installed Version|Latest Version
 	Gui, Add, Button, y+4 w80 Disabled vUpdateButton gUpdate, Update
 	Gui, Add, Button, yp x+2 vUpdateFileButton gUpdateFile, Update from file...
-	Gui, Add, Text, yp+6 x+172 +Right vPackageCounter_U, Loading packages...
+	Gui, Add, Button, yp x+2 w80 vRefresh_UButton gRefresh, Refresh
+	Gui, Add, Text, yp+6 xp+170 +Right vPackageCounter_U, Loading packages...
 Gui, Tab, Installed
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_I hwndhLV_I, File|Name|Installed Version
 	Gui, Add, Button, y+4 w80 Disabled vReinstallButton gReinstall, Reinstall
@@ -60,7 +62,9 @@ Gui, Tab,
 
 Gui, Show, w480 h322, ASPDM - Package Listing
 
+start:
 Gui +Disabled
+Gui +OwnDialogs
 
 Gui, ListView, LV_U
 LV_ModifyCol(1,"100")
@@ -363,7 +367,7 @@ GuiSize:
 		GuiControl,move,LV_%A_LoopField%, % "w" (A_GuiWidth-32) " h" (A_GuiHeight-124)
 		GuiControl,move,PackageCounter_%A_LoopField%, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-118)
 	}
-	GuiSize_list:="Install|InstallFile|Update|UpdateFile|Reinstall|Remove|OpenSelected|SaveSettings|ResetSettings"
+	GuiSize_list:="Install|InstallFile|Refresh_A|Update|UpdateFile|Refresh_U|Reinstall|Remove|OpenSelected|SaveSettings|ResetSettings"
 	Loop, Parse, GuiSize_list, |
 		GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-44)
 return
@@ -508,6 +512,19 @@ InstallFile:
 	Gui -Disabled
 return
 
+Refresh:
+	CheckedItems:=0
+	Settings:=Settings_Get()
+	Start_select_pack:=""
+	Gui, ListView, LV_U
+	LV_Delete()
+	Gui, ListView, LV_I
+	LV_Delete()
+	Gui, ListView, LV_A
+	LV_Delete()
+	gosub,start
+return
+
 Update:
 	gosub,Install
 	Gui, ListView, LV_U
@@ -519,6 +536,8 @@ UpdateFile:
 return
 
 Reinstall:
+	gosub,Install
+	Gui, ListView, LV_I
 return
 
 Remove:
@@ -549,14 +568,12 @@ Remove:
 	Gui, ListView, LV_I
 	
 	if ( (ecode)==Install.Success ) {
-		;Update Button
-		GuiControl,Disable,RemoveButton
-		GuiControl,,RemoveButton,Remove
-		
 		MsgBox, 64, , Removal finished successfully.
 	}
 	else
 		MsgBox, 16, , % "An uninstallation error occured.`n(ExitCode: " ecode " [""" Install_ExitCode(ecode) """])"
+	
+	gosub,ListView_Events_checkedList
 	
 	Gui -Disabled
 return
