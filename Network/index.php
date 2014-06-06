@@ -6,7 +6,7 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 		<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=0.6">
-		<title>ahkscript.org - Package/StdLib Distribution and Management</title>
+		<title>ASPDM - AHKScript.org's Package/StdLib Distribution and Management</title>
 		<link type="image/png" href="src/ahk.png" rel="icon">
 		<link rel="stylesheet" href="src/font-awesome-4.0.3/css/font-awesome.min.css">
 		<link type="text/css"  href="src/bootstrap.css" rel="stylesheet">
@@ -168,7 +168,7 @@
         
 		<div class="container">
 			
-			<h1><a href="http://ahkscript.org" id="logolink"><img id="logo" src="src/ahk.png"></a> ahkscript.org - Package/StdLib Distribution and Management</h1>
+			<h1><a href="http://ahkscript.org" id="logolink"><img id="logo" src="src/ahk.png"></a> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</h1>
 			<div id="body">
 
 				<div id="headerlinks">
