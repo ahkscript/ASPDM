@@ -7,12 +7,15 @@ Package_Build(outFile, baseDir, jfile="")
 	else
 		man := Manifest_FromFile(jfile)
 	
+	man.ahkversion:=A_AhkVersion
+	
 	tree := Util_DirTree(baseDir)
 	_Package_DumpTree(outFile, tree)
 	_Package_Compress(outFile, outFile, JSON_FromObj(man))
+	return Package_Validate(outFile)
 }
 
-Package_Validate(fIn) {
+Package_Validate(fIn) { ;Quick Validate
 	if !FileExist(fIn) {
 		MsgBox Validation Error: Non-existant file.
 		return 0

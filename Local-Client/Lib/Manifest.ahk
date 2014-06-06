@@ -10,7 +10,7 @@ Manifest_FromPackage(fileName)
 		if StrGet(pData, 8, "UTF-8") != "AHKPKG00"
 			throw Exception("Invalid format!")
 		sz := NumGet(pData+8, "UInt")
-		return StrGet(pData+12, sz, "UTF-8")
+		return Manifest_FromStr(StrGet(pData+12, sz, "UTF-8"))
 	}
 	catch e
 		throw e ; Propagate exception

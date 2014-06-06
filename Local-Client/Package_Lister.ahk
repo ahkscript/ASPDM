@@ -522,6 +522,7 @@ Refresh:
 	LV_Delete()
 	Gui, ListView, LV_A
 	LV_Delete()
+	gosub,ListView_Events_checkedList
 	gosub,start
 	gosub,TabSwitch
 return
