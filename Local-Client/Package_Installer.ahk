@@ -34,7 +34,7 @@ packs:=StrSplit(args[1],"|")
 if (!IsObject(packs))
 	ExitApp, % Install.Error_NoAction
 TotalItems:=packs.MaxIndex()
-	
+
 ;Install Packages
 	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Installing Packages...
 	Progress Show
@@ -53,6 +53,13 @@ for Current, FilePath in packs
 	
 	;Get package ID from metadata
 	mdata:=JSON_ToObj(Manifest_FromPackage(FilePath))
+	
+	;Check version of AutoHotkey
+	if (Util_VersionCompare(ver_pack:=mdata.ahkversion,A_AhkVersion)) {
+		MsgBox, 52, , The package's AutoHotkey version is greater than the installed version:`n`t%ver_pack%`n`t%A_AhkVersion%`nDo you want to continue the installation?
+		IfMsgBox,No
+			ExitApp, % Install.Error_AhkVersionInvalid
+	}
 	
 	;Make backup copy to asdpm\archive\*.ahkp
 	arch_file := Local_Archive "\" mdata["id"] ".ahkp" ;Rename : [ID].ahkp

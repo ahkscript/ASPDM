@@ -4,13 +4,13 @@ Manifest_FromPackage(fileName)
 	try
 	{
 		if !FileExist(fileName)
-			throw Exception("File does not exist!")
+			throw Exception("File does not exist!`nFile: """ fileName """")
 		FileRead, data, *c %fileName%
 		pData := &data
 		if StrGet(pData, 8, "UTF-8") != "AHKPKG00"
 			throw Exception("Invalid format!")
 		sz := NumGet(pData+8, "UInt")
-		return Manifest_FromStr(StrGet(pData+12, sz, "UTF-8"))
+		return StrGet(pData+12, sz, "UTF-8")
 	}
 	catch e
 		throw e ; Propagate exception

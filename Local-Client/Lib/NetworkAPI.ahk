@@ -118,10 +118,9 @@ API_GetDependencies(pack_ahkp) {
 }
 
 API_UpdateExists(name,ver_local:="") {
-	ver_server:=API_Info(name,"version")
 	if !StrLen(ver_local)
 		ver_local:=JSON_ToObj(Manifest_FromPackage(name)).version
-	if (ver_server > ver_local)
+	if (Util_VersionCompare(ver_server:=API_Info(name,"version"),ver_local))
 		return ver_server
 	return 0
 }

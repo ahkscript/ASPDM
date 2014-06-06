@@ -48,7 +48,7 @@ Gui, Add, ListView, vrequired xp+8 yp+18 w164 h82 Checked Grid -Hdr, Packages
 LV_ModifyCol(1,"155")
 for _each, item in Settings.Installed
 {
-	_lv_man:=Manifest_FromPackage(Settings.local_archive "\" item ".ahkp")
+	_lv_man:=JSON_ToObj(Manifest_FromPackage(Settings.local_archive "\" item ".ahkp"))
 	LV_packs[item]:=_lv_man
 	LV_packs_list[A_Index]:=_lv_man.id
 	LV_Add("",_lv_man.name)
