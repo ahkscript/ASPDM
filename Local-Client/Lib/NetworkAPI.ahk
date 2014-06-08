@@ -100,6 +100,7 @@ API_Info(file,item="") {
 
 API_Get(file) {
 	global Packs_Source
+	StringLower,file,file
 	DownloadFile(Packs_Source "/" file,t:=Util_TempFile())
 	return t
 }

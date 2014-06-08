@@ -45,7 +45,7 @@ Gui, Add, Edit, vversion x+4 yp gInfoActive Limit10,
 
 Gui, Add, GroupBox, x+4 yp-8 w180 h108, Required (Dependencies)
 Gui, Add, ListView, vrequired xp+8 yp+18 w164 h82 Checked Grid -Hdr, Packages
-LV_ModifyCol(1,"155")
+LV_ModifyCol(1,"140")
 for _each, item in Settings.Installed
 {
 	_lv_man:=JSON_ToObj(Manifest_FromPackage(Settings.local_archive "\" item ".ahkp"))
@@ -80,12 +80,9 @@ Gui, Add, Button, x+4 yp gBuild, Build Package
 ;Add placeholders - supported since Windows XP
 	SetEditPlaceholder("id","id")
 	SetEditPlaceholder("version","version")
-	SetEditPlaceholder("type","type")
-	SetEditPlaceholder("ahkflavour","ahkflavour")
 	SetEditPlaceholder("name","name")
 	SetEditPlaceholder("author","author")
 	SetEditPlaceholder("license","license")
-	SetEditPlaceholder("required","required")
 	SetEditPlaceholder("tags",Attributes.tags)
 	SetEditPlaceholder("forumurl","forumurl")
 	SetEditPlaceholder("screenshot","screenshot")
@@ -180,6 +177,12 @@ Save:
 	else
 	{
 		Gui, Submit, NoHide
+		
+		if (!RegExMatch(version,"(\d+\.){3}\d+"))
+		{
+			MsgBox, 48, , % "Invalid versioning scheme. Save aborted.`nOnly digits & dots are allowed.`n" Attributes.version "`n`nValid Example:`t1.23.45.67`nInvalid Example:`t1.0"
+			return
+		}
 		
 		ahkflavour:=Object()
 		for _each, item in ["a32","u32","u64"]

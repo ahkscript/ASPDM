@@ -8,7 +8,7 @@ Manifest_FromPackage(fileName)
 		FileRead, data, *c %fileName%
 		pData := &data
 		if StrGet(pData, 8, "UTF-8") != "AHKPKG00"
-			throw Exception("Invalid format!")
+			throw Exception("Invalid format!`nFile: """ fileName """")
 		sz := NumGet(pData+8, "UInt")
 		return StrGet(pData+12, sz, "UTF-8")
 	}

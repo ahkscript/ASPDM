@@ -8,6 +8,7 @@
 ;           - Added ShortURL()
 ;           - Added short delay 100 ms to show the progress bar if download was too fast
 ;           - Added ProgressBarTitle
+;           - Try-Catch "backup download code"
 ; ----------------------------------------------------------------------------------
 
 DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True, ProgressBarTitle:="Downloading...") {
@@ -23,7 +24,17 @@ DownloadFile(UrlToFile, SaveFileAs, Overwrite := True, UseProgressBar := True, P
             WebRequest.Open("HEAD", UrlToFile)
             WebRequest.Send()
           ;Store the header which holds the file size in a variable:
+          try
             FinalSize := WebRequest.GetResponseHeader("Content-Length")
+          catch
+          {
+            ;throw Exception("could not get Content-Length for URL: " UrlToFile)
+            Progress, CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, , %ProgressBarTitle%, %_surl%
+            UrlDownloadToFile, %UrlToFile%, %SaveFileAs%
+            Sleep 100
+            Progress, Off
+            return
+          }
           ;Create the progressbar and the timer
             Progress, CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, , %ProgressBarTitle%, %_surl%
             SetTimer, __UpdateProgressBar, 100
