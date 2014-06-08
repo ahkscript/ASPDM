@@ -178,12 +178,6 @@ Save:
 	{
 		Gui, Submit, NoHide
 		
-		if (!RegExMatch(version,"(\d+\.){3}\d+"))
-		{
-			MsgBox, 48, , % "Invalid versioning scheme. Save aborted.`nOnly digits & dots are allowed.`n" Attributes.version "`n`nValid Example:`t1.23.45.67`nInvalid Example:`t1.0"
-			return
-		}
-		
 		ahkflavour:=Object()
 		for _each, item in ["a32","u32","u64"]
 		{
