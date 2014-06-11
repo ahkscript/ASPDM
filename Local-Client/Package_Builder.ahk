@@ -206,7 +206,7 @@ Save:
 			,description: 	description
 			,author: 		author
 			,license: 		license
-			,required: 		required
+			,required: 		Util_ArraySort(required)
 			,tags: 			Util_CSV2TagsObj(tags)
 			,forumurl: 		forumurl
 			,screenshot: 	screenshot

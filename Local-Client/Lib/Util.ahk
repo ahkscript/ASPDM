@@ -57,6 +57,15 @@ Util_ObjCount(Obj) {
 	return z
 }
 
+Util_ArraySort(Arr) { ;AutoSort
+	t:=Object()
+	for k, v in Arr
+		t[RegExReplace(v,"\s")]:=v
+	for k, v in t
+		Arr[A_Index]:=v
+	return Arr
+}
+
 Util_ShortPath(p,l=50) {
 	VarSetCapacity(_p, (A_IsUnicode?2:1)*StrLen(p) )
 	DllCall("shlwapi\PathCompactPathEx"

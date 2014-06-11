@@ -39,6 +39,7 @@ Settings_Default(key="") {
 }
 
 Settings_Save(j) {
+	j.installed:=Util_ArraySort(j.installed)
 	s:=JSON_FromObj(j)
 	f:=Settings_File()
 	FileDelete, % f
