@@ -249,22 +249,34 @@
 		if ( (strlen($str)<2) || (stristr($str,"ASPDM")) )
 			return "<a href=\"https://github.com/ahkscript/ASPDM/blob/master/Specifications/License.md\">ASPDM Default License</a>";
 		if (stristr($str,"MIT"))
-			return "<a href=\"http://opensource.org/licenses/MIT\">" . $str . "</a>";
+			return "<a href=\"http://opensource.org/licenses/MIT\">MIT License</a>";
 		if (stristr($str,"BSD"))
 			if (stristr($str,"2"))
-				return "<a href=\"http://opensource.org/licenses/BSD-2-Clause\">" . $str . "</a>";
+				return "<a href=\"http://opensource.org/licenses/BSD-2-Clause\">BSD 2-Clause License</a>";
+			else if (stristr($str,"3"))
+				return "<a href=\"http://opensource.org/licenses/BSD-3-Clause\">BSD 3-Clause License</a>";
 			else
 				return "<a href=\"http://opensource.org/licenses/BSD-3-Clause\">" . $str . "</a>";
 		if (stristr($str,"LGPL"))
-			return "<a href=\"http://opensource.org/licenses/lgpl-license\">" . $str . "</a>";
+			if (stristr($str,"2.1"))
+				return "<a href=\"http://opensource.org/licenses/LGPL-2.1\">LGPL v2.1</a>";
+			else if (stristr($str,"3"))
+				return "<a href=\"http://opensource.org/licenses/LGPL-3.0\">LGPL v3.0</a>";
+			else
+				return "<a href=\"http://opensource.org/licenses/lgpl-license\">" . $str . "</a>";
 		if (stristr($str,"GPL"))
-			return "<a href=\"http://opensource.org/licenses/gpl-license\">" . $str . "</a>";
+			if (stristr($str,"2"))
+				return "<a href=\"http://opensource.org/licenses/GPL-2.0\">GPL v2.0</a>";
+			else if (stristr($str,"3"))
+				return "<a href=\"http://opensource.org/licenses/GPL-3.0\">GPL v3.0</a>";
+			else
+				return "<a href=\"http://opensource.org/licenses/gpl-license\">" . $str . "</a>";
 		if (stristr($str,"Apache"))
-			return "<a href=\"http://opensource.org/licenses/Apache-2.0\">" . $str . "</a>";
+			return "<a href=\"http://opensource.org/licenses/Apache-2.0\">Apache License v2.0</a>";
 		if (stristr($str,"MPL") || stristr($str,"Mozilla"))
-			return "<a href=\"http://opensource.org/licenses/MPL-2.0\">" . $str . "</a>";
+			return "<a href=\"http://opensource.org/licenses/MPL-2.0\">Mozilla Public License v2.0</a>";
 		if (stristr($str,"CC0"))
-			return "<a href=\"http://creativecommons.org/publicdomain/zero/1.0\">" . $str . "</a>";
+			return "<a href=\"http://creativecommons.org/publicdomain/zero/1.0\">Public domain (CC0 1.0)</a>";
 		if ( (stristr($str,"CC")) || (stristr($str,"creative")) || (stristr($str,"commons")) )
 			return "<a href=\"http://creativecommons.org/licenses\">" . $str . "</a>";
 		return $str;
