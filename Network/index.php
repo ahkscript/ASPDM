@@ -4,17 +4,14 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-		<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=0.6">
 		<title>ASPDM - AHKScript.org's Package/StdLib Distribution and Management</title>
-		<link type="image/png" href="src/ahk.png" rel="icon">
-		<link rel="stylesheet" href="src/font-awesome-4.0.3/css/font-awesome.min.css">
-		<link type="text/css"  href="src/bootstrap.css" rel="stylesheet">
+		
+		<?php include 'header.php'; ?>
+		
 		<link type="text/css"  href="src/bootstrap_buttons.min.css" rel="stylesheet">
 		<link type="text/css"  href="src/bootstrap_buttons-theme.min.css" rel="stylesheet">
 		<script src="src/jquery-1.11.0.min.js"></script>
 		<script src="src/sorttable.js"></script>
-		<link type="text/css"  href="src/style.css" rel="stylesheet">
         <link type="text/css"  href="src/modal.css" rel="stylesheet">
         <script>
 			function openDialog(modal) {
@@ -27,11 +24,8 @@
 		<style>
 			/* Special Modal "anti-body-scroll" trick
 			 * See here:  http://coding.abel.nu/2013/02/prevent-page-behind-jquery-ui-dialog-from-scrolling */
-			#full_wrapper { overflow-y:scroll;height:100%; }
+			#full_wrapper { overflow-y:scroll;height:100%;position:relative;top:-20px; }
 			html, body { margin:0;overflow:hidden;height:100%; }
-			
-			/* Align webpage height, Weird... caused by avgrund? */
-			.container { margin-top:0 !important; }
 		
 			/* Extra popup styling */
 			.avgrund-popup p { margin: 0 0 4px; }
@@ -167,15 +161,12 @@
 	?>
         
 		<div class="container">
-			
 			<h1><a href="http://ahkscript.org" id="logolink"><img id="logo" src="src/ahk.png"></a> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</h1>
 			<div id="body">
-
-				<div id="headerlinks">
-					<a href="home.php">Sign In/Out</a>
-					<a href="submit.html">Submit Package</a>
-					<a href="about.html">About ASPDM</a>
-				</div>
+			
+			<div id="headerlinks">
+				<?php include 'navmenu.php'; ?>
+			</div>
 				
 			<h2>Latest AutoHotkey packages</h2>
 			<div class="file-listing">
@@ -235,14 +226,9 @@
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at scelerisque magna, sed hendrerit enim. Aliquam interdum, felis non euismod dignissim, arcu nisi eleifend enim, sed mollis sem sem quis sem. Donec in iaculis quam, sed pretium quam. Donec congue, nunc vitae elementum tempus, nibh neque scelerisque ante, at tempus lacus augue convallis dui. Maecenas vitae elit consequat, volutpat nisl nec, mollis mi. Curabitur non tellus ut enim tristique commodo. Nulla pulvinar tellus augue, eget auctor est euismod nec. Maecenas vestibulum tortor at lacus aliquet, sed rhoncus leo elementum. Aliquam eleifend aliquet odio ut euismod. Morbi volutpat orci in ipsum facilisis, porttitor eleifend ipsum viverra. Nullam quis vehicula nisi.
 				</p>
 			</div>
-			<div id="footer">
-				<p>Hosted by <a href="http://www.2freehosting.com/"><img src="src/2fh_icon.png" alt="2FH"></a>
-				-
-				<a href="http://joedf.users.sourceforge.net/"> Joe DF</a>
-				-
-				Original Web Design from here: <a href="http://win32.libav.org/win64/">http://win32.libav.org/win64/</a>
-				</p>
-			</div>
+			
+			<?php include 'footer.php'; ?>
+			
 		</div>
 		<div class="avgrund-cover"></div>
 	<script type="text/javascript" src="src/modal.js"></script>

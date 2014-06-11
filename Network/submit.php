@@ -1,145 +1,137 @@
-<?php
-// http://www.php.net/manual/en/features.file-upload.php#114004
-// http://www.php.net/manual/en/function.mime-content-type.php#87856
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-//header('Content-Type: text/plain; charset=utf-8');
+<!-- Forked Web Design from here: http://win32.libav.org/win64/ -->
 
-	include 'lib/utils.php';
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Package Submission | ASPDM</title>
+		
+		<?php include 'header.php'; ?>
+		
+		<script src="src/jquery-1.11.0.min.js"></script>
+		<link rel="stylesheet" href="src/ladda.min.css">
+		<script src="src/jquery.form.js"></script>
+		<script src="src/spin.min.js"></script>
+		<script src="src/ladda.min.js"></script>
+		<style>
+			.progress {
+				top: 8px;
+				display:inline-block;
+				position:relative;
+				width:400px;
+				border: 1px solid #ddd;
+				padding: 1px;
+				border-radius: 3px;
+				height:22px;
+			}
+			.bar {
+				background-color: #B4F5B4;
+				width:0%;
+				border-radius: 3px;
+				height:100%;
+			}
+			.percent {
+				position:absolute;
+				display:inline-block;
+				top:2px;
+				text-align: center;
+				width: 100%;
+			}
+		</style>
 
-if(!function_exists('mime_content_type')) {
+		<script type="text/javascript">
+		</script>
+		
+	</head>
 
-	function mime_content_type($filename) {
+	<body>
+		<div class="container">
+			<h1><a href="http://ahkscript.org" id="logolink"><img id="logo" src="src/ahk.png"></a> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</h1>
+			<div id="body">
+			
+			<div id="headerlinks">
+				<?php include 'navmenu.php'; ?>
+			</div>
 
-		$mime_types = array(
+			<h2>Package Submission</h2>
 
-			'txt' => 'text/plain',
-			'htm' => 'text/html',
-			'html' => 'text/html',
-			'php' => 'text/html',
-			'css' => 'text/css',
-			'js' => 'application/javascript',
-			'json' => 'application/json',
-			'xml' => 'application/xml',
-			'swf' => 'application/x-shockwave-flash',
-			'flv' => 'video/x-flv',
+			<div><h4>Upload your package file (.ahkp) :</h4>
+				<form action="p_submit.php" method="post" enctype="multipart/form-data">
+					<div class="fullw">
+						<label for="file">Package:</label>
+						<input type="file" name="file" id="file"><br>
+						
+						<input type="submit" value="Submit Package" class="big">
+						<div class="progress" style="display:none;">
+							<div class="bar"></div>
+							<div class="percent">0%</div>
+						</div><br>
+						
+						<!--
+						<button class="ladda-button" data-color="mint" data-style="expand-right" data-size="s">Submit</button>
+						<br>
+						-->
+						<code id="status" style="display:none;"></code>
+					</div>
+				</form>
+				<script type="text/javascript">
+					(function() {
+						
+						var bar = $('.bar');
+						var progress = $('.progress');
+						var percent = $('.percent');
+						var status = $('#status');
+						
+				        //var bt = Ladda.create( document.querySelector( 'button' ) ); 
+						$('form').ajaxForm({
+							beforeSend: function() {
+								
+								progress.css("display","inline-block");
+								status.html("Please wait...");
+								var percentVal = '0%';
+								bar.width(percentVal)
+								percent.html(percentVal);
+								
+								//bt.start();
+							},
+							uploadProgress: function(event, position, total, percentComplete) {
+								
+								var percentVal = percentComplete + '%';
+								bar.width(percentVal)
+								percent.html(percentVal);
+								
+ 								//bt.setProgress( percentComplete/10 );
+							},
+							success: function() {
+								
+								var percentVal = '100%';
+								bar.width(percentVal)
+								percent.html(percentVal);
+								//Maybe, during a rainy day, I'll be less lazy than today. And, I will try making the Ladda buttons show a tick when it's done...
+							},
+							complete: function(xhr) {
+							
+								status.html(xhr.responseText);
+								status.css("display","inline-block");
+								
+								//bt.stop();
+							}
+						}); 
 
-			// images
-			'png' => 'image/png',
-			'jpe' => 'image/jpeg',
-			'jpeg' => 'image/jpeg',
-			'jpg' => 'image/jpeg',
-			'gif' => 'image/gif',
-			'bmp' => 'image/bmp',
-			'ico' => 'image/vnd.microsoft.icon',
-			'tiff' => 'image/tiff',
-			'tif' => 'image/tiff',
-			'svg' => 'image/svg+xml',
-			'svgz' => 'image/svg+xml',
+					})();
+				</script>
+				<hr class="max">
+			</div>
 
-			// archives
-			'zip' => 'application/zip',
-			'rar' => 'application/x-rar-compressed',
-			'exe' => 'application/x-msdownload',
-			'msi' => 'application/x-msdownload',
-			'cab' => 'application/vnd.ms-cab-compressed',
-
-			// audio/video
-			'mp3' => 'audio/mpeg',
-			'qt' => 'video/quicktime',
-			'mov' => 'video/quicktime',
-
-			// adobe
-			'pdf' => 'application/pdf',
-			'psd' => 'image/vnd.adobe.photoshop',
-			'ai' => 'application/postscript',
-			'eps' => 'application/postscript',
-			'ps' => 'application/postscript',
-
-			// ms office
-			'doc' => 'application/msword',
-			'rtf' => 'application/rtf',
-			'xls' => 'application/vnd.ms-excel',
-			'ppt' => 'application/vnd.ms-powerpoint',
-
-			// open office
-			'odt' => 'application/vnd.oasis.opendocument.text',
-			'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
-		);
-
-		$ext = pathinfo($filename, PATHINFO_EXTENSION);
-		if (array_key_exists($ext, $mime_types)) {
-			return $mime_types[$ext];
-		}
-		elseif (function_exists('finfo_open')) {
-			$finfo = finfo_open(FILEINFO_MIME);
-			$mimetype = finfo_file($finfo, $filename);
-			finfo_close($finfo);
-			return $mimetype;
-		}
-		else {
-			return 'application/octet-stream';
-		}
-	}
-}
-
-try {
-	
-	// Undefined | Multiple Files | $_FILES Corruption Attack
-	// If this request falls under any of them, treat it invalid.
-	if (
-		!isset($_FILES['file']['error']) ||
-		is_array($_FILES['file']['error'])
-	) {
-		throw new RuntimeException('Invalid parameters.');
-	}
-
-	// Check $_FILES['file']['error'] value.
-	switch ($_FILES['file']['error']) {
-		case UPLOAD_ERR_OK:
-			break;
-		case UPLOAD_ERR_NO_FILE:
-			throw new RuntimeException('No file sent.');
-		case UPLOAD_ERR_INI_SIZE:
-		case UPLOAD_ERR_FORM_SIZE:
-			throw new RuntimeException('Exceeded filesize limit.');
-		default:
-			throw new RuntimeException('Unknown errors.');
-	}
-
-	// You should also check filesize here. 
-	if ($_FILES['file']['size'] > 5248000) {
-		throw new RuntimeException('Exceeded filesize limit. (5 MB)');
-	}
-
-	$ext = pathinfo($_FILES['file']['tmp_name'], PATHINFO_EXTENSION);
-	// DO NOT TRUST $_FILES['file']['mime'] VALUE !!
-	// Check MIME Type by yourself.
-	if ( (mime_content_type($_FILES['file']['tmp_name']) != "application/octet-stream") && ($ext != "ahkp") )
-	{
-		throw new RuntimeException('Invalid file format.');
-	}
-	
-	if (!valid_ahkp($_FILES['file']['tmp_name']))
-		throw new RuntimeException('Invalid file format.');
-	
-	// You should name it uniquely.
-	// DO NOT USE $_FILES['file']['name'] WITHOUT ANY VALIDATION !!
-	// On this example, obtain safe unique name from its binary data.
-    $filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
-	
-	if (file_exists("./packs/tmp/" . $filename))
-	{
-		throw new RuntimeException('The same package has already been uploaded !');
-	}
-	
-    if (move_uploaded_file($_FILES['file']['tmp_name'],"./packs/tmp/" . $filename))
-	{
-        echo 'File is uploaded successfully.';
-    } else {
-        throw new RuntimeException('FileMove error.');
-    };
-} catch (RuntimeException $e) {
-	echo $e->getMessage();
-}
-
-?>
+			<h1>Notice</h1>
+				<h4>Submission terms and conditions </h4>
+				<p>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at scelerisque magna, sed hendrerit enim. Aliquam interdum, felis non euismod dignissim, arcu nisi eleifend enim, sed mollis sem sem quis sem. Donec in iaculis quam, sed pretium quam. Donec congue, nunc vitae elementum tempus, nibh neque scelerisque ante, at tempus lacus augue convallis dui. Maecenas vitae elit consequat, volutpat nisl nec, mollis mi. Curabitur non tellus ut enim tristique commodo. Nulla pulvinar tellus augue, eget auctor est euismod nec. Maecenas vestibulum tortor at lacus aliquet, sed rhoncus leo elementum. Aliquam eleifend aliquet odio ut euismod. Morbi volutpat orci in ipsum facilisis, porttitor eleifend ipsum viverra. Nullam quis vehicula nisi.
+				</p>
+			</div>
+			
+			<?php include 'footer.php'; ?>
+			
+		</div>
+	</body>
+</html>
