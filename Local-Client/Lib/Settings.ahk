@@ -23,6 +23,7 @@ Settings_Validate(j) {
 	loop,Parse,vars,`|
 		if (!j.Haskey(A_LoopField))
 			j[A_LoopField]:=j_default[A_LoopField]
+	j.installed:=Util_ArraySort(j.installed)
 	return j
 }
 
