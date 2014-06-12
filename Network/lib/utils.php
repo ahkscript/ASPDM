@@ -19,7 +19,7 @@
 	function get_metadata($file,$raw=0) {
 		if ($file == NULL)
 			return -1;
-		$file = "./packs/" . str_replace("/","",strtolower($file)); //Remove '/' to avoid exploit
+		$file = $_SERVER['DOCUMENT_ROOT'] . "/packs/" . str_replace("/","",strtolower($file)); //Remove '/' to avoid exploit
 		if (!file_exists($file))
 			return -2;
 		$handle = fopen($file, "r");
