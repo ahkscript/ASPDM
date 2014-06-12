@@ -38,7 +38,6 @@ tbody tr:nth-child(2n+1) td {
 	background-color: #F9F9F9;
 }
 
-
 #footer {
 	font-size:x-small;
 }
@@ -47,7 +46,6 @@ h1:first-child {
 	font-size: 24px;
 	padding-bottom: 5px;
 }
-
 
 h2 {
 	border-color: #468847;
@@ -72,6 +70,10 @@ h1 {
 #logo {
 	width: 48px;
 	height: 48px;
+}
+
+#logolink {
+    text-decoration: none;
 }
 
 a {
@@ -106,7 +108,6 @@ a:hover {
 #headerlinks a:hover {
 	text-decoration: none;
 }
-
 
 #headerlinks .username {
 	background-color: #0088CC;
@@ -146,9 +147,18 @@ div.userhome {
 	text-align: center;
 }
 
+.userhome table {
+	font-size: 14px;
+}
+
+.userhome td {
+	padding:2px;
+}
+
 .userhome th:nth-child(2n),
 .userhome td:nth-child(2n) {
     text-align: right;
+	border-left: 1px solid #DDDDDD;
 }
 
 i.fa {

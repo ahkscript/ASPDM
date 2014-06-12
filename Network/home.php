@@ -7,6 +7,29 @@ if(!isset($_SESSION['sess_user_id']) || (trim($_SESSION['sess_user_id']) == ''))
 header("location: login.php");
 exit();
 }
+
+include 'lib/utils.php';
+
+include 'lib/db_info.php';
+
+$conn = mysql_connect($host, $db_user, $db_pass);
+mysql_select_db($db_name, $conn);
+
+	$username = mysql_real_escape_string($_SESSION["sess_username"]);
+
+	$query = "SELECT usertype, email, packs
+	FROM users
+	WHERE username = '$username';";
+
+	$result = mysql_query($query);
+
+	if(mysql_num_rows($result) == 0) { // User not found. redirect to login form...
+		header('Location: login.php?i=u');
+		exit();
+	}
+	
+	$info = mysql_fetch_array($result, MYSQL_ASSOC);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -22,7 +45,7 @@ exit();
 
 	<body>
 		<div class="container">
-			<h1><a href="http://ahkscript.org" id="logolink"><img id="logo" src="src/ahk.png"></a> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</h1>
+			<h1><a href="/" id="logolink"><img id="logo" src="src/ahk.png"> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</h1></a>
 			<div id="body">
 			
 			<div id="headerlinks">
@@ -36,10 +59,23 @@ exit();
 				<div class="userhome">
 					<div>
 						<table>
-							<tr><th><h4>Lorem Ipsum</h4></th><th><h4>Version</h4></th></tr>
-							<tr><td>Package_AAAA.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_BBBB.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_CCCC.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><th><h4>Submitted Packages</h4></th><th><h4>Version</h4></th></tr>
+							<?php
+							if (strlen($info["packs"])==0)
+								echo '<tr><td>None</td><td>-</td></tr>';
+							else {
+								$sp_t = strtok($info["packs"], ";");
+								while ($sp_t != false) {
+									$sp_f = $sp_t.'.ahkp';
+									$sp_d = get_metadata($sp_f);
+									if (is_object($sp_d))
+										echo '<tr><td><a href="/dl_file.php?f='.$sp_f.'">'.$sp_f.'</a></td><td>'.($sp_d->version).'</td></tr>';
+									else
+										echo '<tr><td><a href="/dl_file.php?f='.$sp_f.'">'.$sp_f.'</a></td><td>ERROR</td></tr>';
+									$sp_t = strtok(";");
+								}
+							}
+							?>
 						</table>
 					</div>
 					<div>

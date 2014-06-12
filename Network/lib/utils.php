@@ -16,6 +16,21 @@
 		return in_array(strtolower($needle), array_map('strtolower', $haystack));
 	}
 	
+	function get_metadata($file,$raw=0) {
+		if ($file == NULL)
+			return -1;
+		$file = "./packs/" . str_replace("/","",strtolower($file)); //Remove '/' to avoid exploit
+		if (!file_exists($file))
+			return -2;
+		$handle = fopen($file, "r");
+		fseek($handle,8);
+		$size = fread_UINT($handle);
+		if ($raw)
+			return fread($handle,$size);
+		else
+			return json_decode(fread($handle,$size));
+	}
+	
 	function print_metadata($file,$content_item) {
 		if ($file == NULL) {
 			echo "ERROR: Invalid parameters";
