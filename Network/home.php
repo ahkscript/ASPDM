@@ -37,36 +37,36 @@ exit();
 					<div>
 						<table>
 							<tr><th><h4>Lorem Ipsum</h4></th><th><h4>Version</h4></th></tr>
-							<tr><td>Package_AAAA.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_BBBB.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_CCCC.ahkp</td><td>[version: 1.0.0.0]</td></tr>
+							<tr><td>Package_AAAA.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_BBBB.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_CCCC.ahkp</td><td>1.0.0.0</td></tr>
 						</table>
 					</div>
 					<div>
 						<table>
 							<tr><th><h4>Lorem Ipsum</h4></th><th><h4>Version</h4></th></tr>
-							<tr><td>Package_AAAA.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_BBBB.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_CCCC.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_DDDD.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_EEEE.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_FFFF.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_GGGG.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_HHHH.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_IIII.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_JJJJ.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_KKKK.ahkp</td><td>[version: 1.0.0.0]</td></tr>
+							<tr><td>Package_AAAA.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_BBBB.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_CCCC.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_DDDD.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_EEEE.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_FFFF.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_GGGG.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_HHHH.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_IIII.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_JJJJ.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_KKKK.ahkp</td><td>1.0.0.0</td></tr>
 						</table>
 					</div>
 					<div>
 						<table>
 							<tr><th><h4>Lorem Ipsum</h4></th><th><h4>Version</h4></th></tr>
-							<tr><td>Package_AAAA.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_BBBB.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_CCCC.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_DDDD.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_EEEE.ahkp</td><td>[version: 1.0.0.0]</td></tr>
-							<tr><td>Package_FFFF.ahkp</td><td>[version: 1.0.0.0]</td></tr>
+							<tr><td>Package_AAAA.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_BBBB.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_CCCC.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_DDDD.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_EEEE.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><td>Package_FFFF.ahkp</td><td>1.0.0.0</td></tr>
 						</table>
 					</div>
 			</div>

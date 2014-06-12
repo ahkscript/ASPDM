@@ -5,10 +5,7 @@ session_start();
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-$host = "mysql.2freehosting.com";
-$db_user = "******************";
-$db_pass = "******************";
-$db_name = "******************";
+include 'lib/db_info.php';
 
 $conn = mysql_connect($host, $db_user, $db_pass);
 mysql_select_db($db_name, $conn);
