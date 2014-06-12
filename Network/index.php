@@ -26,6 +26,10 @@
 			 * See here:  http://coding.abel.nu/2013/02/prevent-page-behind-jquery-ui-dialog-from-scrolling */
 			#full_wrapper { overflow-y:scroll;height:100%;position:relative;top:-20px; }
 			html, body { margin:0;overflow:hidden;height:100%; }
+			
+			table {
+				margin-bottom: 20px;
+			}
 		
 			/* Extra popup styling */
 			.avgrund-popup p { margin: 0 0 4px; }

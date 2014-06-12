@@ -13,7 +13,6 @@ table.sortable span.sortarrow {
 */
 
 table {
-	margin-bottom: 20px;
 	width: 100%;
 }
 
@@ -66,7 +65,7 @@ h1 {
 }
 
 .com {
-	//text-align: center;
+	/*text-align: center;*/
 	font-weight: bold;
 }
 
@@ -106,6 +105,50 @@ a:hover {
 #headerlinks a:active,
 #headerlinks a:hover {
 	text-decoration: none;
+}
+
+
+#headerlinks .username {
+	background-color: #0088CC;
+    border-color: #0088CC;
+    border-radius: 4px;
+    border-style: solid;
+    border-width: 2px;
+    color: #FEFEFE;
+    display: inline-block;
+    margin-right: 4px;
+    padding: 0 2px !important;
+}
+#headerlinks .username:active,
+#headerlinks .username:hover {
+	background-color: #00BBEE;
+    color: #FEFEFE;
+}
+
+div.userhome h4 {
+	background-color: #1691BE;
+    color: white;
+    margin: 0;
+    padding: 4px;
+}
+
+div.userhome div {
+	/* padding: 10px; */
+	vertical-align: top;
+	border: 1px solid #DDDDDD;
+    display: inline-block;
+    margin: 0;
+    padding: 1px;
+    width: 32%;
+}
+
+div.userhome {
+	text-align: center;
+}
+
+.userhome th:nth-child(2n),
+.userhome td:nth-child(2n) {
+    text-align: right;
 }
 
 i.fa {
@@ -160,7 +203,7 @@ input.big {
 }
 
 input.big:hover {
-	cursor: hand; cursor: pointer;
+	cursor: pointer;
 	background-color: #EFEFEF;
 	color: #468847;
 }
