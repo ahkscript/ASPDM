@@ -20,6 +20,9 @@ if (args) {
 } else
 	Start_select_pack:=""
 
+if (FileExist(Start_select_pack))
+	Start_select_localmode:=1
+
 AppVersion:="1.0.0.0"
 CheckUpdate(AppVersion,-1)
 
