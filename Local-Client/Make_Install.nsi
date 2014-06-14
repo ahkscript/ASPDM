@@ -129,6 +129,7 @@ Section "MainSection" SEC01
 	File "Package_Installer.ahk"
 	File "Package_Remover.ahk"
 	File "CustomURI_Handler.exe"
+	File "OpenWith_Handler.exe"
 	
 	SetOutPath "$INSTDIR\Res"
 	File /r Res\*.*
@@ -143,13 +144,13 @@ Section "MainSection" SEC01
 	WriteRegStr HKCR "ahkp.package\DefaultIcon" "" \
 		"$INSTDIR\Res\ahk.ico"
 	WriteRegStr HKCR "ahkp.package\shell\open\command" "" \
-		'"$INSTDIR\Package_Lister.ahk" "%1"'
+		'"$INSTDIR\OpenWith_Handler.exe" "%1"'
 
 	DetailPrint "Creating ASPDM:// URI Scheme..."
 	WriteRegStr HKCR "ASPDM" "URL Protocol" ""
 	WriteRegStr HKCR "ASPDM" "" "URL:ASPDM Protocol"
 	WriteRegStr HKCR "ASPDM\DefaultIcon" "" "$INSTDIR\res\ahk.ico"
-	WriteRegStr HKCR "ASPDM\shell\open\command" "" '"CustomURI_Handler.exe" "%1"'
+	WriteRegStr HKCR "ASPDM\shell\open\command" "" '"$INSTDIR\CustomURI_Handler.exe" "%1"'
 	
 	DetailPrint "Creating shortcuts..."
 	SetShellVarContext all
@@ -200,6 +201,7 @@ Section Uninstall
 	Delete "$INSTDIR\Package_Installer.ahk"
 	Delete "$INSTDIR\Package_Remover.ahk"
 	Delete "$INSTDIR\CustomURI_Handler.exe"
+	Delete "$INSTDIR\OpenWith_Handler.exe"
 	RMDir /r "$INSTDIR\Res"
 	RMDir /r "$INSTDIR\Lib"
 	
