@@ -13,6 +13,9 @@ if (args)
 else
 	Start_select_pack:=""
 
+AppVersion:="1.0.0.0"
+CheckUpdate(AppVersion,-1)
+
 CheckedItems:=0
 
 ;get settings
@@ -55,7 +58,8 @@ Gui, Tab, Settings
 	Gui, Add, Button, yp-5 x+4 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
 	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_folder, % Settings.stdlib_folder
 	Gui, Add, Button, y278 x16 w80 vSaveSettingsButton gSaveSettings, Save Settings
-	Gui, Add, Button, y278 x+2 vResetSettingsButton gResetSettings, Reset Settings
+	Gui, Add, Button, yp x+2 vResetSettingsButton gResetSettings, Reset Settings
+	Gui, Add, Text, yp+6 x+170 +Right vtxt_version, ASPDM Client v%AppVersion%
 Gui, Tab,
 	Gui, Add, Edit, vSearchBar gSearch y44 x272 w250,
 	SetEditPlaceholder("SearchBar","Search...")
@@ -367,6 +371,7 @@ GuiSize:
 		GuiControl,move,LV_%A_LoopField%, % "w" (A_GuiWidth-32) " h" (A_GuiHeight-124)
 		GuiControl,move,PackageCounter_%A_LoopField%, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-118)
 	}
+	GuiControl,move,txt_version, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-130)
 	GuiSize_list:="Install|InstallFile|Refresh_A|Update|UpdateFile|Refresh_U|Reinstall|Remove|OpenSelected|SaveSettings|ResetSettings"
 	Loop, Parse, GuiSize_list, |
 		GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-44)

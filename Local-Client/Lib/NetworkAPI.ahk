@@ -28,7 +28,7 @@ CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.tk/update.ini") {
 	}
 	else
 	{
-		if (NewVersion > Version)
+		if (Util_VersionCompare(NewVersion,Version))
 		{
 			if (silent==-1 || silent==0) {
 				MsgBox, 262212, %A_ScriptName% - Update, A new version is available.`nCurrent Version: `t%Version%`nLatest Version: `t%NewVersion%`nWould you like to update?
