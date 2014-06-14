@@ -14,7 +14,7 @@ API_u2vClean:=1 ;enable u2v_clean()
 ; API_Source:="http://api-php.aspdm.1eko.com"
 ; --------------------------------------------
 
-CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.tk/update.ini") {
+CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.tk/client/update.ini") {
 	URLDownloadToFile,%Update_URL%, % tempupdatefile:=Util_TempFile()
 	IniRead,NewVersion,%tempupdatefile%,Update,Version,NULL (Error)
 	IniRead,__URL,%tempupdatefile%,Update,URL

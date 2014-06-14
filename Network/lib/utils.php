@@ -12,6 +12,25 @@
 		return hexdec($size);
 	}
 	
+	function iniget($inifile, $key) {
+		$h = fopen($inifile, "r");
+		if ($h) {
+			while (($line = fgets($h)) !== false) {
+				// process the line read.
+				if ($pos=stristr($line,$key))
+				{
+					fclose($h);
+					return strtok(substr($line,$pos+strlen($key)+1),"\r\n");
+				}
+			}
+			fclose($h);
+		} else {
+			// error opening the file.
+			return "error";
+		}
+		return "null";
+	}
+	
 	function in_arrayi($needle, $haystack) {
 		return in_array(strtolower($needle), array_map('strtolower', $haystack));
 	}
