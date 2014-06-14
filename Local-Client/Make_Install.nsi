@@ -67,9 +67,9 @@ done:
 
 ; Check if AutoHotkey is Installed
 ReadRegStr $1 HKLM "SOFTWARE\AutoHotkey" "InstallDir"
-IfFileExists "$1\Autohotkey.exe" AHK_Installed AHK_NotInstalled
+IfFileExists '$1\AutoHotkey.exe' AHK_Installed AHK_NotInstalled
 AHK_NotInstalled:
-	MessageBox MB_ICONEXCLAMATION|MB_YESNO "AutoHotkey is seems to be not installed.$\nContinue Installation?" IDYES AHK_Installed
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO "AutoHotkey seems to be not installed.$\nContinue Installation?" IDYES AHK_Installed
 	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. The installer will now exit."
 	Abort
 AHK_Installed:
