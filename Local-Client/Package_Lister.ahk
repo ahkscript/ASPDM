@@ -479,8 +479,12 @@ Install:
 	;Note WinXP Command-line 8191 chars limitation
 	;  http://support.microsoft.com/kb/830473
 	;Assuming approximately 50 each file path, should be around 114 packages with "|" delimiters
-	Runwait *RunAs Package_Installer.ahk "%Install_packs%",,UseErrorLevel
-	ecode:=ErrorLevel
+	
+	ecode:=Admin_run("Package_Installer.ahk",Install_packs)
+	if (ecode=="NOT_ADMIN") {
+		Gui -Disabled
+		return
+	}
 	
 	;Update "Installed" list - full-blown list update
 	Settings:=Settings_Get()
@@ -560,8 +564,16 @@ Remove:
 	}
 	Remove_packs:=SubStr(Remove_packs,1,-1)
 	
-	Runwait *RunAs Package_Remover.ahk "%Remove_packs%",,UseErrorLevel
-	ecode:=ErrorLevel
+	_Remove:
+	;Note WinXP Command-line 8191 chars limitation
+	;  http://support.microsoft.com/kb/830473
+	;Assuming approximately 50 each file path, should be around 114 packages with "|" delimiters
+	
+	ecode:=Admin_run("Package_Remover.ahk",Remove_packs)
+	if (ecode=="NOT_ADMIN") {
+		Gui -Disabled
+		return
+	}
 	
 	;full-blown list update
 	Settings:=Settings_Get()
@@ -607,5 +619,22 @@ LV_GetCheckedCount() {
 	Loop
 		if (!(checked := LV_GetNext(checked,"Checked")))
 			return (A_Index-1)
+}
+
+Admin_run(program, argument) {
+	;AutoHotkey Supported OS Versions: WIN_7, WIN_8, WIN_8.1, WIN_VISTA, WIN_2003, WIN_XP, WIN_2000
+	if A_OSVersion in WIN_2003,WIN_XP,WIN_2000
+	{
+		if (A_IsAdmin)
+			Runwait "%program%" "%argument%",,UseErrorLevel
+		else {
+			MsgBox, 48, , Sorry`, an error has occured.`n`nYou need administrator rights.`nPlease contact your administrator for help.
+			Gui -Disabled
+			return "NOT_ADMIN"
+		}
+	}
+	else
+		Runwait *RunAs "%program%" "%argument%",,UseErrorLevel
+	return ErrorLevel
 }
 
