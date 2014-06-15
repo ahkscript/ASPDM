@@ -45,6 +45,6 @@
 	
 	<br><br>
 	<hr><a href="/">Click here for the homepage.</a>
-<div>
+</div>
 </body>
 </html>
