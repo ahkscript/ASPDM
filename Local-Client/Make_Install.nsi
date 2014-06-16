@@ -69,13 +69,11 @@ Function .onInit
 	; Check if AutoHotkey is Installed
 	ReadRegStr $1 HKLM "SOFTWARE\AutoHotkey" "InstallDir"
 	${StrRep} $1 '$1' '"' "" ;remove all quotes
-	MessageBox MB_OK "TEST1: $1\AutoHotkey.exe"
 	IfFileExists '$1\AutoHotkey.exe' AHK_Installed AHK_NotInstalled_firstcheck
 	AHK_NotInstalled_firstcheck:
 		ReadRegStr $1 HKCR "AutoHotkeyScript\Shell\Open\Command" ""
 		${StrRep} $1 '$1' ' "%1" %*' "" ;extract path
 		${StrRep} $1 '$1' '"' "" ;remove all quotes
-		MessageBox MB_OK "TEST2: $1"
 		IfFileExists '$1' AHK_Installed AHK_NotInstalled
 		AHK_NotInstalled:
 			MessageBox MB_ICONEXCLAMATION|MB_YESNO "AutoHotkey seems to be not installed.$\nContinue Installation?" IDYES AHK_Installed
