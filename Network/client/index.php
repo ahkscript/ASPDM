@@ -46,8 +46,7 @@
 	</div>
 <?php
 	date_default_timezone_set("America/New_York"); // EST vs EDT time => EST with Daylight Savings Time
-	$timetype = date("I")?"EDT":"EST";
-	echo '<div id="info"><p>Last updated: '.date("F jS, Y H:i:s",filemtime($file)).' ('.$timetype.').</p>';
+	echo '<div id="info"><p>Last updated: '.date("F jS, Y H:i:s",filemtime($file)).' (UTC-05:00).</p>';
 	echo '<p><b>MD5: '.md5_file($file).'<br>SHA-1: '.sha1_file($file).'</b></p></div>';
 ?>
 	<br><br>
