@@ -21,6 +21,7 @@
 	#content { margin-top:200px; }
 	#sp { margin:auto;text-align:center;width:300px; }
 	a:active { position:relative;top:1px; }
+	#time { font-size:10px;color:#666; }
 </style>
 </head>
 <body>
@@ -30,7 +31,8 @@
 	
 	$version = iniget("update.ini","version");
 	echo '<div id="sp">';
-	echo '<a href="ASPDM_Install-v'.$version.'.exe" id="link">';
+	$file = 'ASPDM_Install-v'.$version.'.exe';
+	echo '<a href="'.$file.'" id="link">';
 ?>
 		<table id="dnl">
 			<tr>
@@ -42,7 +44,10 @@
 		</table>
 	</a>
 	</div>
-	
+<?php
+	date_default_timezone_set("EST");
+	echo '<p id="time">Last updated: '.date("F jS, Y H:i:s",filemtime($file)).' (EST).</p>';
+?>
 	<br><br>
 	<hr><a href="/">Click here for the homepage.</a>
 </div>
