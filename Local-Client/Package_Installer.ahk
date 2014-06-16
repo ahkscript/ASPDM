@@ -23,6 +23,8 @@ if ErrorLevel
 	ExitApp, % Install.Error_CreateArchiveDir
 
 InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Config" file
+ExamplesFolder:=Settings.StdLib_Examples_Folder ;Should be fetched from "settings/Config" file
+DocsFolder:=Settings.StdLib_Docs_Folder ;Should be fetched from "settings/Config" file
 /*	Possible Lib\ Folders:
 
 	%A_ScriptDir%\Lib\  ; Local library - requires AHK_L 42+.
@@ -57,7 +59,7 @@ for Current, FilePath in packs
 	;Check version of AutoHotkey
 	if (Util_VersionCompare(ver_pack:=mdata.ahkversion,A_AhkVersion)) {
 		MsgBox, 52, , The package's AutoHotkey version is greater than the installed version:`n`t%ver_pack%`n`t%A_AhkVersion%`nDo you want to continue the installation?
-		IfMsgBox,No
+		IfMsgBox, No
 			ExitApp, % Install.Error_AhkVersionInvalid
 	}
 	
@@ -86,6 +88,8 @@ for Current, FilePath in packs
 	if ErrorLevel
 		ExitApp, % Install.Error_CreateRepoSubDir
 	RepoSubDir := ExtractDir "\Lib"
+	RepoSampleDir := ExtractDir "\Examples"
+	RepoDocsDir := ExtractDir "\Docs"
 	
 	;Extract package to local repo
 	if !Package_Extract(ExtractDir, FilePath)
@@ -93,6 +97,24 @@ for Current, FilePath in packs
 	
 	;Copy data from local repo "Lib\" to StdLib "Lib\"
 	FileCopyDir,%RepoSubDir%,%InstallationFolder%,1
+	if ErrorLevel
+	{
+		;Delete or clean before exit
+		FileRemoveDir,%ExtractDir%,1
+		ExitApp, % Install.Error_CopyToStdLib
+	}
+	
+	;Copy data from local repo "Examples\" to StdLib "Examples\"
+	FileCopyDir,%RepoSampleDir%,%ExamplesFolder%,1
+	if ErrorLevel
+	{
+		;Delete or clean before exit
+		FileRemoveDir,%ExtractDir%,1
+		ExitApp, % Install.Error_CopyToStdLib
+	}
+	
+	;Copy data from local repo "Docs\" to StdLib "Docs\"
+	FileCopyDir,%RepoDocsDir%,%DocsFolder%,1
 	if ErrorLevel
 	{
 		;Delete or clean before exit

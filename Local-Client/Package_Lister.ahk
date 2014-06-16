@@ -67,6 +67,15 @@ Gui, Tab, Settings
 	Gui, Add, Text, y+10 xp, StdLib Installation folder
 	Gui, Add, Button, yp-5 x+4 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
 	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_folder, % Settings.stdlib_folder
+	
+	Gui, Add, Text, y+10 x20, StdLib Examples folder
+	Gui, Add, Button, yp-5 x+9 vstdlib_examples_folderBrowseButton gstdlib_examples_folderBrowse, Browse...
+	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_examples_folder, % Settings.stdlib_examples_folder
+	
+	Gui, Add, Text, y+10 x20, StdLib Docs folder
+	Gui, Add, Button, yp-5 x+29 vstdlib_docs_folderBrowseButton gstdlib_docs_folderBrowse, Browse...
+	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_docs_folder, % Settings.stdlib_docs_folder
+	
 	Gui, Add, Button, y278 x16 w80 vSaveSettingsButton gSaveSettings, Save Settings
 	Gui, Add, Button, yp x+2 vResetSettingsButton gResetSettings, Reset Settings
 	Gui, Add, Text, yp+6 x+170 +Right vtxt_version, ASPDM Client v%AppVersion%
@@ -421,11 +430,29 @@ stdlib_folderBrowse: ;stdlib_folderBrowseButton
 	Gui -Disabled
 return
 
+stdlib_examples_folderBrowse: ;stdlib_folderBrowseButton
+	Gui +Disabled
+	Gui +OwnDialogs
+	FileSelectFolder, __tmp, %A_MyDocuments%, 3, Select the StdLib Examples folder
+	if __tmp is not Space
+		GuiControl,,stdlib_examples_folder,%__tmp%
+	Gui -Disabled
+return
+
+stdlib_docs_folderBrowse: ;stdlib_folderBrowseButton
+	Gui +Disabled
+	Gui +OwnDialogs
+	FileSelectFolder, __tmp, %A_MyDocuments%, 3, Select the StdLib Documentation folder
+	if __tmp is not Space
+		GuiControl,,stdlib_docs_folder,%__tmp%
+	Gui -Disabled
+return
+
 SaveSettings:
 	MsgBox, 36, , Are you sure you want to save these settings?
 	IfMsgBox,Yes
 	{
-		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|stdlib_folder"
+		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|stdlib_folder|stdlib_docs_folder|stdlib_examples_folder"
 		Loop, Parse, _list_SaveSettings, |
 		{
 			GuiControlGet, %A_LoopField%
