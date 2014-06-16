@@ -23,6 +23,8 @@ if ErrorLevel
 	ExitApp, % Install.Error_CreateArchiveDir
 
 InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Config" file
+ExamplesFolder:=Settings.StdLib_Examples_Folder ;Should be fetched from "settings/Config" file
+DocsFolder:=Settings.StdLib_Docs_Folder ;Should be fetched from "settings/Config" file
 /*	Possible Lib\ Folders:
 
 	%A_ScriptDir%\Lib\  ; Local library - requires AHK_L 42+.
@@ -51,16 +53,32 @@ for Current, id_akhp in packs
 	
 	;Setup Deletion Lists
 	RepoSubDir := Local_Repo "\" mdata["id"]
+	RepoSubDirExamples := RepoSubDir "\Examples"
 	RepoSubDirLib := RepoSubDir "\Lib"
-	if (!FileExist(RepoSubDirLib))
+	RepoSubDirDocs := RepoSubDir "\Docs"
+	if (!FileExist(RepoSubDir))
 		ExitApp, % Install.Error_NonExistantDir
 	RemList:=Object()
 	Loop, %RepoSubDirLib%\*, 1, 0
 	{
 		RemList.Insert(A_LoopFileName)
 	}
-	
-	;Delete files in StdLib folder
+	RemListEx:=Object()
+	Loop, %RepoSubDirExamples%\*, 1, 0
+	{
+		RemListEx.Insert(A_LoopFileName)
+	}
+	RemListDocs:=Object()
+	Loop, %RepoSubDirDocs%\*, 1, 0
+	{
+		RemListEx.Insert(A_LoopFileName)
+	}
+	RemListDocs:=Object()
+	Loop, %RepoSubDirDocs%\*, 1, 0
+	{
+		RemListDocs.Insert(A_LoopFileName)
+	}
+	;Delete files in StdLib /Lib folder
 	For each, file in RemList
 	{
 		if (_fAttrib:=FileExist(InstallationFolder "\" file))
@@ -73,6 +91,44 @@ for Current, id_akhp in packs
 			else
 			{
 				FileDelete,%InstallationFolder%\%file%
+				if ErrorLevel
+					ExitApp, % Install.Error_DeleteStdLib
+			}
+		}
+	}
+	
+	;Delete files in StdLib /Examples folder
+	For each, file in RemListEx
+	{
+		if (_fAttrib:=FileExist(ExamplesFolder "\" file))
+		{
+			if (InStr(_fAttrib, "D")) {
+				FileRemoveDir,%ExamplesFolder%\%file%,1
+				if ErrorLevel
+					ExitApp, % Install.Error_DeleteStdLibSubDir
+			}
+			else
+			{
+				FileDelete,%ExamplesFolder%\%file%
+				if ErrorLevel
+					ExitApp, % Install.Error_DeleteStdLib
+			}
+		}
+	}
+	
+	;Delete files in StdLib /Docs folder
+	For each, file in RemListDocs
+	{
+		if (_fAttrib:=FileExist(DocsFolder "\" file))
+		{
+			if (InStr(_fAttrib, "D")) {
+				FileRemoveDir,%DocsFolder%\%file%,1
+				if ErrorLevel
+					ExitApp, % Install.Error_DeleteStdLibSubDir
+			}
+			else
+			{
+				FileDelete,%DocsFolder%\%file%
 				if ErrorLevel
 					ExitApp, % Install.Error_DeleteStdLib
 			}

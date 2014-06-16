@@ -19,7 +19,7 @@ Settings_Get() {
 
 Settings_Validate(j) {
 	j_default:=Settings_Default()
-	vars:="stdlib_folder|local_repo|local_archive|hide_installed|only_show_stdlib|installed"
+	vars:="stdlib_docs_folder|stdlib_examples_folder|stdlib_folder|local_repo|local_archive|hide_installed|only_show_stdlib|installed"
 	loop,Parse,vars,`|
 		if (!j.Haskey(A_LoopField))
 			j[A_LoopField]:=j_default[A_LoopField]
@@ -29,6 +29,8 @@ Settings_Validate(j) {
 
 Settings_Default(key="") {
 	j:={stdlib_folder: 	RegExReplace(A_AhkPath,"\w+\.exe","lib")
+		,stdlib_examples_folder: 	RegExReplace(A_AhkPath,"\w+\.exe","examples")
+		,stdlib_docs_folder: 	RegExReplace(A_AhkPath,"\w+\.exe","docs")
 		,local_repo: 		A_AppData "\aspdm\repo"
 		,local_archive:		A_AppData "\aspdm\archive"
 		,hide_installed: 	true
