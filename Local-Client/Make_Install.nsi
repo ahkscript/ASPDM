@@ -25,11 +25,11 @@ Function .onInit
 	SetOutPath $TEMP
   
 	; Uncomment the following lines for splash screen
-		;File /oname=spltmp.bmp "Installer_resources\ahk_Splash.bmp"
-		;advsplash::show 2000 600 400 -1 $TEMP\spltmp
-		;Pop $0 ; $0 has '1' if the user closed the splash screen early,
-			; '0' if everything closed normally, and '-1' if some error occurred.
-		;Delete $TEMP\spltmp.bmp
+	;File /oname=spltmp.bmp "Installer_resources\ahk_Splash.bmp"
+	;advsplash::show 2000 600 400 -1 $TEMP\spltmp
+	;Pop $0 ; $0 has '1' if the user closed the splash screen early,
+		; '0' if everything closed normally, and '-1' if some error occurred.
+	;Delete $TEMP\spltmp.bmp
 
 	; Install to the correct directory on 32 bit or 64 bit machines
 	IfFileExists $WINDIR\SYSWOW64\*.* Is64bit Is32bit
@@ -44,15 +44,15 @@ Function .onInit
 
 	; Check to see if already installed
 	ReadRegStr $R0 HKLM \
-		"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-		"UninstallString"
-		StrCmp $R0 "" done
-	 
-		MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-		"${PRODUCT_NAME} is already installed. $\n$\nClick `OK` to remove the \
-		previous version or `Cancel` to cancel this upgrade." \
-		IDOK uninst
-		Abort
+	"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+	"UninstallString"
+	StrCmp $R0 "" done
+ 
+	MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+	"${PRODUCT_NAME} is already installed. $\n$\nClick `OK` to remove the \
+	previous version or `Cancel` to cancel this upgrade." \
+	IDOK uninst
+	Abort
 		 
 	;Run the uninstaller
 	uninst:
