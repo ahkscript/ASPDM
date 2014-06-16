@@ -10,6 +10,8 @@
 SetCompressor lzma
 
 !include "MUI2.nsh"
+!include "StrFunc.nsh"
+${StrRep} ;StringReplace Function
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -22,58 +24,64 @@ InstallDir "$PROGRAMFILES\AutoHotkey\${PRODUCT_NAME}"
 Function .onInit
 	SetOutPath $TEMP
   
-; Uncomment the following lines for splash screen
-	;File /oname=spltmp.bmp "Installer_resources\ahk_Splash.bmp"
-	;advsplash::show 2000 600 400 -1 $TEMP\spltmp
-	;Pop $0 ; $0 has '1' if the user closed the splash screen early,
-		; '0' if everything closed normally, and '-1' if some error occurred.
-	;Delete $TEMP\spltmp.bmp
+	; Uncomment the following lines for splash screen
+		;File /oname=spltmp.bmp "Installer_resources\ahk_Splash.bmp"
+		;advsplash::show 2000 600 400 -1 $TEMP\spltmp
+		;Pop $0 ; $0 has '1' if the user closed the splash screen early,
+			; '0' if everything closed normally, and '-1' if some error occurred.
+		;Delete $TEMP\spltmp.bmp
 
-; Install to the correct directory on 32 bit or 64 bit machines
-IfFileExists $WINDIR\SYSWOW64\*.* Is64bit Is32bit
-Is32bit:
-	SetRegView 32
-	StrCpy $INSTDIR "$PROGRAMFILES32\AutoHotkey\${PRODUCT_NAME}"
-	GOTO End32Bitvs64BitCheck
-Is64bit:
-	SetRegView 64
-	StrCpy $INSTDIR "$PROGRAMFILES64\AutoHotkey\${PRODUCT_NAME}"
-End32Bitvs64BitCheck:
+	; Install to the correct directory on 32 bit or 64 bit machines
+	IfFileExists $WINDIR\SYSWOW64\*.* Is64bit Is32bit
+	Is32bit:
+		SetRegView 32
+		StrCpy $INSTDIR "$PROGRAMFILES32\AutoHotkey\${PRODUCT_NAME}"
+		GOTO End32Bitvs64BitCheck
+	Is64bit:
+		SetRegView 64
+		StrCpy $INSTDIR "$PROGRAMFILES64\AutoHotkey\${PRODUCT_NAME}"
+	End32Bitvs64BitCheck:
 
-; Check to see if already installed
-ReadRegStr $R0 HKLM \
-	"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-	"UninstallString"
-	StrCmp $R0 "" done
- 
-	MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-	"${PRODUCT_NAME} is already installed. $\n$\nClick `OK` to remove the \
-	previous version or `Cancel` to cancel this upgrade." \
-	IDOK uninst
-	Abort
-	 
-;Run the uninstaller
-uninst:
-	ClearErrors
-	ExecWait '$R0 _?=$INSTDIR' ;Do not copy the uninstaller to a temp file
+	; Check to see if already installed
 	ReadRegStr $R0 HKLM \
-	"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-	"UninstallString"
-	StrCmp $R0 "" done
-	Delete /REBOOTOK '$R0'
-done:
+		"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+		"UninstallString"
+		StrCmp $R0 "" done
+	 
+		MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+		"${PRODUCT_NAME} is already installed. $\n$\nClick `OK` to remove the \
+		previous version or `Cancel` to cancel this upgrade." \
+		IDOK uninst
+		Abort
+		 
+	;Run the uninstaller
+	uninst:
+		ClearErrors
+		ExecWait '$R0 _?=$INSTDIR' ;Do not copy the uninstaller to a temp file
+		ReadRegStr $R0 HKLM \
+		"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+		"UninstallString"
+		StrCmp $R0 "" done
+		Delete /REBOOTOK '$R0'
+	done:
+	; -----NotInstalled:
 
-; -----NotInstalled:
-
-; Check if AutoHotkey is Installed
-ReadRegStr $1 HKLM "SOFTWARE\AutoHotkey" "InstallDir"
-IfFileExists '$1\AutoHotkey.exe' AHK_Installed AHK_NotInstalled
-AHK_NotInstalled:
-	MessageBox MB_ICONEXCLAMATION|MB_YESNO "AutoHotkey seems to be not installed.$\nContinue Installation?" IDYES AHK_Installed
-	MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. The installer will now exit."
-	Abort
-AHK_Installed:
-
+	; Check if AutoHotkey is Installed
+	ReadRegStr $1 HKLM "SOFTWARE\AutoHotkey" "InstallDir"
+	${StrRep} $1 '$1' '"' "" ;remove all quotes
+	MessageBox MB_OK "TEST1: $1\AutoHotkey.exe"
+	IfFileExists '$1\AutoHotkey.exe' AHK_Installed AHK_NotInstalled_firstcheck
+	AHK_NotInstalled_firstcheck:
+		ReadRegStr $1 HKCR "AutoHotkeyScript\Shell\Open\Command" ""
+		${StrRep} $1 '$1' ' "%1" %*' "" ;extract path
+		${StrRep} $1 '$1' '"' "" ;remove all quotes
+		MessageBox MB_OK "TEST2: $1"
+		IfFileExists '$1' AHK_Installed AHK_NotInstalled
+		AHK_NotInstalled:
+			MessageBox MB_ICONEXCLAMATION|MB_YESNO "AutoHotkey seems to be not installed.$\nContinue Installation?" IDYES AHK_Installed
+			MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. The installer will now exit."
+			Abort
+	AHK_Installed:
 FunctionEnd
 
 Function LaunchASPDM

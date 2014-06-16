@@ -21,7 +21,7 @@
 	#content { margin-top:200px; }
 	#sp { margin:auto;text-align:center;width:300px; }
 	a:active { position:relative;top:1px; }
-	#time { font-size:10px;color:#666; }
+	#info { font-size:10px;color:#666; }
 </style>
 </head>
 <body>
@@ -45,8 +45,10 @@
 	</a>
 	</div>
 <?php
-	date_default_timezone_set("EST");
-	echo '<p id="time">Last updated: '.date("F jS, Y H:i:s",filemtime($file)).' (EST).</p>';
+	date_default_timezone_set("America/New_York"); // EST vs EDT time => EST with Daylight Savings Time
+	$timetype = date("I")?"EDT":"EST";
+	echo '<div id="info"><p>Last updated: '.date("F jS, Y H:i:s",filemtime($file)).' ('.$timetype.').</p>';
+	echo '<p><b>MD5: '.md5_file($file).'<br>SHA-1: '.sha1_file($file).'</b></p></div>';
 ?>
 	<br><br>
 	<hr><a href="/">Click here for the homepage.</a>
