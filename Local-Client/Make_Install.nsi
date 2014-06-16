@@ -20,6 +20,7 @@ ${StrRep} ;StringReplace Function
 !define MUI_WELCOMEFINISHPAGE_BITMAP "Installer_resources\ahk_banner.bmp"
 
 InstallDir "$PROGRAMFILES\AutoHotkey\${PRODUCT_NAME}"
+var /GLOBAL h_ahk_path
 
 Function .onInit
 	SetOutPath $TEMP
@@ -36,10 +37,12 @@ Function .onInit
 	Is32bit:
 		SetRegView 32
 		StrCpy $INSTDIR "$PROGRAMFILES32\AutoHotkey\${PRODUCT_NAME}"
+		StrCpy $h_ahk_path "$PROGRAMFILES32\AutoHotkey\AutoHotkey.exe"
 		GOTO End32Bitvs64BitCheck
 	Is64bit:
 		SetRegView 64
 		StrCpy $INSTDIR "$PROGRAMFILES64\AutoHotkey\${PRODUCT_NAME}"
+		StrCpy $h_ahk_path "$PROGRAMFILES64\AutoHotkey\AutoHotkey.exe"
 	End32Bitvs64BitCheck:
 
 	; Check to see if already installed
@@ -74,11 +77,13 @@ Function .onInit
 		ReadRegStr $1 HKCR "AutoHotkeyScript\Shell\Open\Command" ""
 		${StrRep} $1 '$1' ' "%1" %*' "" ;extract path
 		${StrRep} $1 '$1' '"' "" ;remove all quotes
-		IfFileExists '$1' AHK_Installed AHK_NotInstalled
-		AHK_NotInstalled:
-			MessageBox MB_ICONEXCLAMATION|MB_YESNO "AutoHotkey seems to be not installed.$\nContinue Installation?" IDYES AHK_Installed
-			MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. The installer will now exit."
-			Abort
+		IfFileExists '$1' AHK_Installed AHK_NotInstalled_secondcheck
+		AHK_NotInstalled_secondcheck:
+			IfFileExists $h_ahk_path AHK_Installed AHK_NotInstalled
+			AHK_NotInstalled:
+				MessageBox MB_ICONEXCLAMATION|MB_YESNO "AutoHotkey seems to be not installed.$\nContinue Installation?" IDYES AHK_Installed
+				MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. The installer will now exit."
+				Abort
 	AHK_Installed:
 FunctionEnd
 
