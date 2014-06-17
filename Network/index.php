@@ -11,6 +11,7 @@
 		<link type="text/css"  href="src/bootstrap_buttons.min.css" rel="stylesheet">
 		<link type="text/css"  href="src/bootstrap_buttons-theme.min.css" rel="stylesheet">
 		<script src="src/jquery-1.11.0.min.js"></script>
+		<script src="src/jquery.hashchange.min.js"></script>
 		<script src="src/sorttable.js"></script>
         <link type="text/css"  href="src/modal.css" rel="stylesheet">
         <script>
@@ -203,9 +204,9 @@
                     $j_forum = (strlen($j_forum))?$j_forum:"#";
     ?>
     					<tr><td><a href="#"><?=$j_type?></a></td>
-                        <td><a href="#" onclick="javascript:openDialog('<?=$j_id?>');"><?=$j_name?></a></td>
+                        <td><a href="#<?=$j_id?>" onclick="javascript:openDialog('<?=$j_id?>');"><?=$j_name?></a></td>
 						<td align="right">
-							<a href="#" onclick="javascript:openDialog('<?=$j_id?>');" title="Information"><i class="fa fa-info-circle"></i></a>
+							<a href="#<?=$j_id?>" onclick="javascript:openDialog('<?=$j_id?>');" title="Information"><i class="fa fa-info-circle"></i></a>
 							<a href="<?=$j_forum?>" title="Forum"><i class="fa fa-comments"></i></a>
 							<!-- PHP Download script necessary for compatibility with all browsers, especially IE... -->
 							<a href="/dl_file.php?f=<?=$j_id?>.ahkp" title="Download"><i class="fa fa-cloud-download"></i></a></td>
@@ -234,16 +235,34 @@
 			<?php include 'footer.php'; ?>
 			
 		</div>
-		<div class="avgrund-cover"></div>
+		<div class="avgrund-cover" onclick="javascript:closeDialog();"></div>
 		<script type="text/javascript" src="src/modal.js"></script>
 		<script>
 		//auto open modal if for example: http://aspdm.tk/#isbinfile
 		$(window).load(function() {
+			loadmodal_hashref();
+		});
+		
+		$(function(){
+			// Bind the event.
+			$(window).hashchange( function(){
+				closeDialog(); //avoid bug : 'Mutiple overlaping modals'
+				loadmodal_hashref();
+			});
+			// Trigger the event
+			$(window).hashchange();
+		});
+		
+		function get_hashref() {
 			var p = location.href.lastIndexOf("#");
-			var link = location.href.substr(p+1);
+			return location.href.substr(p+1);
+		}
+		
+		function loadmodal_hashref() {
+			var link = get_hashref();
 			if (link.length > 0)
 				openDialog(link);
-		});
+		}
 		</script>
 	</div>
 	</body>
