@@ -1,7 +1,8 @@
 !define PRODUCT_NAME "ASPDM"
 !define PRODUCT_NAME_LONG "ASPDM : Package Manager"
 !define PRODUCT_VERSION "1.0.0.0"
-!define PRODUCT_PUBLISHER "(c) 2014 The ASPDM group (http://asdpm.tk)" ;The ahkscript.org Group
+!define PRODUCT_COMPANY "The ASPDM group" ;The ahkscript.org Group
+!define PRODUCT_PUBLISHER "(c) 2014 The ASPDM group (http://aspdm.tk)"
 !define PRODUCT_WEB_SITE "http://aspdm.tk"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Package_Lister.ahk"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -128,6 +129,17 @@ FunctionEnd
 
 Name "${PRODUCT_NAME_LONG}"
 OutFile "ASPDM_Install-v${PRODUCT_VERSION}.exe"
+
+VIProductVersion "${PRODUCT_VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductName" "${PRODUCT_NAME_LONG}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "CompanyName" "${PRODUCT_COMPANY}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalTrademarks" "${PRODUCT_NAME} is a trademark of ${PRODUCT_COMPANY}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "LegalCopyright" "${PRODUCT_PUBLISHER}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileDescription" "${PRODUCT_NAME_LONG}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "FileVersion" "${PRODUCT_VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "ProductVersion" "${PRODUCT_VERSION}"
+VIAddVersionKey /LANG=${LANG_ENGLISH} "OriginalFilename" "ASPDM_Install-v${PRODUCT_VERSION}.exe"
+
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
