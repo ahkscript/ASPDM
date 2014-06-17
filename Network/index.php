@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <!-- Forked Web Design from here: http://win32.libav.org/win64/ -->
 
@@ -24,7 +24,7 @@
 		<style>
 			/* Special Modal "anti-body-scroll" trick
 			 * See here:  http://coding.abel.nu/2013/02/prevent-page-behind-jquery-ui-dialog-from-scrolling */
-			#full_wrapper { overflow-y:scroll;height:100%;position:relative;top:-20px; }
+			#full_wrapper { overflow-y:scroll;height:100%; }
 			html, body { margin:0;overflow:hidden;height:100%; }
 			
 			table {
@@ -235,54 +235,16 @@
 			
 		</div>
 		<div class="avgrund-cover"></div>
-	<script type="text/javascript" src="src/modal.js"></script>
+		<script type="text/javascript" src="src/modal.js"></script>
+		<script>
+		//auto open modal if for example: http://aspdm.tk/#isbinfile
+		$(window).load(function() {
+			var p = location.href.lastIndexOf("#");
+			var link = location.href.substr(p+1);
+			if (link.length > 0)
+				openDialog(link);
+		});
+		</script>
 	</div>
 	</body>
 </html>
-
-﻿<?php
-	function html_linefmt($str) {
-		$order   = array("\r\n", "\n", "\r");
-		$replace = '<br />';
-		// Processes \r\n's first so they aren't converted twice.
-		return str_replace($order, $replace, $str);
-	}
-	
-	function html_licensefmt($str) {
-		$str = trim($str);
-		if ( (strlen($str)<2) || (stristr($str,"ASPDM")) )
-			return "<a href=\"https://github.com/ahkscript/ASPDM/blob/master/Specifications/License.md\">ASPDM Default License</a>";
-		if (stristr($str,"MIT"))
-			return "<a href=\"http://opensource.org/licenses/MIT\">MIT License</a>";
-		if (stristr($str,"BSD"))
-			if (stristr($str,"2"))
-				return "<a href=\"http://opensource.org/licenses/BSD-2-Clause\">BSD 2-Clause License</a>";
-			else if (stristr($str,"3"))
-				return "<a href=\"http://opensource.org/licenses/BSD-3-Clause\">BSD 3-Clause License</a>";
-			else
-				return "<a href=\"http://opensource.org/licenses/BSD-3-Clause\">" . $str . "</a>";
-		if (stristr($str,"LGPL"))
-			if (stristr($str,"2.1"))
-				return "<a href=\"http://opensource.org/licenses/LGPL-2.1\">LGPL v2.1</a>";
-			else if (stristr($str,"3"))
-				return "<a href=\"http://opensource.org/licenses/LGPL-3.0\">LGPL v3.0</a>";
-			else
-				return "<a href=\"http://opensource.org/licenses/lgpl-license\">" . $str . "</a>";
-		if (stristr($str,"GPL"))
-			if (stristr($str,"2"))
-				return "<a href=\"http://opensource.org/licenses/GPL-2.0\">GPL v2.0</a>";
-			else if (stristr($str,"3"))
-				return "<a href=\"http://opensource.org/licenses/GPL-3.0\">GPL v3.0</a>";
-			else
-				return "<a href=\"http://opensource.org/licenses/gpl-license\">" . $str . "</a>";
-		if (stristr($str,"Apache"))
-			return "<a href=\"http://opensource.org/licenses/Apache-2.0\">Apache License v2.0</a>";
-		if (stristr($str,"MPL") || stristr($str,"Mozilla"))
-			return "<a href=\"http://opensource.org/licenses/MPL-2.0\">Mozilla Public License v2.0</a>";
-		if (stristr($str,"CC0"))
-			return "<a href=\"http://creativecommons.org/publicdomain/zero/1.0\">Public domain (CC0 1.0)</a>";
-		if ( (stristr($str,"CC")) || (stristr($str,"creative")) || (stristr($str,"commons")) )
-			return "<a href=\"http://creativecommons.org/licenses\">" . $str . "</a>";
-		return $str;
-	}
-?>

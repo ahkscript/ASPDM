@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	$pageName = basename($_SERVER['PHP_SELF']);
 
 	if (strcasecmp($pageName,"login.php")!=0) {
