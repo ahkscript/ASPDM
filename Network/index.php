@@ -30,6 +30,8 @@
 				height:148px;
 				width:148px;
 			}
+			
+			#index_containter{ margin-top:0 !important; }
 		
 			/* Special Modal "anti-body-scroll" trick
 			 * See here:  http://coding.abel.nu/2013/02/prevent-page-behind-jquery-ui-dialog-from-scrolling */
@@ -177,7 +179,7 @@
 	};
 	?>
         
-		<div class="container">
+		<div class="container" id="index_containter">
 			<h1><a href="/" id="logolink"><img id="logo" src="src/ahk.png"> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</h1></a>
 			<div id="body">
 			
