@@ -80,7 +80,7 @@ a {
 	text-decoration: none;
 }
 
-a:not(.dialog_button):active {
+a:not(.dialog_button):not(.no_s_a):active {
 	position: relative;
 	top: 1px;
 }

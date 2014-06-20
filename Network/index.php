@@ -23,6 +23,14 @@
 			}
 		</script>
 		<style>
+			#get_aspdm {
+				position:absolute;
+				left:0;
+				top:0;
+				height:148px;
+				width:148px;
+			}
+		
 			/* Special Modal "anti-body-scroll" trick
 			 * See here:  http://coding.abel.nu/2013/02/prevent-page-behind-jquery-ui-dialog-from-scrolling */
 			#full_wrapper { overflow-y:scroll;height:100%; }
@@ -87,6 +95,10 @@
 	</head>
 
 	<body>
+	<img id="get_aspdm" usemap="#get_aspdm_map" src="src/get_aspdm.png"></img>
+		<map name="get_aspdm_map">
+			<area href="/client" alt="Get ASPDM" coords="0,0,0,148,148,0" shape="poly">
+		</map>
 	<div id="full_wrapper">
     <?php
 		include 'lib/utils.php';

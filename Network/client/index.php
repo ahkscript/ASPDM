@@ -22,6 +22,7 @@
 	#sp { margin:auto;text-align:center;width:300px; }
 	a:active { position:relative;top:1px; }
 	#info { font-size:10px;color:#666; }
+	#link { text-decoration:none; }
 </style>
 </head>
 <body>
