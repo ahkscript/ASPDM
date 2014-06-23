@@ -43,7 +43,7 @@ Gui, Add, Text, x+4 yp+4 , ASPDM
 Gui, Font
 Gui, Add, Text, yp+5 x+12, AHKScript.org's Package/StdLib Distribution and Management
 
-Gui, +hwndhGUI +Resize +MinSize480x304
+Gui, +hwndhGUI +Resize +MinSize530x360
 
 ;gui tabs
 Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|Settings
@@ -51,18 +51,21 @@ Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|
 	Gui, Add, Button, y+4 w80 vInstallButton Disabled gInstall, Install
 	Gui, Add, Button, yp x+2 vInstallFileButton gInstallFile, Install from file...
 	Gui, Add, Button, yp x+2 w80 vRefresh_AButton gRefresh, Refresh
+	Gui, Add, Button, yp x+2 wp vCheckAll_AButton gCheckAll,Check all
 	Gui, Add, Text, yp+6 xp+170 vPackageCounter_A +Right, Loading packages...
 Gui, Tab, Updates
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_U hwndhLV_U, File|Name|Installed Version|Latest Version
 	Gui, Add, Button, y+4 w80 Disabled vUpdateButton gUpdate, Update
 	Gui, Add, Button, yp x+2 vUpdateFileButton gUpdateFile, Update from file...
 	Gui, Add, Button, yp x+2 w80 vRefresh_UButton gRefresh, Refresh
+	Gui, Add, Button, yp x+2 wp vCheckAll_UButton gCheckAll,Check all
 	Gui, Add, Text, yp+6 xp+170 +Right vPackageCounter_U, Loading packages...
 Gui, Tab, Installed
 	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_I hwndhLV_I, File|Name|Installed Version
 	Gui, Add, Button, y+4 w80 Disabled vReinstallButton gReinstall, Reinstall
 	Gui, Add, Button, yp x+2 wp Disabled vRemoveButton gRemove, Remove
 	Gui, Add, Button, yp x+2 vOpenSelectedButton gOpenSelected, See selected package files
+	Gui, Add, Button, yp x+2 w80 vCheckAll_IButton gCheckAll,Check all
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
 	Gui, Add, Checkbox, y78 x20 vHide_Installed, Hide Installed Packages in Available tab
@@ -79,10 +82,10 @@ Gui, Tab, Settings
 	Gui, Add, Button, yp x+2 vClientUpdateButton gClientUpdate, Check for updates
 	Gui, Add, Text, yp+6 x+170 +Right vtxt_version, ASPDM Client v%AppVersion%
 Gui, Tab,
-	Gui, Add, Edit, vSearchBar gSearch y44 x272 w250,
+	Gui, Add, Edit, vSearchBar gSearch y44 x222 w300,
 	SetEditPlaceholder("SearchBar","Search...")
 
-Gui, Show, w480 h322, ASPDM - Package Listing
+Gui, Show, w530 h360, ASPDM - Package Listing
 
 start:
 Gui +Disabled
@@ -90,12 +93,12 @@ Gui +OwnDialogs
 
 Gui, ListView, LV_U
 LV_ModifyCol(1,"100")
-LV_ModifyCol(2,"170")
+LV_ModifyCol(2,"220")
 LV_ModifyCol(3,"90")
 LV_ModifyCol(4,"80")
 Gui, ListView, LV_I
 LV_ModifyCol(1,"100")
-LV_ModifyCol(2,"250")
+LV_ModifyCol(2,"300")
 LV_ModifyCol(3,"90")
 Gui, ListView, LV_A
 _selectedlist:="LV_A"
@@ -227,6 +230,11 @@ List_Available:
 			GuiControl,,PackageCounter_A, %TotalItemsNew%/%TotalItems% Packages
 		else
 			GuiControl,,PackageCounter_A, %TotalItems% Packages
+		
+		if (!LV_GetCount())
+			GuiControl,Disable,CheckAll_AButton
+		else
+			GuiControl,Enable,CheckAll_AButton
 	}
 	Gui -Disabled
 return
@@ -257,6 +265,12 @@ List_Installed: ;and Updates List
 		GuiControl,,PackageCounter_U, %TotalItems_U% Packages
 	TotalItems_I := Util_ObjCount(Settings.Installed)
 	GuiControl,,PackageCounter_I, %TotalItems_I% Packages
+	_tmp:="UI"
+	Loop,Parse,_tmp
+		if (!TotalItems_%A_loopfield%)
+			GuiControl,Disable,CheckAll_%A_loopfield%Button
+		else
+			GuiControl,Enable,CheckAll_%A_loopfield%Button
 	Gui -Disabled
 return
 
@@ -404,7 +418,7 @@ return
 
 GuiSize:
 	GuiControl,move,Tabs, % "w" (A_GuiWidth-16) " h" (A_GuiHeight-60)
-	GuiControl,move,SearchBar, % "x" (A_GuiWidth-258)
+	GuiControl,move,SearchBar, % "x" (A_GuiWidth-308)
 	GuiSize_list:="AUI"
 	Loop, Parse, GuiSize_list
 	{
@@ -412,13 +426,25 @@ GuiSize:
 		GuiControl,move,PackageCounter_%A_LoopField%, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-118)
 	}
 	GuiControl,move,txt_version, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-130)
-	GuiSize_list:="Install|InstallFile|Refresh_A|Update|UpdateFile|Refresh_U|Reinstall|Remove|OpenSelected|SaveSettings|ResetSettings"
+	GuiSize_list:="Install|InstallFile|Refresh_A|Update|UpdateFile|Refresh_U|Reinstall|Remove|OpenSelected|SaveSettings|ResetSettings|ClientUpdate|CheckAll_A|CheckAll_U|CheckAll_I"
 	Loop, Parse, GuiSize_list, |
 		GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-44)
 return
 
 GuiClose:
 ExitApp
+
+CheckAll:
+	CheckAll_v := "CheckAll_" SubStr(_selectedlist,0)
+	if (%CheckAll_v%) {
+		LV_Modify(0,"-Check")
+		GuiControl,,%CheckAll_v%Button,Check all
+	} else {
+		LV_Modify(0,"+Check")
+		GuiControl,,%CheckAll_v%Button,Uncheck all
+	}
+	%CheckAll_v% := !(%CheckAll_v%)
+return
 
 stdlib_folderBrowse: ;stdlib_folderBrowseButton
 	Gui +Disabled
@@ -562,18 +588,24 @@ InstallFile:
 return
 
 Refresh:
+	Gui +Disabled
+	Gui +OwnDialogs
 	CheckedItems:=0
 	Settings:=Settings_Get()
 	Start_select_pack:=""
-	Gui, ListView, LV_U
-	LV_Delete()
-	Gui, ListView, LV_I
-	LV_Delete()
-	Gui, ListView, LV_A
-	LV_Delete()
+	_tmp:="UIA"
+	Loop,Parse,_tmp
+	{
+		CheckAll_%A_loopfield%:=0
+		GuiControl,Enable,CheckAll_%A_loopfield%Button
+		GuiControl,,CheckAll_%A_loopfield%Button,Check all
+		Gui, ListView, LV_%A_Loopfield%
+		LV_Delete()
+	}
 	gosub,ListView_Events_checkedList
 	gosub,start
 	gosub,TabSwitch
+	Gui -Disabled
 return
 
 Update:
