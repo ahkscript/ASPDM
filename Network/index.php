@@ -27,8 +27,8 @@
 				position:absolute;
 				left:0;
 				top:0;
-				height:148px;
-				width:148px;
+				height:128px;
+				width:128px;
 			}
 			
 			#index_containter{ margin-top:0 !important; }
@@ -99,7 +99,7 @@
 	<body>
 	<img id="get_aspdm" usemap="#get_aspdm_map" src="src/get_aspdm.png"></img>
 		<map name="get_aspdm_map">
-			<area href="/client" alt="Get ASPDM" coords="0,0,0,148,148,0" shape="poly">
+			<area href="/client" alt="Get ASPDM" coords="0,0,0,128,128,0" shape="poly">
 		</map>
 	<div id="full_wrapper">
     <?php

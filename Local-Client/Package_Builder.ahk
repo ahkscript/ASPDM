@@ -1,4 +1,6 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+﻿#NoTrayIcon
+
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ;#Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
@@ -23,6 +25,8 @@ Attributes:={id:			"A short name used for identification purposes (Should be a v
 			,tags:			"Comma-separated tags (Optional, Recommended)"
 			,forumurl:		"ahkscript.org forum topic URL (Optional, Recommended)"
 			,screenshot:	"Filename of the screenshot to be displayed (Optional)"}
+
+Menu, tray, Icon, res\ahk.ico
 
 ; "Standard" ASPDM Header
 Gui, Font, s16 wBold, Arial

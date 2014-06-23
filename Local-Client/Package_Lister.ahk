@@ -1,4 +1,6 @@
-﻿#SingleInstance, Ignore
+﻿#NoTrayIcon
+
+#SingleInstance, Ignore
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ;#Warn  ; Recommended for catching common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
@@ -23,13 +25,16 @@ if (args) {
 if (FileExist(Start_select_pack))
 	Start_select_localmode:=1
 
+;get settings
+Settings:=Settings_Get()
+
 AppVersion:="1.0.0.0"
-CheckUpdate(AppVersion,-1)
+if (Settings.Check_ClientUpdates)
+	CheckUpdate(AppVersion,-1)
 
 CheckedItems:=0
 
-;get settings
-Settings:=Settings_Get()
+Menu, tray, Icon, res\ahk.ico
 
 ; "Standard" ASPDM Header
 Gui, Font, s16 wBold, Arial
@@ -62,13 +67,16 @@ Gui, Tab, Installed
 Gui, Tab, Settings
 	Gui, Add, Checkbox, y78 x20 vHide_Installed, Hide Installed Packages in Available tab
 	Gui, Add, Checkbox, y+4 xp vOnly_Show_StdLib Disabled, Only show StdLib Packages
+	Gui, Add, Checkbox, y+4 xp vCheck_ClientUpdates, Check for ASPDM client updates
 	GuiControl,,Hide_Installed, % (!(!(Settings.hide_installed)))+0
 	GuiControl,,Only_Show_StdLib, % (!(!(Settings.only_show_stdlib)))+0
+	GuiControl,,Check_ClientUpdates, % (!(!(Settings.Check_ClientUpdates)))+0
 	Gui, Add, Text, y+10 xp, StdLib Installation folder
 	Gui, Add, Button, yp-5 x+4 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
 	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_folder, % Settings.stdlib_folder
 	Gui, Add, Button, y278 x16 w80 vSaveSettingsButton gSaveSettings, Save Settings
 	Gui, Add, Button, yp x+2 vResetSettingsButton gResetSettings, Reset Settings
+	Gui, Add, Button, yp x+2 vClientUpdateButton gClientUpdate, Check for updates
 	Gui, Add, Text, yp+6 x+170 +Right vtxt_version, ASPDM Client v%AppVersion%
 Gui, Tab,
 	Gui, Add, Edit, vSearchBar gSearch y44 x272 w250,
@@ -425,7 +433,7 @@ SaveSettings:
 	MsgBox, 36, , Are you sure you want to save these settings?
 	IfMsgBox,Yes
 	{
-		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|stdlib_folder"
+		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|Check_ClientUpdates|stdlib_folder"
 		Loop, Parse, _list_SaveSettings, |
 		{
 			GuiControlGet, %A_LoopField%
@@ -638,6 +646,10 @@ OpenSelected:
 	}
 	else
 		MsgBox, 48, , No package is currently selected.`nPlease select/highlight a package in the list.
+return
+
+ClientUpdate:
+	CheckUpdate(AppVersion)
 return
 
 array_has_value(arr,value) {
