@@ -43,7 +43,8 @@ Submission
 ----------
 
 - Any package can be submitted to the repository, and should meet all mandatory requirements in the Package Quality Guidelines section.
-- All packages must have the mandatory `Lib\` folder. See [Package Structure](Database.md)
+- All 'library' packages must have the mandatory `Lib\` folder. See [Package Structure](Database.md)
+- All 'tool/other' packages must have the mandatory `Install.ahk`, `Remove.ahk` and `Execute.ahk` files. See [Package Structure](Database.md)
 - All packages should be submitted with a license. Those submitted without a license are assumed to be released under the [ahkscript.org Default Package License](License.md).
 - Package author is included in the package metadata.
 - (In case of moderation queue):

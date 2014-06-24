@@ -270,6 +270,19 @@ Build:
 	else
 	{
 		jdata:=Manifest_FromFile(SelectedFile)
+		
+		if Instr(jdata.type,"Lib") {
+			if !FileExist(package_dir "\Lib") {
+				MsgBox, 48, , 'Library' type packages must have a '\Lib' folder.`nPlease try again.
+				return
+			}
+		} else {
+			if ( !FileExist(package_dir "\Execute.ahk") || !FileExist(package_dir "\Install.ahk") || !FileExist(package_dir "\Remove.ahk") ) {
+				MsgBox, 48, , 'Tool/Other' type packages must have the following files:`n`n`tExecute.ahk`n`tInstall.ahk`n`tRemove.ahk`n`nPlease try again.
+				return
+			}
+		}
+		
 		_package_out_name := RegExReplace(jdata.id,"\W")
 		FileSelectFile, outP, S18, %_package_out_name%.ahkp, Save the built package file, AHKP file (*.ahkp)
 		if outP =

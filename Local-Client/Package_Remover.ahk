@@ -53,31 +53,46 @@ for Current, id_akhp in packs
 	
 	;Setup Deletion Lists
 	RepoSubDir := Local_Repo "\" mdata["id"]
-	RepoSubDirLib := RepoSubDir "\Lib"
-	if (!FileExist(RepoSubDirLib))
-		ExitApp, % Install.Error_NonExistantDir
-	RemList:=Object()
-	Loop, %RepoSubDirLib%\*, 1, 0
-	{
-		RemList.Insert(A_LoopFileName)
-	}
 	
-	;Delete files in StdLib folder
-	For each, file in RemList
-	{
-		if (_fAttrib:=FileExist(InstallationFolder "\" file))
+	
+	if (Instr(mdata["type"],"Lib")) { ;if package type is 'library'
+		RepoSubDirLib := RepoSubDir "\Lib"
+		if (!FileExist(RepoSubDirLib))
+			ExitApp, % Install.Error_NonExistantDir
+		RemList:=Object()
+		Loop, %RepoSubDirLib%\*, 1, 0
 		{
-			if (InStr(_fAttrib, "D")) {
-				FileRemoveDir,%InstallationFolder%\%file%,1
-				if ErrorLevel
-					ExitApp, % Install.Error_DeleteStdLibSubDir
-			}
-			else
+			RemList.Insert(A_LoopFileName)
+		}
+		
+		;Delete files in StdLib folder
+		For each, file in RemList
+		{
+			if (_fAttrib:=FileExist(InstallationFolder "\" file))
 			{
-				FileDelete,%InstallationFolder%\%file%
-				if ErrorLevel
-					ExitApp, % Install.Error_DeleteStdLib
+				if (InStr(_fAttrib, "D")) {
+					FileRemoveDir,%InstallationFolder%\%file%,1
+					if ErrorLevel
+						ExitApp, % Install.Error_DeleteStdLibSubDir
+				}
+				else
+				{
+					FileDelete,%InstallationFolder%\%file%
+					if ErrorLevel
+						ExitApp, % Install.Error_DeleteStdLib
+				}
 			}
+		}
+	} else { ;'Tool/Other' type package
+		try_remove_tool:
+		RunWait, %ExtractDir%\Remove.ahk, %ExtractDir%, UseErrorLevel
+		if ( ErrorLevel || ErrorLevel=="ERROR" ) { ;Remove Script failure
+			_tmpname:=mdata["id"]
+			MsgBox, 20, , The '%_tmpname%' tool remove script has failed.`nTry again?`n`nError code: [%ErrorLevel%]
+			ifMsgBox, Yes
+				goto,try_remove_tool
+			else
+				ExitApp, % Install.Error_ToolRemoveScript
 		}
 	}
 	

@@ -87,19 +87,32 @@ for Current, FilePath in packs
 	FileCreateDir, % ExtractDir := Local_Repo "\" mdata["id"]
 	if ErrorLevel
 		ExitApp, % Install.Error_CreateRepoSubDir
-	RepoSubDir := ExtractDir "\Lib"
 	
 	;Extract package to local repo
 	if !Package_Extract(ExtractDir, FilePath)
 		ExitApp, % Install.Error_Extraction
 	
-	;Copy data from local repo "Lib\" to StdLib "Lib\"
-	FileCopyDir,%RepoSubDir%,%InstallationFolder%,1
-	if ErrorLevel
-	{
-		;Delete or clean before exit
-		FileRemoveDir,%ExtractDir%,1
-		ExitApp, % Install.Error_CopyToStdLib
+	if (Instr(mdata["type"],"Lib")) { ;if package type is 'library'
+		;Copy data from local repo "Lib\" to StdLib "Lib\"
+		RepoSubDir := ExtractDir "\Lib"
+		FileCopyDir,%RepoSubDir%,%InstallationFolder%,1
+		if ErrorLevel
+		{
+			;Delete or clean before exit
+			FileRemoveDir,%ExtractDir%,1
+			ExitApp, % Install.Error_CopyToStdLib
+		}
+	} else { ;'Tool/Other' type package
+		try_install_tool:
+		RunWait, %ExtractDir%\Install.ahk, %ExtractDir%, UseErrorLevel
+		if ( ErrorLevel || ErrorLevel=="ERROR" ) { ;Install Script failure
+			_tmpname:=mdata["id"]
+			MsgBox, 20, , The '%_tmpname%' tool install script has failed.`nTry again?`n`nError code: [%ErrorLevel%]
+			ifMsgBox, Yes
+				goto,try_install_tool
+			else
+				ExitApp, % Install.Error_ToolInstallScript
+		}
 	}
 	
 	;delete key in case of "double-install"

@@ -1,0 +1,1 @@
+﻿;empty since no registry or any special handling is needed.

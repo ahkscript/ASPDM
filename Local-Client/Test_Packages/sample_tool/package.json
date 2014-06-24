@@ -1,0 +1,26 @@
+{
+	"ahkbranch":"v1.1",
+	"ahkflavour":[
+		"a32",
+		"u32",
+		"u64"
+	],
+	"ahkversion":"1.1.15.00",
+	"author":"Joe DF",
+	"description":"This is a sample description.\nThis is the second sentence of this description.",
+	"forumurl":"http:\/\/forum.com\/?topic=1234",
+	"id":"sample_tool",
+	"license":"ASPDM Default License",
+	"name":"Sample tool",
+	"required":{
+		
+	},
+	"screenshot":"",
+	"tags":[
+		"sample",
+		"tool",
+		"test"
+	],
+	"type":"Tool",
+	"version":"1.0.0.0"
+}

@@ -11,8 +11,10 @@
 			,Error_DeleteStdLib:		0x0B
 			,Error_DeleteStdLibSubDir:	0x0C
 			,Error_DeleteRepoSubDir:	0x0D
-			,Error_AhkVersionInvalid:	0x0E
-			,Error_NoAction:			0x0F
+			,Error_ToolInstallScript:	0x0E
+			,Error_ToolRemoveScript:	0x0F
+			,Error_AhkVersionInvalid:	0x10
+			,Error_NoAction:			0x11
 			,Error_RunInstaller: "ERROR"
 			,Success: 0xDEAD } ;random chosen value, "Maximum" value is 0x80000000
 			;see http://msdn.microsoft.com/en-us/library/system.environment.exitcode.aspx

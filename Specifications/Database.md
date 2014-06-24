@@ -54,6 +54,8 @@ _**Licenses :**_ packages submitted to ahkscript.org without the license attribu
 Package Structure
 -------------------
 
+### 'Library' packages
+
 Library packages should have a standard package structure consisting of the following folders:
 
 - `Lib\` (*Mandatory*) : StdLib files
@@ -61,6 +63,16 @@ Library packages should have a standard package structure consisting of the foll
 - Root folder : Examples, etc.
 
 _Note:_ When installing a package into a StdLib folder, the files in the package's `Lib\` folder would be copied to it.
+
+### 'Tool/Other' packages
+
+Tool/Other packages should have a standard package structure consisting of the following:
+
+- `Install.ahk` (*Mandatory*) : Executed on package installation
+- `Remove.ahk` (*Mandatory*) : Executed on package removal
+- `Execute.ahk` (*Mandatory*) : Execute the tool
+- `Doc\` : Documentation
+- Root folder : Examples, etc.
 
 Package File Format
 -------------------
