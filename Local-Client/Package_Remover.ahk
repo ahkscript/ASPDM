@@ -84,11 +84,11 @@ for Current, id_akhp in packs
 			}
 		}
 	} else { ;'Tool/Other' type package
+		_tmpname:=mdata["id"]
 		try_remove_tool:
-		RunWait, %ExtractDir%\Remove.ahk, %ExtractDir%, UseErrorLevel
+		RunWait, %RepoSubDir%\Remove.ahk, %RepoSubDir%, UseErrorLevel
 		if ( ErrorLevel || ErrorLevel=="ERROR" ) { ;Remove Script failure
-			_tmpname:=mdata["id"]
-			MsgBox, 20, , The '%_tmpname%' tool remove script has failed.`nTry again?`n`nError code: [%ErrorLevel%]
+			MsgBox, 20, , The '%_tmpname%' tool remove script has failed.`nTry again?`n`nError code: [%ErrorLevel%:%A_LastError%]
 			ifMsgBox, Yes
 				goto,try_remove_tool
 			else

@@ -103,11 +103,11 @@ for Current, FilePath in packs
 			ExitApp, % Install.Error_CopyToStdLib
 		}
 	} else { ;'Tool/Other' type package
+		_tmpname:=mdata["id"]
 		try_install_tool:
 		RunWait, %ExtractDir%\Install.ahk, %ExtractDir%, UseErrorLevel
 		if ( ErrorLevel || ErrorLevel=="ERROR" ) { ;Install Script failure
-			_tmpname:=mdata["id"]
-			MsgBox, 20, , The '%_tmpname%' tool install script has failed.`nTry again?`n`nError code: [%ErrorLevel%]
+			MsgBox, 20, , The '%_tmpname%' tool install script has failed.`nTry again?`n`nError code: [%ErrorLevel%:%A_LastError%]
 			ifMsgBox, Yes
 				goto,try_install_tool
 			else
