@@ -5,8 +5,8 @@
 <head>
 <title>Client | ASPDM</title>
 <style>
-	body {
-		font-family:Arial,sans-serif;
+	html, body {
+		font-family:Helvetica,Arial,sans-serif;
 		text-align:center;
 		margin:auto;
 	}
@@ -22,14 +22,28 @@
 	#sp { margin:auto;text-align:center;width:300px; }
 	a:active { position:relative;top:1px; }
 	#info { font-size:10px;color:#666; }
-	#link { text-decoration:none; }
+	h1 a { color:black; }
+	a { color:#0088cc;text-decoration:none; }
+	#logo {
+		height:48px;
+		width:48px;
+		vertical-align:middle;
+	}
+	h1 { font-size:24px; }
+	hr { border: #666 solid;border-width: 1px 0 0;width:640px; }
+	#footer { font-size:10px; }
+	#footer a:hover { text-decoration:underline; }
 </style>
 </head>
 <body>
 <div id="content">
+	<h1>
+		<a id="logolink" href="/">
+			<img src="/src/ahk.png" id="logo"> ASPDM : Package Manager
+			</a>
+	</h1>
+	<hr><br><br>
 <?php
-	echo '<h1>ASPDM : Package Manager - Preview</h1><hr><br><br>';
-	
 	$version = iniget("update.ini","version");
 	echo '<div id="sp">';
 	$file = 'ASPDM_Install-v'.$version.'.exe';
@@ -48,11 +62,14 @@
 <?php
 	date_default_timezone_set("America/New_York"); // EST vs EDT time => EST with Daylight Savings Time
 	$timetype = date("I")?"EDT":"EST";
-	echo '<div id="info"><p>Last updated: '.date("F jS, Y H:i:s",filemtime($file)).' ('.$timetype.').</p>';
+	echo '<div id="info"><p>Last updated: '.date("F jS, Y H:i:s",filemtime($file)).' ('.$timetype.')</p>';
 	echo '<p><b>MD5: '.md5_file($file).'<br>SHA-1: '.sha1_file($file).'</b></p></div>';
 ?>
 	<br><br>
-	<hr><a href="/">Click here for the homepage.</a>
+	<hr>
+		<div id="footer">
+			<a href="/">ASPDM Homepage</a> - <a href="/client/archive.php">Download Archive</a>
+		</div>
 </div>
 </body>
 </html>
