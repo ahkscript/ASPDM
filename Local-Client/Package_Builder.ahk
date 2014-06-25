@@ -103,6 +103,19 @@ GroupAdd, MainGUIWindows, ahk_id %hGUI%
 ControlFocus, Button1, ahk_id %hGUI%
 return
 
+GuiDropFiles: ;forked from Ahk2Exe.ahk  -  permalink: https://github.com/fincs/Ahk2Exe/blob/44f155b96c571dc83a16370762fda78a46320d92/Ahk2Exe.ahk#L85-L93
+	if A_EventInfo > 2
+		MsgBox, 48, , You cannot drop more than one file into this window!
+	else {
+		SplitPath, A_GuiEvent,,, dropExt
+		if dropExt = json
+		{
+			_SelectedFile:=A_GuiEvent
+			gosub,_open
+		}
+	}
+return
+
 GuiClose:
 ExitApp
 
@@ -135,6 +148,7 @@ EditShowBalloonTip(h, title, text, timeout := 2000)
 Open:
 	Gui +OwnDialogs
 	FileSelectFile, _SelectedFile, 3, , Open a package JSON file, JSON file (*.json)
+	_open:
 	if _SelectedFile =
 		MsgBox, 64, , No package JSON file selected.
 	else
