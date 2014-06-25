@@ -1,0 +1,22 @@
+﻿html, body {
+	font-family:Helvetica,Arial,sans-serif;
+	text-align:center;
+	margin:auto;
+}
+
+a { color:#0088cc;text-decoration:none; }
+a:active { position:relative;top:1px; }
+
+h1 a { color:black; }
+h1 { font-size:24px; }
+
+hr { border: #666 solid;border-width: 1px 0 0; }
+
+#logo {
+	height:48px;
+	width:48px;
+	vertical-align:middle;
+}
+
+#footer a:hover { text-decoration:underline; }
+#footer { font-size:10px; }

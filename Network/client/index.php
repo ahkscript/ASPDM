@@ -4,12 +4,8 @@
 <html>
 <head>
 <title>Client | ASPDM</title>
+<link type="text/css"  href="/client/style.css" rel="stylesheet">
 <style>
-	html, body {
-		font-family:Helvetica,Arial,sans-serif;
-		text-align:center;
-		margin:auto;
-	}
 	table { text-align:center;vertical-align:middle; }
 	#dnl{
 		border: solid 1px;
@@ -18,25 +14,13 @@
 		background-color:#E5E5E5;
 	}
 	#dnl td { vertical-align:middle;text-align:center; }
-	#content { margin-top:200px; }
 	#sp { margin:auto;text-align:center;width:300px; }
-	a:active { position:relative;top:1px; }
 	#info { font-size:10px;color:#666; }
-	h1 a { color:black; }
-	a { color:#0088cc;text-decoration:none; }
-	#logo {
-		height:48px;
-		width:48px;
-		vertical-align:middle;
-	}
-	h1 { font-size:24px; }
-	hr { border: #666 solid;border-width: 1px 0 0;width:640px; }
-	#footer { font-size:10px; }
-	#footer a:hover { text-decoration:underline; }
+	hr { width:640px; }
 </style>
 </head>
 <body>
-<div id="content">
+<div id="content" style="margin-top:200px">
 	<h1>
 		<a id="logolink" href="/">
 			<img src="/src/ahk.png" id="logo"> ASPDM : Package Manager

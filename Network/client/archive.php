@@ -5,34 +5,18 @@
 <head>
 <title>Client | ASPDM</title>
 <script src="/src/sorttable.js"></script>
+<link type="text/css"  href="/client/style.css" rel="stylesheet">
 <style>
-	html, body {
-		font-family:Helvetica,Arial,sans-serif;
-		text-align:center;
-		margin:auto;
-	}
-	#content { margin-top:48px; }
-	a:active { position:relative;top:1px; }
-	h1 a { color:black; }
-	a { color:#0088cc;text-decoration:none; }
-	#logo {
-		height:48px;
-		width:48px;
-		vertical-align:middle;
-	}
-	h1 { font-size:24px; }
 	h1, h4 { margin:4px; }
-	hr { border: #666 solid;border-width: 1px 0 0;width:800px; }
-	#footer { font-size:10px; }
-	#footer a:hover { text-decoration:underline; }
+	hr { width:800px; }
+	.hash { font-size:11px }
 	#list { margin:auto;font-family:Consolas,Courier New,Courier,serif;font-size:12px;width:780px; }
 	#list td { padding:4px; }
 	#list thead { color:blue;text-decoration:underline;cursor:pointer; }
-	.hash { font-size:11px }
 </style>
 </head>
 <body>
-<div id="content">
+<div id="content" style="margin-top:48px">
 	<h1>
 		<a id="logolink" href="/">
 			<img src="/src/ahk.png" id="logo"> ASPDM : Package Manager
