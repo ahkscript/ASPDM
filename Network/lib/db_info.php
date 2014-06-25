@@ -1,6 +1,6 @@
 <?php
-	$host = "mysql.2freehosting.com";
-	$db_user = "******************";
-	$db_pass = "******************";
-	$db_name = "******************";
+	$DB_HOST = "mysql.2freehosting.com";
+	$DB_USER = "******************";
+	$DB_PASS = "******************";
+	$DB_NAME = "******************";
 ?>

@@ -104,6 +104,7 @@
 		</map>
 	<div id="full_wrapper">
     <?php
+	if (!function_exists("html_linefmt"))
 		include 'lib/utils.php';
 	
     $num = 0;

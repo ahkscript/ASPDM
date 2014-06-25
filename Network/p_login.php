@@ -8,8 +8,8 @@ $password = $_POST['password'];
 include 'lib/db_info.php';
 include 'lib/server.php';
 
-$conn = mysql_connect($host, $db_user, $db_pass);
-mysql_select_db($db_name, $conn);
+$conn = mysql_connect($DB_HOST, $DB_USER, $DB_PASS);
+mysql_select_db($DB_NAME, $conn);
 
 $username = mysql_real_escape_string($username);
 

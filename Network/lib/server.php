@@ -18,8 +18,8 @@
 	function sessionValid() {
 		if (isset($_SESSION["sess_username"]) && isset($_SESSION["sess_id"])) {
 			include 'lib/db_info.php';
-			$conn = mysql_connect($host, $db_user, $db_pass);
-			mysql_select_db($db_name, $conn);
+			$conn = mysql_connect($DB_HOST, $DB_USER, $DB_PASS);
+			mysql_select_db($DB_NAME, $conn);
 			$username = mysql_real_escape_string($_SESSION["sess_username"]);
 
 			$query = "SELECT id, username, password
@@ -58,6 +58,12 @@
 	function MsgBox($m="") {
 		echo '<script language="javascript">';
 		echo 'alert("'.$m.'")';
+		echo '</script>';
+	}
+	
+	function js_redirect($url="") {
+		echo '<script language="javascript">';
+		echo 'window.location.replace("'.$url.'");';
 		echo '</script>';
 	}
 	

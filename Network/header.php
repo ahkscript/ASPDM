@@ -7,7 +7,12 @@
 	sessionCookie();
 	$sess_valid = sessionValid();
 	
-	if (strcasecmp($pageName,"home.php")==0) {
+	if (!function_exists("in_arrayi"))
+		include 'lib/utils.php';
+	
+	include 'lib/pagelock.php';
+	
+	if (in_arrayi($pageName,$LOCKED_PAGES)) {
 		if (!$sess_valid) {
 			sessionInvalid();
 			header('Location: login.php');

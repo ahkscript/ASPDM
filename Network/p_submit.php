@@ -4,7 +4,24 @@
 
 //header('Content-Type: text/plain; charset=utf-8');
 
-	include 'lib/utils.php';
+	//Start session
+	session_start();
+	
+	if (!function_exists('sessionCookie'))
+		include 'lib/server.php';
+		
+	sessionCookie();
+	$sess_valid = sessionValid();
+	
+	if (!$sess_valid) {
+		sessionInvalid();
+		echo 'ERROR: Login required!';
+		js_redirect("/login.php"); //redirect user
+		exit();
+	}
+	
+	if (!function_exists('valid_ahkp'))
+		include 'lib/utils.php';
 
 if(!function_exists('mime_content_type')) {
 
