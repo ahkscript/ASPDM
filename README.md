@@ -13,7 +13,7 @@ _Network_ : The Web Frontend and NetworkAPI
 Download the latest version (Development Version)  
   
 - http://aspdm/client  
-- http://aspdm/client/get.php (`Direct`)  
+- http://aspdm/client/get.php (_Direct_)  
   
 **Specifications**  
 
