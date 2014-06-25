@@ -68,8 +68,8 @@
 							
 							
 						<div class="fullw" style="height:32px;">
-							<div onmouseover="remember_me_tip(1)" onmouseout="remember_me_tip(0)">
-								<label><input type="checkbox" name="remember" value="yes"> Remember me</label>
+							<div>
+								<label onmouseover="remember_me_tip(1)" onmouseout="remember_me_tip(0)"><input type="checkbox" name="remember" value="yes"> Remember me</label>
 							</div>
 							<div id="rememberme_notice" class="infobox" style="display:none;" onmouseover="remember_me_tip(0)">
 								Remember my login session for <b>two weeks</b> so that I can come back without logging in.

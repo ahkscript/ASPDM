@@ -19,6 +19,12 @@
 			exit();
 		}
 	}
+	
+	if (strcasecmp($pageName,"login.php")==0) {
+		if ($sess_valid) {
+			header('Location: home.php');
+		}
+	}
 ?>
 
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
