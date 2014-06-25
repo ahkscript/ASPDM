@@ -228,6 +228,11 @@ Section Uninstall
 	RMDir /r "$INSTDIR\Res"
 	RMDir /r "$INSTDIR\Lib"
 	
+	MessageBox MB_ICONEXCLAMATION|MB_YESNO "Keep ASPDM local repository and settings?" IDYES UNINST_KEEP_REPO
+	DetailPrint "Removing ASPDM local repository and settings..."
+	Delete "$APPDATA\${PRODUCT_NAME}"
+	UNINST_KEEP_REPO:
+	
 	DetailPrint "Removing .ahkp file association..."
 	DeleteRegKey HKCR ".ahkp"
 	DeleteRegKey HKCR "ahkp.package"
