@@ -10,7 +10,7 @@
 		session_start();
 		
 		include 'lib/server.php';
-		sessionInvalid(1);
+		sessionInvalid();
 		
 		?>
 

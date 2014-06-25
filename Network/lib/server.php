@@ -45,7 +45,7 @@
 		return sessionInvalid();
 	}
 	
-	function sessionInvalid($i=0) {
+	function sessionInvalid() {
 		if (isset($_SESSION)) {
 			session_destroy();
 			unset($_SESSION);
