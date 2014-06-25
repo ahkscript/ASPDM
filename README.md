@@ -4,9 +4,16 @@ AHKScript.org's Package/StdLib Distribution and Management
 http://aspdm.tk/  
   
 **Quick Info**  
-
+  
 _Local-Client_ : The local package manager  
 _Network_ : The Web Frontend and NetworkAPI  
+  
+**Try ASPDM right now!**  
+  
+Download the latest version (Development Version)  
+  
+- http://aspdm/client  
+- http://aspdm/client/get.php (`Direct`)  
   
 **Specifications**  
 
