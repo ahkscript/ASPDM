@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	
 	//fork of "JSON_Beautify.ahk"
 	

@@ -1,36 +1,3 @@
-<?php
-//Start session
-session_start();
-
-//Check whether the session variable SESS_MEMBER_ID is present or not
-if(!isset($_SESSION['sess_user_id']) || (trim($_SESSION['sess_user_id']) == '')) {
-header("location: login.php");
-exit();
-}
-
-include 'lib/utils.php';
-
-include 'lib/db_info.php';
-
-$conn = mysql_connect($host, $db_user, $db_pass);
-mysql_select_db($db_name, $conn);
-
-	$username = mysql_real_escape_string($_SESSION["sess_username"]);
-
-	$query = "SELECT usertype, email, packs
-	FROM users
-	WHERE username = '$username';";
-
-	$result = mysql_query($query);
-
-	if(mysql_num_rows($result) == 0) { // User not found. redirect to login form...
-		header('Location: login.php?i=u');
-		exit();
-	}
-	
-	$info = mysql_fetch_array($result, MYSQL_ASSOC);
-
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <!-- Forked Web Design from here: http://win32.libav.org/win64/ -->
@@ -61,6 +28,27 @@ mysql_select_db($db_name, $conn);
 						<table>
 							<tr><th><h4>Submitted Packages</h4></th><th><h4>Version</h4></th></tr>
 							<?php
+							include 'lib/db_info.php';
+							include 'lib/utils.php';
+
+							$conn = mysql_connect($host, $db_user, $db_pass);
+							mysql_select_db($db_name, $conn);
+
+								$username = mysql_real_escape_string($_SESSION["sess_username"]);
+
+								$query = "SELECT usertype, email, packs
+								FROM users
+								WHERE username = '$username';";
+
+								$result = mysql_query($query);
+
+								if(mysql_num_rows($result) == 0) { // User not found. redirect to login form...
+									header('Location: login.php?i=u');
+									exit();
+								}
+								
+							$info = mysql_fetch_array($result, MYSQL_ASSOC);
+
 							if (strlen($info["packs"])==0)
 								echo '<tr><td>None</td><td>-</td></tr>';
 							else {

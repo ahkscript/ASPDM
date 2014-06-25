@@ -8,9 +8,10 @@
 	<body>
 		<?php
 		session_start();
-		//unset($_SESSION["sess_user_id"]);
-		session_destroy();
-		//header("Location: home.php");
+		
+		include 'lib/server.php';
+		sessionInvalid(1);
+		
 		?>
 
 		<h1>logged out.</h1>

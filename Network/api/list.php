@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	include '../lib/utils.php';
 
 	if (isset($_GET["full"]))

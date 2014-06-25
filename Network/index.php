@@ -32,7 +32,7 @@
 				width:128px;
 			}
 			
-			#index_containter{ margin-top:0 !important; }
+			/* #index_containter{ margin-top:0 !important; } */
 		
 			/* Special Modal "anti-body-scroll" trick
 			 * See here:  http://coding.abel.nu/2013/02/prevent-page-behind-jquery-ui-dialog-from-scrolling */
@@ -140,7 +140,7 @@
                     $j_required = str_replace('"', '', $j_required);
                     $j_required = str_replace(',', ', ', $j_required);
 					
-                    $j_description = html_linefmt($obj->description);
+                    $j_description = html_linefmt(html_escape($obj->description));
                     $j_description = (strlen($j_description))?$j_description:"No description.";
 					
                     $j_size = formatSizeUnits(filesize($file));

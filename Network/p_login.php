@@ -6,6 +6,7 @@ $username = $_POST['username'];
 $password = $_POST['password'];
 
 include 'lib/db_info.php';
+include 'lib/server.php';
 
 $conn = mysql_connect($host, $db_user, $db_pass);
 mysql_select_db($db_name, $conn);
@@ -34,8 +35,18 @@ if($hash != $userData['password']) // Incorrect password. So, redirect to login_
 	header('Location: login.php?i=p&u=' . $username);
 }else{ // Redirect to home page after successful login.
 	session_regenerate_id();
-	$_SESSION['sess_user_id'] = $userData['id'];
+	$_SESSION['sess_id'] = hash('sha256',$userData['username'].$userData['id'].$userData['password']);
 	$_SESSION['sess_username'] = $userData['username'];
+	
+	delete_Cookie("aspdm_sess_id");
+	delete_Cookie("aspdm_sess_username");
+	
+	if(isset($_REQUEST["remember"])){
+		$sess_time = time()+60*60*24*7*2;
+        setcookie("aspdm_sess_id",$_SESSION['sess_id'],$sess_time,'/');
+        setcookie("aspdm_sess_username",$_SESSION['sess_username'],$sess_time,'/');
+    }
+	
 	session_write_close();
 	header('Location: home.php');
 }

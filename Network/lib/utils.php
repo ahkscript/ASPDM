@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 	function fread_UINT($handle) {
 		$bytes = strrev(fread($handle,4));
@@ -110,6 +110,10 @@
 		else
 			$bytes = '0 bytes';
 		return $bytes;
+	}
+	
+	function html_escape($str) {
+		return str_replace('>', "&gt;",str_replace('<', "&lt;", $str));
 	}
 	
 	function html_linefmt($str) {

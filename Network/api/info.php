@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	include '../lib/utils.php';
 	
 	$f = (isset($_GET["f"])) ? htmlspecialchars($_GET["f"]) : NULL;

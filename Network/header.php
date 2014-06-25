@@ -1,9 +1,18 @@
 <?php
 	$pageName = basename($_SERVER['PHP_SELF']);
 	
-	if (strcasecmp($pageName,"login.php")!=0) {
-		//Start session
-		session_start();
+	//Start session
+	session_start();
+	include 'lib/server.php';
+	sessionCookie();
+	$sess_valid = sessionValid();
+	
+	if (strcasecmp($pageName,"home.php")==0) {
+		if (!$sess_valid) {
+			sessionInvalid();
+			header('Location: login.php');
+			exit();
+		}
 	}
 ?>
 
