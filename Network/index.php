@@ -20,6 +20,7 @@
 			}
 			function closeDialog() {
 				Avgrund.hide();
+				Avgrund.hide(); //new bug?
 			}
 		</script>
 		<style>
