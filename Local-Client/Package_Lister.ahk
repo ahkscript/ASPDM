@@ -47,7 +47,7 @@ Gui, +hwndhGUI +Resize +MinSize530x360
 
 ;gui tabs
 Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|Settings
-	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_A hwndhLV_A, File|Name|Version|Author|Description
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_A hwndhLV_A, File|Name|Version|Author|Description|tags
 	Gui, Add, Button, y+4 w80 vInstallButton Disabled gInstall, Install
 	Gui, Add, Button, yp x+2 vInstallFileButton gInstallFile, Install from file...
 	Gui, Add, Button, yp x+2 w80 vRefresh_AButton gRefresh, Refresh
@@ -71,9 +71,11 @@ Gui, Tab, Settings
 	Gui, Add, Checkbox, y78 x20 vHide_Installed, Hide Installed Packages in Available tab
 	Gui, Add, Checkbox, y+4 xp vOnly_Show_StdLib Disabled, Only show StdLib Packages
 	Gui, Add, Checkbox, y+4 xp vCheck_ClientUpdates, Check for ASPDM client updates
+	Gui, Add, Checkbox, y+4 xp vContentSensitiveSearch, Content-Sensitive Search (Uncheck to search tags only)
 	GuiControl,,Hide_Installed, % (!(!(Settings.hide_installed)))+0
 	GuiControl,,Only_Show_StdLib, % (!(!(Settings.only_show_stdlib)))+0
 	GuiControl,,Check_ClientUpdates, % (!(!(Settings.Check_ClientUpdates)))+0
+	GuiControl,,ContentSensitiveSearch, % (!(!(Settings.ContentSensitiveSearch)))+0
 	Gui, Add, Text, y+10 xp, StdLib Installation folder
 	Gui, Add, Button, yp-5 x+4 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
 	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_folder, % Settings.stdlib_folder
@@ -109,6 +111,7 @@ LV_ModifyCol(2,"120")
 LV_ModifyCol(3,"60")
 LV_ModifyCol(4,"80")
 LV_ModifyCol(5,"300")
+LV_ModifyCol(6,"0") ;make tags invisible
 ListView_Offline:=0
 if Ping() {
 	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
@@ -213,14 +216,14 @@ List_Available:
 		{
 			if (Settings.hide_installed) {
 				if (!array_has_value(Settings.Installed,info["id"])) {
-					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
+					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"],Util_TagsObj2CSV(info["tags"]))
 					TotalItemsNew-=1
 				}
 			}
 			else
 			{
 				if (StrLen(info["id"]))
-					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"])
+					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"],Util_TagsObj2CSV(info["tags"]))
 				else
 					LV_Add("","ERROR: Unable to load package(s)")
 			}
@@ -397,12 +400,17 @@ Search:
 			LV_GetText(ltmpC, A_Index,3)
 			LV_GetText(ltmpD, A_Index,4)
 			LV_GetText(ltmpE, A_Index,5)
+			LV_GetText(ltmp_TAGS, A_Index,6)
 			Query_Item_match:=0
 			for each, Query_Item in QueryList
 			{
-				if InStr(ltmpA ltmpB ltmpC ltmpD ltmpE, Query_Item, 0)
+				if InStr(ltmp_TAGS, Query_Item, 0)
 				{
 					Query_Item_match+=1
+				}
+				else if (Settings.ContentSensitiveSearch) {
+					if InStr(ltmpA ltmpB ltmpC ltmpD ltmpE, Query_Item, 0)
+						Query_Item_match+=1
 				}
 			}
 			if (Query_Item_match == QueryList.MaxIndex()) {
@@ -459,7 +467,7 @@ SaveSettings:
 	MsgBox, 36, , Are you sure you want to save these settings?
 	IfMsgBox,Yes
 	{
-		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|Check_ClientUpdates|stdlib_folder"
+		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|Check_ClientUpdates|ContentSensitiveSearch|stdlib_folder"
 		Loop, Parse, _list_SaveSettings, |
 		{
 			GuiControlGet, %A_LoopField%

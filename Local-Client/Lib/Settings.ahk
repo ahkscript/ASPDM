@@ -19,7 +19,7 @@ Settings_Get() {
 
 Settings_Validate(j) {
 	j_default:=Settings_Default()
-	vars:="stdlib_folder|local_repo|local_archive|hide_installed|only_show_stdlib|installed|Check_ClientUpdates"
+	vars:="stdlib_folder|local_repo|local_archive|hide_installed|only_show_stdlib|installed|Check_ClientUpdates|ContentSensitiveSearch"
 	loop,Parse,vars,`|
 		if (!j.Haskey(A_LoopField))
 			j[A_LoopField]:=j_default[A_LoopField]
@@ -34,6 +34,7 @@ Settings_Default(key="") {
 		,hide_installed: 	true
 		,only_show_stdlib: 	false
 		,Check_ClientUpdates: true
+		,ContentSensitiveSearch: true
 		,installed: 		{}}
 	if (k=="")
 		return j
