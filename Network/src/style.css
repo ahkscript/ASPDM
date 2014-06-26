@@ -126,14 +126,14 @@ a:hover {
     color: #FEFEFE;
 }
 
-div.userhome h4 {
+div.userhome .table h4 {
 	background-color: #1691BE;
     color: white;
     margin: 0;
     padding: 4px;
 }
 
-div.userhome div {
+div.userhome .table {
 	/* padding: 10px; */
 	vertical-align: top;
 	border: 1px solid #DDDDDD;
@@ -147,18 +147,21 @@ div.userhome {
 	text-align: center;
 }
 
-.userhome table {
-	font-size: 14px;
+.userhome .table h4,
+.userhome .table {
+	font-size: 12px;
 }
 
-.userhome td {
-	padding:2px;
-}
+.userhome th { padding:1px; }
+.userhome td { padding:2px; }
 
-.userhome th:nth-child(2n),
-.userhome td:nth-child(2n) {
-    text-align: right;
+.userhome td:not(:first-child) {
 	border-left: 1px solid #DDDDDD;
+}
+
+.userhome th:last-child,
+.userhome td:last-child {
+	text-align: right;
 }
 
 i.fa {

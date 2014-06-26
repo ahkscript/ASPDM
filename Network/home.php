@@ -24,7 +24,7 @@
 				<h3>Welcome, <?php echo $_SESSION["sess_username"]; ?></h4>
 				
 				<div class="userhome">
-					<div>
+					<div class="table">
 						<table>
 							<tr><th><h4>Submitted Packages</h4></th><th><h4>Version</h4></th></tr>
 							<?php
@@ -67,7 +67,7 @@
 							?>
 						</table>
 					</div>
-					<div style="width:64%">
+					<div class="table" style="width:64%">
 						<table>
 							<tr><th><h4>Pending packages</h4></th><th><h4>File</h4></th><th><h4>Version</h4></th></tr>
 							<?php
