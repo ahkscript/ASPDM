@@ -24,32 +24,36 @@
 				<h3>Welcome, <?php echo $_SESSION["sess_username"]; ?></h4>
 				
 				<div class="userhome">
+					<?php
+						include 'lib/db_info.php';
+						$conn = mysql_connect($DB_HOST, $DB_USER, $DB_PASS);
+						mysql_select_db($DB_NAME, $conn);
+						$username = mysql_real_escape_string($_SESSION["sess_username"]);
+						$query = "SELECT usertype, email, packs, userurl
+						FROM users
+						WHERE username = '$username';";
+						$result = mysql_query($query);
+						if(mysql_num_rows($result) == 0) { // User not found. redirect to login form...
+							header('Location: login.php?i=u');
+							exit();
+						}
+						$info = mysql_fetch_array($result, MYSQL_ASSOC);
+					?>
+					<div class="table" style="display:block;margin: 16px auto;">
+						<table>
+							<tr><th colspan="2">Account Information</th></tr>
+							<tr><td>Rank:</td><td><?php echo $info["usertype"]; ?></td></tr>
+							<tr><td>Email:</td><td><a href="mailto:<?php echo $info["email"]; ?>"><?php echo $info["email"]; ?></a></td></tr>
+							<tr><td>URL:</td><td><a href="<?php echo $info["userurl"]; ?>"><?php echo $info["userurl"]; ?></a></td></tr>
+						</table>
+					</div>
 					<div class="table">
 						<table>
 							<tr><th><h4>Submitted Packages</h4></th><th><h4>Version</h4></th></tr>
 							<?php
-							include 'lib/db_info.php';
 							if (!function_exists("get_metadata"))
 								include 'lib/utils.php';
-
-							$conn = mysql_connect($DB_HOST, $DB_USER, $DB_PASS);
-							mysql_select_db($DB_NAME, $conn);
-
-								$username = mysql_real_escape_string($_SESSION["sess_username"]);
-
-								$query = "SELECT usertype, email, packs
-								FROM users
-								WHERE username = '$username';";
-
-								$result = mysql_query($query);
-
-								if(mysql_num_rows($result) == 0) { // User not found. redirect to login form...
-									header('Location: login.php?i=u');
-									exit();
-								}
-								
-							$info = mysql_fetch_array($result, MYSQL_ASSOC);
-
+							
 							if (strlen($info["packs"])==0)
 								echo '<tr><td>None</td><td>-</td></tr>';
 							else {

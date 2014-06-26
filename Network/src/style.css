@@ -147,6 +147,10 @@ div.userhome {
 	text-align: center;
 }
 
+.userhome .table th {
+	border: none;
+}
+
 .userhome .table h4,
 .userhome .table {
 	font-size: 12px;
