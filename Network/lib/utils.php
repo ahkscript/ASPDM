@@ -35,10 +35,16 @@
 		return in_array(strtolower($needle), array_map('strtolower', $haystack));
 	}
 	
-	function get_metadata($file,$raw=0) {
+	function get_metadata($file,$raw=0,$internal=0) {
 		if ($file == NULL)
 			return -1;
-		$file = $_SERVER['DOCUMENT_ROOT'] . "/packs/" . str_replace("/","",strtolower($file)); //Remove '/' to avoid exploit
+		
+		if ($internal) { //safe func call
+			$file = $file;
+		} else {
+			$file = $_SERVER['DOCUMENT_ROOT'] . "/packs/" . safe_var(strtolower($file)); //Remove '/' to avoid exploit
+		}
+		
 		if (!file_exists($file))
 			return -2;
 		$handle = fopen($file, "r");
@@ -55,7 +61,7 @@
 			echo "ERROR: Invalid parameters";
 			return 0;
 		}
-		$file = "../packs/" . str_replace("/","",strtolower($file)); //Remove '/' to avoid exploit
+		$file = "../packs/" . safe_var(strtolower($file)); //Remove '/' to avoid exploit
 		if (!file_exists($file)) {
 			echo "ERROR: File does not exist.";
 			return 0;
@@ -110,6 +116,14 @@
 		else
 			$bytes = '0 bytes';
 		return $bytes;
+	}
+	
+	function safe_var($v) {
+		$v = str_replace(array("/","\\"),"",$v);
+		if (strlen(str_replace("..","",$v))==0)
+			return "";
+		else
+			return $v;
 	}
 	
 	function html_escape($str) {

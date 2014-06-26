@@ -15,7 +15,12 @@
 	// get filename
 	$path_parts = pathinfo($_REQUEST['f']);
 	$pack = $path_parts['basename'];
-	$file = "packs/".strtolower($pack);
+	if (isset($_REQUEST['tmp'])) {
+		if (!function_exists("safe_var"))
+			include 'lib/utils.php';
+		$file = "packs/tmp/".safe_var($_REQUEST['tmp']).'/'.strtolower($pack);
+	} else
+		$file = "packs/".strtolower($pack);
 
 	// make sure the file exists
 	if (is_file($file)) {

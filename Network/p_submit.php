@@ -144,12 +144,18 @@ try {
 	// On this example, obtain safe unique name from its binary data.
     $filename = sprintf('%s.ahkp',sha1_file($_FILES['file']['tmp_name']));
 	
-	if (file_exists("./packs/tmp/" . $filename))
+	$username_tmp = safe_var($_SESSION['sess_username']);
+	$pending_user_tmpdir = "./packs/tmp/".$username_tmp.'/';
+	
+	if (!file_exists($pending_user_tmpdir))
+		mkdir($pending_user_tmpdir);
+	
+	if (file_exists($pending_user_tmpdir.$filename))
 	{
 		throw new RuntimeException('The same package has already been uploaded !');
 	}
 	
-    if (move_uploaded_file($_FILES['file']['tmp_name'],"./packs/tmp/" . $filename))
+    if (move_uploaded_file($_FILES['file']['tmp_name'],$pending_user_tmpdir.$filename))
 	{
         echo 'File is uploaded successfully.';
     } else {

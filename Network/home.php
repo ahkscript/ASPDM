@@ -67,31 +67,37 @@
 							?>
 						</table>
 					</div>
-					<div>
+					<div style="width:64%">
 						<table>
-							<tr><th><h4>Lorem Ipsum</h4></th><th><h4>Version</h4></th></tr>
-							<tr><td>Package_AAAA.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_BBBB.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_CCCC.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_DDDD.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_EEEE.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_FFFF.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_GGGG.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_HHHH.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_IIII.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_JJJJ.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_KKKK.ahkp</td><td>1.0.0.0</td></tr>
-						</table>
-					</div>
-					<div>
-						<table>
-							<tr><th><h4>Lorem Ipsum</h4></th><th><h4>Version</h4></th></tr>
-							<tr><td>Package_AAAA.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_BBBB.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_CCCC.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_DDDD.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_EEEE.ahkp</td><td>1.0.0.0</td></tr>
-							<tr><td>Package_FFFF.ahkp</td><td>1.0.0.0</td></tr>
+							<tr><th><h4>Pending packages</h4></th><th><h4>File</h4></th><th><h4>Version</h4></th></tr>
+							<?php
+							$username_tmp = safe_var($_SESSION['sess_username']);
+							$pending_user_tmpdir = './packs/tmp/'.$username_tmp;
+							
+							if (!file_exists($pending_user_tmpdir))
+								mkdir($pending_user_tmpdir);
+							
+							if ($handle = opendir($pending_user_tmpdir)) {
+								$_tmpcount = 0;
+								while (false !== ($entry = readdir($handle))) {
+									if ($entry != "." && $entry != "..") {
+										$_tmpdata = get_metadata($pending_user_tmpdir.'/'.$entry,0,1);
+										
+										if (is_object($_tmpdata))
+											echo '<tr><td>'.($_tmpdata->id).'.ahkp</td><td><a href="/dl_file.php?f='.$entry.'&tmp='.$username_tmp.'">'.$entry.'</a></td><td>'.($_tmpdata->version).'</td></tr>';
+										else
+											echo '<tr><td>ERROR: get_metadata</td><td>-</td><td>-</td></tr>';
+											
+										$_tmpcount+=1;
+									}
+								}
+								if (!$_tmpcount)
+									echo '<tr><td>None</td><td>-</td><td>-</td></tr>';
+								closedir($handle);
+							} else {
+								echo '<tr><td>ERROR: opendir</td><td>-</td><td>-</td></tr>';
+							}
+							?>
 						</table>
 					</div>
 			</div>
