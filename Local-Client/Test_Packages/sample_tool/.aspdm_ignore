@@ -1,0 +1,2 @@
+#comment
+*.r #ignore all files with '.r' extension

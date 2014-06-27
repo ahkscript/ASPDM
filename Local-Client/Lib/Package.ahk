@@ -8,8 +8,25 @@ Package_Build(outFile, baseDir, jfile="")
 		man := Manifest_FromFile(jfile)
 	
 	man.ahkversion:=A_AhkVersion
-	
+
 	tree := Util_DirTree(baseDir)
+	
+	if FileExist(ignorefile:=baseDir "\.aspdm_ignore") {
+		ignore_patterns:=[]
+		Loop,Read,%ignorefile%
+			if StrLen(ignore_line:=Trim(RegExReplace(A_LoopReadLine,"#.+")))
+				ignore_patterns.Insert(ignore_line)
+		for each, pat in ignore_patterns
+		{
+			StringReplace,_tmp,pat,\,\\,All
+			StringReplace,_tmp,_tmp,.,\.,All
+			StringReplace,_tmp,_tmp,*,.*,All
+			ignore_patterns[each]:=_tmp ;strip ##comments##
+		}
+		MsgBox
+		tree := Util_DirTreeIgnore(tree,ignore_patterns)
+	}
+	
 	_Package_DumpTree(outFile, tree)
 	_Package_Compress(outFile, outFile, JSON_FromObj(man))
 	return Package_Validate(outFile)

@@ -124,7 +124,7 @@ Util_DirTree(dir)
 	{
 		StringTrimLeft, name, A_LoopFileFullPath, %ldir%
 		e := { name: name, fullPath: A_LoopFileLongPath }
-		if SubStr(name, 0) = "~" || SubStr(name, -3) = ".bak" || name = "package.json"
+		if SubStr(name, 0) = "~" || SubStr(name, -3) = ".bak" || name = "package.json" || name = ".aspdm_ignore"
 			continue
 		IfInString, A_LoopFileAttrib, D
 		{
@@ -134,6 +134,29 @@ Util_DirTree(dir)
 		data.Insert(e)
 	}
 	return data
+}
+
+Util_DirTreeIgnore(tree,patterns)
+{
+	if (patterns.MaxIndex == 0)
+		return tree
+	for i, file in tree
+	{
+		for j, pat in patterns
+		{
+			if RegExMatch(file.fullPath,pat) {
+				tree.Remove(i)
+				break
+			}
+		}
+		if (tree.HasKey(i)) {
+			if (file.isDir)
+				tree[i].contents:=Util_DirTreeIgnore(file.contents,patterns)
+			else
+				continue
+		}
+	}
+	return tree
 }
 
 Util_isASCII(s)
