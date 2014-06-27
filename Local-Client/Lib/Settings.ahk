@@ -29,6 +29,7 @@ Settings_Validate(j) {
 
 Settings_Default(key="") {
 	j:={stdlib_folder: 	RegExReplace(A_AhkPath,"\w+\.exe","lib")
+		,userlib_folder: 	A_MyDocuments "\AutoHotkey\Lib"
 		,local_repo: 		A_AppData "\aspdm\repo"
 		,local_archive:		A_AppData "\aspdm\archive"
 		,hide_installed: 	true
