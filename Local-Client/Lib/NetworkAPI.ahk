@@ -28,7 +28,7 @@ API_ValidateSource(domain) {
 	check:=A_NowUTC "|" A_TickCount
 	data:=JSON_ToObj(u2v_clean("http://api-php." domain "/status.php?_c=" check))
 	if IsObject(data) {
-		if (data["api"]["check"] == check)
+		if ( (data["api"]["check"] == check) && (data["api"]["name"] == "aspdm") )
 			return 1
 	}
 	return 0
