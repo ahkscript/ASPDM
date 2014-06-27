@@ -11,19 +11,43 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include Lib\LV_Colors.ahk
 
 Start_select_localmode:=0
+Start_select_pack:=""
 
 if (args) {
-	if InStr(args[1],"--local") {
-		Start_select_localmode:=1
-		if (!FileExist(Start_select_pack:=args[2]))
-			Start_select_pack:=""
-	} else
-		Start_select_pack:=args[1]
-} else
-	Start_select_pack:=""
+	if (argc==1) {
+		if SubStr(args[1],-4) = .ahkp
+			Start_select_pack:=args[1]
+	} else {
+		i:=0
+		while(i<argc)
+		{
+			i+=1
+			if InStr(args[i],"--local") {
+				Start_select_localmode:=1
+				if (args[i+1]) {
+					if (!FileExist(Start_select_pack:=args[i+1]))
+						Start_select_pack:=""
+				} else
+					break
+				i+=1
+			}
+			else if InStr(args[i],"--source") {
+				if (args[i+1]) {
+					API_SetSource(args[i+1]) ;If unsuccessful, nothing changes
+				} else
+					break
+				i+=1
+			}
+			else if SubStr(args[i],-4) = .ahkp
+				Start_select_pack:=args[i]
+		}
+	}
+}
 
 if (FileExist(Start_select_pack))
 	Start_select_localmode:=1
+else
+	Start_select_localmode:=0
 
 ;get settings
 Settings:=Settings_Get()
@@ -43,7 +67,7 @@ Gui, Add, Text, x+4 yp+4 , ASPDM
 Gui, Font
 Gui, Add, Text, yp+5 x+12, AHKScript.org's Package/StdLib Distribution and Management
 
-Gui, +hwndhGUI +Resize +MinSize530x360
+Gui, +hwndhGUI +Resize +MinSize530x384
 
 ;gui tabs
 Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|Settings
@@ -86,8 +110,15 @@ Gui, Tab, Settings
 Gui, Tab,
 	Gui, Add, Edit, vSearchBar gSearch y44 x222 w300,
 	SetEditPlaceholder("SearchBar","Search...")
+	
+Gui, Add, StatusBar,, Loading...
+SB_SetParts(220)
+SB_SetText("Package source: " Packs_Source,1)
+__tmp_localRepo:=Settings.Local_Repo
+StringReplace,__tmp_localRepo,__tmp_localRepo,%A_AppData%,`%AppData`%
+SB_SetText("Local repository: " __tmp_localRepo,2)
 
-Gui, Show, w530 h360, ASPDM - Package Listing
+Gui, Show, w530 h384, ASPDM - Package Listing
 
 start:
 Gui +Disabled
@@ -425,18 +456,18 @@ Search:
 return
 
 GuiSize:
-	GuiControl,move,Tabs, % "w" (A_GuiWidth-16) " h" (A_GuiHeight-60)
+	GuiControl,move,Tabs, % "w" (A_GuiWidth-16) " h" (A_GuiHeight-72)
 	GuiControl,move,SearchBar, % "x" (A_GuiWidth-308)
 	GuiSize_list:="AUI"
 	Loop, Parse, GuiSize_list
 	{
-		GuiControl,move,LV_%A_LoopField%, % "w" (A_GuiWidth-32) " h" (A_GuiHeight-124)
-		GuiControl,move,PackageCounter_%A_LoopField%, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-118)
+		GuiControl,move,LV_%A_LoopField%, % "w" (A_GuiWidth-32) " h" (A_GuiHeight-136)
+		GuiControl,move,PackageCounter_%A_LoopField%, % "y" (A_GuiHeight-50) " x" (A_GuiWidth-118)
 	}
-	GuiControl,move,txt_version, % "y" (A_GuiHeight-38) " x" (A_GuiWidth-130)
+	GuiControl,move,txt_version, % "y" (A_GuiHeight-50) " x" (A_GuiWidth-130)
 	GuiSize_list:="Install|InstallFile|Refresh_A|Update|UpdateFile|Refresh_U|Reinstall|Remove|OpenSelected|SaveSettings|ResetSettings|ClientUpdate|CheckAll_A|CheckAll_U|CheckAll_I"
 	Loop, Parse, GuiSize_list, |
-		GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-44)
+		GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-56)
 return
 
 GuiClose:

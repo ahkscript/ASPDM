@@ -55,6 +55,10 @@
 		return 0;
 	}
 	
+	function getServerName() {
+		return (isset($_SERVER['HTTP_HOST']))?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
+	}
+	
 	function MsgBox($m="") {
 		echo '<script language="javascript">';
 		echo 'alert("'.$m.'")';

@@ -1,18 +1,38 @@
-﻿Packs_Source:="http://packs.aspdm.tk"
-API_Source:="http://api-php.aspdm.tk"
-API_u2vClean:=1 ;enable u2v_clean()
+﻿API_u2vClean:=1 ;enable u2v_clean()
+API_SetSource("aspdm.tk")
 
 ; Other/mirror servers - [not always updated]
 ; --------------------------------------------
-; Packs_Source:="http://packs.ahk.cu.cc"
-; API_Source:="http://api-php.ahk.cu.cc"
+; API_SetSource("ahk.cu.cc")
 ;
-; Packs_Source:="http://packs.aspdm.cu.cc"
-; API_Source:="http://api-php.aspdm.cu.cc"
+; API_SetSource("aspdm.cu.cc")
 ;
-; Packs_Source:="http://packs.aspdm.1eko.com"
-; API_Source:="http://api-php.aspdm.1eko.com"
+; API_SetSource("aspdm.1eko.com")
 ; --------------------------------------------
+
+API_SetSource(domain) {
+	Global Package_Source
+	Global Packs_Source
+	Global API_Source
+	
+	if API_ValidateSource(domain) {
+		Package_Source:=domain
+		Packs_Source:="http://packs." domain
+		API_Source:="http://api-php." domain
+		return 1
+	}
+	return 0
+}
+
+API_ValidateSource(domain) {
+	check:=A_NowUTC "|" A_TickCount
+	data:=JSON_ToObj(u2v_clean("http://api-php." domain "/status.php?_c=" check))
+	if IsObject(data) {
+		if (data["api"]["check"] == check)
+			return 1
+	}
+	return 0
+}
 
 CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.tk/client/update.ini") {
 	URLDownloadToFile,%Update_URL%, % tempupdatefile:=Util_TempFile()

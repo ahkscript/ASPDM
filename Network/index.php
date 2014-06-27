@@ -147,6 +147,11 @@
                     $j_size = formatSizeUnits(filesize($file));
 					
 					$a_license = html_licensefmt($obj->license);
+					
+					if (!function_exists("getServerName"))
+						include 'lib/server.php';
+						
+					$URI_Domain = getServerName();
     ?>
     	<aside id="<?=$j_id?>" class="avgrund-popup">
 			<button type="button" class="close" aria-hidden="true" onclick="closeDialog()">&times;</button>
@@ -158,7 +163,7 @@
 					<!-- PHP Download script necessary for compatibility with all browsers, especially IE... -->
 					<a href="/dl_file.php?f=<?=$j_id?>.ahkp" class="btn btn-sm btn-success dialog_button btn-download" type="button">Download</a>
 
-					<a href="aspdm://<?=$j_id?>.ahkp" class="btn btn-sm btn-primary dialog_button btn-install" type="button">Install</a>
+					<a href="aspdm://<?=$URI_Domain?>/<?=$j_id?>" class="btn btn-sm btn-primary dialog_button btn-install" type="button">Install</a>
 				</div>
 			</div>
 			
