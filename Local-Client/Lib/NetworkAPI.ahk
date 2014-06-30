@@ -1,5 +1,5 @@
 ﻿API_u2vClean:=1 ;enable u2v_clean()
-API_SetSource("aspdm.tk")
+API_SetSource("aspdm.tk") ; Über Default packs source
 
 ; Other/mirror servers - [not always updated]
 ; --------------------------------------------
@@ -15,6 +15,8 @@ API_SetSource(domain) {
 	Global Packs_Source
 	Global API_Source
 	
+	domain:=API_ParseSource(domain)
+	
 	if API_ValidateSource(domain) {
 		Package_Source:=domain
 		Packs_Source:="http://packs." domain
@@ -22,6 +24,19 @@ API_SetSource(domain) {
 		return 1
 	}
 	return 0
+}
+
+API_ParseSource(domain,mainonly:=0) {
+	if (mainonly) {
+		RegExMatch(domain "/","i)([a-z]+\.[a-z]+/)",m) ;Isolate main domain, ex:  http://packs.fansite.com/asdsd/sdds  -->  fansite.com
+		StringTrimRight,domain,m1,1
+		return domain
+	} else {
+		RegExMatch("/" domain "/","i)(/[\w\.]+/)",m) ;Isolate full domain, ex:  http://packs.fansite.com/asdsd/sdds  -->  packs.fansite.com
+		StringTrimRight,domain,m1,1
+		StringTrimLeft,domain,domain,1
+		return domain
+	}
 }
 
 API_ValidateSource(domain) {

@@ -5,10 +5,15 @@
 ;#Warn  ; Recommended for catching common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
+SetBatchLines,-1
+SetWinDelay,0
+
 #Include Lib\Arguments.ahk
 #Include Lib\Install.ahk
 #Include Lib\NetworkAPI.ahk
 #Include Lib\LV_Colors.ahk
+
+SelfPID:=DllCall("GetCurrentProcessId")
 
 Start_select_localmode:=0
 Start_select_pack:=""
@@ -32,7 +37,7 @@ if (args) {
 				i+=1
 			}
 			else if InStr(args[i],"--source") {
-				if (args[i+1]) {
+				if (Package_Source != Trim(args[i+1])) {
 					API_SetSource(args[i+1]) ;If unsuccessful, nothing changes
 				} else
 					break
@@ -57,6 +62,12 @@ if (Settings.Check_ClientUpdates)
 	CheckUpdate(AppVersion,-1)
 
 CheckedItems:=0
+
+if (!args)
+	if (Package_Source != Settings.package_source)
+		API_SetSource(Settings.package_source) ;If unsuccessful, nothing changes
+
+Package_Sources:=Util_SingleArray2Str(Util_ArraySort(Settings.package_sources),"|") ;sort and remove duplicates
 
 Menu, tray, Icon, res\ahk.ico
 
@@ -100,9 +111,14 @@ Gui, Tab, Settings
 	GuiControl,,Only_Show_StdLib, % (!(!(Settings.only_show_stdlib)))+0
 	GuiControl,,Check_ClientUpdates, % (!(!(Settings.Check_ClientUpdates)))+0
 	GuiControl,,ContentSensitiveSearch, % (!(!(Settings.ContentSensitiveSearch)))+0
-	Gui, Add, Text, y+10 xp, StdLib Installation folder
+	Gui, Add, Text, y+10 xp, Package source
+	Gui, Add, Button, yp-5 x+4 vPackSource_AddButton gPackSource_Add, Add...
+	Gui, Add, Button, yp x+2 vPackSource_RemoveButton gPackSource_Remove, Remove
+	Gui, Add, DropDownList, yp+1 x+4 w280 h21 R5 Choose1 vPackSource_list -Multi, %Package_Sources%
+	GuiControl, ChooseString, PackSource_list, % Settings.Package_Source
+	Gui, Add, Text, y+10 x20, StdLib Installation folder
 	Gui, Add, Button, yp-5 x+4 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
-	Gui, Add, Edit, yp+1 x+4 w250 Disabled vstdlib_folder, % Settings.stdlib_folder
+	Gui, Add, Edit, yp+1 x+4 w280 h21 Disabled vstdlib_folder -Multi, % Settings.stdlib_folder
 	Gui, Add, Button, y278 x16 w80 vSaveSettingsButton gSaveSettings, Save Settings
 	Gui, Add, Button, yp x+2 vResetSettingsButton gResetSettings, Reset Settings
 	Gui, Add, Button, yp x+2 vClientUpdateButton gClientUpdate, Check for updates
@@ -112,7 +128,7 @@ Gui, Tab,
 	SetEditPlaceholder("SearchBar","Search...")
 	
 Gui, Add, StatusBar,, Loading...
-SB_SetParts(220)
+SB_SetParts(264)
 SB_SetText("Package source: " Packs_Source,1)
 __tmp_localRepo:=Settings.Local_Repo
 StringReplace,__tmp_localRepo,__tmp_localRepo,%A_AppData%,`%AppData`%
@@ -269,6 +285,10 @@ List_Available:
 			GuiControl,Disable,CheckAll_AButton
 		else
 			GuiControl,Enable,CheckAll_AButton
+		
+		_tmp_sbtxt:="Package source: " Packs_Source " [" TotalItems " items]"
+		SB_SetParts(5*(StrLen(_tmp_sbtxt)+2))
+		SB_SetText(_tmp_sbtxt,1)
 	}
 	Gui -Disabled
 return
@@ -485,10 +505,46 @@ CheckAll:
 	%CheckAll_v% := !(%CheckAll_v%)
 return
 
+PackSource_Add: ;PackSource_AddButton
+	Gui +Disabled
+	Gui +OwnDialogs
+	InputBox,__tmp,Add package repository,Add a package source to work with.,,300,128
+	if __tmp is not Space
+	{
+		Progress, CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Verification..., Package Source
+		Progress, Show
+		Progress, 50
+		sleep 100
+		__tmp_t:=API_SetSource(__tmp:=Trim(__tmp))
+		Progress, 100
+		sleep, 100
+		Progress, Off
+		if (__tmp_t) {
+			GuiControl,,PackSource_List, % API_ParseSource(__tmp) ;auto-add
+			MsgBox, 64, , The package source was added successfully.`nPlease save your settings now.
+		} else
+			MsgBox, 48, , The following package source is invalid:`n`n`t%__tmp%`n`nPlease verify the entry and try again.
+	}
+	Gui -Disabled
+return
+
+PackSource_Remove: ;PackSource_RemoveButton
+	GuiControlGet,PackSource_ListSelected,,PackSource_List
+	ControlGet, PackSource_PipeList, List,, ComboBox1, ahk_pid %SelfPID%
+	__tmp:=""
+	Loop,Parse,PackSource_PipeList,`n
+	{
+		if A_LoopField != %PackSource_ListSelected%
+			__tmp .= "|" A_LoopField
+	}
+	GuiControl,,PackSource_List,%__tmp% ;auto-add
+	GuiControl, Choose, PackSource_list, 1
+return
+
 stdlib_folderBrowse: ;stdlib_folderBrowseButton
 	Gui +Disabled
 	Gui +OwnDialogs
-	FileSelectFolder, __tmp, %A_MyDocuments%, 3, Select the StdLib Installation folder
+	FileSelectFolder, __tmp, *C:\, 3, Select the StdLib Installation folder
 	if __tmp is not Space
 		GuiControl,,stdlib_folder,%__tmp%
 	Gui -Disabled
@@ -504,6 +560,12 @@ SaveSettings:
 			GuiControlGet, %A_LoopField%
 			Settings[A_LoopField] := (%A_LoopField%)
 		}
+		
+		GuiControlGet,PackSource_ListSelected,,PackSource_List
+		Settings.package_source := PackSource_ListSelected
+		ControlGet, PackSource_PipeList, List,, ComboBox1, ahk_pid %SelfPID%
+		Settings.package_sources := StrSplit(PackSource_PipeList,"`n")
+		
 		gosub,_SaveSettings
 	}
 return
