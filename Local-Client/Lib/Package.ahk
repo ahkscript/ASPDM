@@ -18,12 +18,12 @@ Package_Build(outFile, baseDir, jfile="")
 				ignore_patterns.Insert(ignore_line)
 		for each, pat in ignore_patterns
 		{
+			StringReplace,_tmp,pat,/,\,All
 			StringReplace,_tmp,pat,\,\\,All
 			StringReplace,_tmp,_tmp,.,\.,All
 			StringReplace,_tmp,_tmp,*,.*,All
 			ignore_patterns[each]:=_tmp ;strip ##comments##
 		}
-		MsgBox
 		tree := Util_DirTreeIgnore(tree,ignore_patterns)
 	}
 	
