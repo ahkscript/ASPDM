@@ -652,10 +652,16 @@ Install:
 	;  http://support.microsoft.com/kb/830473
 	;Assuming approximately 50 each file path, should be around 114 packages with "|" delimiters
 	
-	ecode:=Admin_run("Package_Installer.ahk",Install_packs)
-	if (ecode=="NOT_ADMIN") {
-		Gui -Disabled
-		return
+	;Changing Install folder will added in the future
+	if (isAdminRunAs_Needed(Settings.StdLib_Folder)) {
+		ecode:=Admin_run("Package_Installer.ahk",Install_packs)
+		if (ecode=="NOT_ADMIN") {
+			Gui -Disabled
+			return
+		}
+	} else {
+		Runwait "Package_Installer.ahk" "%Install_packs%",,UseErrorLevel
+		ecode := ErrorLevel
 	}
 	
 	;Update "Installed" list - full-blown list update
@@ -747,10 +753,16 @@ Remove:
 	;  http://support.microsoft.com/kb/830473
 	;Assuming approximately 50 each file path, should be around 114 packages with "|" delimiters
 	
-	ecode:=Admin_run("Package_Remover.ahk",Remove_packs)
-	if (ecode=="NOT_ADMIN") {
-		Gui -Disabled
-		return
+	;Changing Install folder will added in the future
+	if (isAdminRunAs_Needed(Settings.StdLib_Folder)) {
+		ecode:=Admin_run("Package_Remover.ahk",Remove_packs)
+		if (ecode=="NOT_ADMIN") {
+			Gui -Disabled
+			return
+		}
+	} else {
+		Runwait "Package_Remover.ahk" "%Remove_packs%",,UseErrorLevel
+		ecode := ErrorLevel
 	}
 	
 	;full-blown list update
@@ -818,5 +830,17 @@ Admin_run(program, argument) {
 	else
 		Runwait *RunAs "%program%" "%argument%",,UseErrorLevel
 	return ErrorLevel
+}
+
+isAdminRunAs_Needed(dir) {
+	if A_IsAdmin
+		return false
+	else {
+		tmpfn := Util_TempFile(dir)
+		FileAppend,__ASPDM_ADMIN_TEST__,%tmpfn%
+		if !(e:=ErrorLevel)
+			FileDelete,%tmpfn%
+		return e
+	}
 }
 

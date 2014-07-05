@@ -9,8 +9,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include Lib\Settings.ahk
 #Include Lib\Arguments.ahk
 
-if (!A_IsAdmin)
-   ExitApp, % Install.Error_NonAdministrator
+;if (!A_IsAdmin)
+;   ExitApp, % Install.Error_NonAdministrator
 if (!args)
 	ExitApp, % Install.Error_InvalidParameters
 
