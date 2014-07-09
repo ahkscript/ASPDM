@@ -82,7 +82,7 @@ Gui, +hwndhGUI +Resize +MinSize530x384
 
 ;gui tabs
 Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|Settings
-	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_A hwndhLV_A, File|Name|Version|Author|Description|tags
+	Gui, Add, ListView, x16 y+8 w440 h200 Checked AltSubmit Grid -Multi gListView_Events vLV_A hwndhLV_A, File|Name|Version|Author|Source|Description|tags
 	Gui, Add, Button, y+4 w80 vInstallButton Disabled gInstall, Install
 	Gui, Add, Button, yp x+2 vInstallFileButton gInstallFile, Install from file...
 	Gui, Add, Button, yp x+2 w80 vRefresh_AButton gRefresh, Refresh
@@ -104,10 +104,12 @@ Gui, Tab, Installed
 	Gui, Add, Text, yp+6 x+252 +Right vPackageCounter_I, Loading packages...
 Gui, Tab, Settings
 	Gui, Add, Checkbox, y78 x20 vHide_Installed, Hide Installed Packages in Available tab
+	Gui, Add, Checkbox, y+4 xp vShow_AllPackSources, Show Packages from all sources
 	Gui, Add, Checkbox, y+4 xp vOnly_Show_StdLib Disabled, Only show StdLib Packages
 	Gui, Add, Checkbox, y+4 xp vCheck_ClientUpdates, Check for ASPDM client updates
 	Gui, Add, Checkbox, y+4 xp vContentSensitiveSearch, Content-Sensitive Search (Uncheck to search tags only)
 	GuiControl,,Hide_Installed, % (!(!(Settings.hide_installed)))+0
+	GuiControl,,Show_AllPackSources, % (!(!(Settings.Show_AllPackSources)))+0
 	GuiControl,,Only_Show_StdLib, % (!(!(Settings.only_show_stdlib)))+0
 	GuiControl,,Check_ClientUpdates, % (!(!(Settings.Check_ClientUpdates)))+0
 	GuiControl,,ContentSensitiveSearch, % (!(!(Settings.ContentSensitiveSearch)))+0
@@ -129,7 +131,7 @@ Gui, Tab,
 	
 Gui, Add, StatusBar,, Loading...
 SB_SetParts(264)
-SB_SetText("Package source: " Packs_Source,1)
+SB_SetText("Package sources: " Util_ObjCount(Settings.package_sources),1)
 __tmp_localRepo:=Settings.Local_Repo
 StringReplace,__tmp_localRepo,__tmp_localRepo,%A_AppData%,`%AppData`%
 SB_SetText("Local repository: " __tmp_localRepo,2)
@@ -157,13 +159,28 @@ LV_ModifyCol(1,"100")
 LV_ModifyCol(2,"120")
 LV_ModifyCol(3,"60")
 LV_ModifyCol(4,"80")
-LV_ModifyCol(5,"300")
-LV_ModifyCol(6,"0") ;make tags invisible
+LV_ModifyCol(5,"80")
+LV_ModifyCol(6,"300")
+LV_ModifyCol(7,"0") ;make tags invisible
 ListView_Offline:=0
 if Ping() {
 	Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11, Waiting..., Loading Package List...
 	Progress Show
-	packs:=API_ListAll()
+	
+	packs_l:=Object()
+	if (Settings.Show_AllPackSources) {
+		for each, package_src in Settings.package_sources
+		{
+			if (API_SetSource(package_src))
+				packs_l[package_source]:=API_ListAll()
+		}
+		packs:=packs_l[Settings.package_sources[1]]
+	} else {
+		API_SetSource(Settings.package_source)
+		packs_l[package_source]:=API_ListAll()
+		packs:=packs_l[package_source]
+	}
+	
 	if (!IsObject(packs)) {
 		Progress, Off
 		ListView_OfflineMsg:="Offline mode, ASPDM API is not responding."
@@ -231,7 +248,7 @@ if (StrLen(Start_select_pack)) {
 					LV_GetText(pack_id,A_index,1)
 					LV_GetText(pack_name,A_index,2)
 					LV_GetText(pack_auth,A_index,4)
-					LV_GetText(pack_desc,A_index,5)
+					LV_GetText(pack_desc,A_index,6)
 					SplitPath,pack_id,,,,pack_id
 					pack_desc:=(StrLen(pack_desc))?pack_desc:"No description."
 					MsgBox, 64, , Package Information`nID: `t%pack_id%`nName: `t%pack_name%`nAuthor: `t%pack_auth%`n`nDescription: `n%pack_desc%
@@ -257,23 +274,28 @@ List_Available:
 	if (!ListView_Offline)
 	{
 		LV_Delete()
-		TotalItems:=Util_ObjCount(packs)
+		TotalItems:=0
+		for each, packs in packs_l
+			TotalItems += Util_ObjCount(packs)
 		TotalItemsNew:=TotalItems
-		for each, info in packs
+		for each, packs in packs_l
+		{
+		for _each, info in packs
 		{
 			if (Settings.hide_installed) {
 				if (!array_has_value(Settings.Installed,info["id"])) {
-					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"],Util_TagsObj2CSV(info["tags"]))
+					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],each,info["description"],Util_TagsObj2CSV(info["tags"]))
 					TotalItemsNew-=1
 				}
 			}
 			else
 			{
 				if (StrLen(info["id"]))
-					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],info["description"],Util_TagsObj2CSV(info["tags"]))
+					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],each,info["description"],Util_TagsObj2CSV(info["tags"]))
 				else
 					LV_Add("","ERROR: Unable to load package(s)")
 			}
+		}
 		}
 		TotalItemsNew:=(TotalItemsNew<0)?0:(TotalItems-TotalItemsNew)
 		if (Settings.hide_installed)
@@ -286,7 +308,7 @@ List_Available:
 		else
 			GuiControl,Enable,CheckAll_AButton
 		
-		_tmp_sbtxt:="Package source: " Packs_Source " [" TotalItems " items]"
+		_tmp_sbtxt:="Package sources: " Util_ObjCount(packs_l) " [" TotalItems " items]"
 		SB_SetParts(5*(StrLen(_tmp_sbtxt)+2))
 		SB_SetText(_tmp_sbtxt,1)
 	}
@@ -343,6 +365,7 @@ ListView_Offline:
 		LV_ModifyCol(3,"0")
 		LV_ModifyCol(4,"0")
 		LV_ModifyCol(5,"0")
+		LV_ModifyCol(6,"0")
 		LV_Colors.Attach(hLV_%A_loopfield%,1,0,1)
 	}
 return
@@ -366,7 +389,7 @@ ListView_Events:
 			LV_GetText(pack_name,A_EventInfo,2)
 			;LV_GetText(pack_ver,A_EventInfo,3)
 			LV_GetText(pack_auth,A_EventInfo,4)
-			LV_GetText(pack_desc,A_EventInfo,5)
+			LV_GetText(pack_desc,A_EventInfo,6)
 			SplitPath,pack_id,,,,pack_id
 			pack_desc:=(StrLen(pack_desc))?pack_desc:"No description."
 			MsgBox, 64, , Package Information`nID: `t%pack_id%`nName: `t%pack_name%`nAuthor: `t%pack_auth%`n`nDescription: `n%pack_desc%
@@ -450,8 +473,8 @@ Search:
 			LV_GetText(ltmpB, A_Index,2)
 			LV_GetText(ltmpC, A_Index,3)
 			LV_GetText(ltmpD, A_Index,4)
-			LV_GetText(ltmpE, A_Index,5)
-			LV_GetText(ltmp_TAGS, A_Index,6)
+			LV_GetText(ltmpE, A_Index,6)
+			LV_GetText(ltmp_TAGS, A_Index,7)
 			Query_Item_match:=0
 			for each, Query_Item in QueryList
 			{
@@ -554,7 +577,7 @@ SaveSettings:
 	MsgBox, 36, , Are you sure you want to save these settings?
 	IfMsgBox,Yes
 	{
-		_list_SaveSettings:="Hide_Installed|Only_Show_StdLib|Check_ClientUpdates|ContentSensitiveSearch|stdlib_folder"
+		_list_SaveSettings:="Hide_Installed|Show_AllPackSources|Only_Show_StdLib|Check_ClientUpdates|ContentSensitiveSearch|stdlib_folder"
 		Loop, Parse, _list_SaveSettings, |
 		{
 			GuiControlGet, %A_LoopField%
@@ -604,6 +627,7 @@ Install:
 	
 	;check for "required" aka dependencies
 	Install_packs_dependencies:=Object()
+	Install_packs_dependencies_src:=Object()
 	
 	;example - Install_packs:="~built_packs~\winfade.ahkp"
 	Install_packs := ""
@@ -614,7 +638,10 @@ Install:
 		if (!r_check)
 		break
 		LV_GetText(r_item,r_check,1)
+		LV_GetText(r_item_src,r_check,5)
+		API_SetSource(r_item_src)
 		r_path:=API_Get(r_item) ;download the package
+		Install_packs_dependencies_src.Insert(Package_Source)
 		Util_ArrayInsert(Install_packs_dependencies,API_GetDependencies(r_item))
 		Install_packs.= r_path "|"
 	}
@@ -639,8 +666,12 @@ Install:
 			{
 				SplitPath,r_item,,,,r_item_noExt
 				if (!array_has_value(Settings.Installed,r_item_noExt)) {
+					API_SetSource(Install_packs_dependencies_src[_each])
 					r_path:=API_Get(r_item)
-					Install_packs.= r_path "|"
+					if (Package_Validate(r_path))
+						Install_packs.= r_path "|"
+					else
+						MsgBox, 48, , The following package could not be retrieved:`n`n`t%r_item%
 				}
 			}
 			Install_packs:=SubStr(Install_packs,1,-1)

@@ -19,7 +19,7 @@ Settings_Get() {
 
 Settings_Validate(j) {
 	j_default:=Settings_Default()
-	vars:="stdlib_folder|local_repo|local_archive|hide_installed|only_show_stdlib|package_source|package_sources|installed|Check_ClientUpdates|ContentSensitiveSearch"
+	vars:="stdlib_folder|local_repo|local_archive|hide_installed|Show_AllPackSources|only_show_stdlib|package_source|package_sources|installed|Check_ClientUpdates|ContentSensitiveSearch"
 	loop,Parse,vars,`|
 		if (!j.Haskey(A_LoopField))
 			j[A_LoopField]:=j_default[A_LoopField]
@@ -33,6 +33,7 @@ Settings_Default(key="") {
 		,local_repo:		A_AppData "\aspdm\repo"
 		,local_archive:		A_AppData "\aspdm\archive"
 		,hide_installed:	true
+		,Show_AllPackSources: true
 		,only_show_stdlib:	false
 		,package_source:	"aspdm.tk"
 		,package_sources:	["aspdm.tk","ahk.cu.cc","aspdm.cu.cc","aspdm.1eko.com"]

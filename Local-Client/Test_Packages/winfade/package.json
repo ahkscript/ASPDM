@@ -23,6 +23,6 @@
 		"window",
 		"gui"
 	],
-	"type":"Other",
+	"type":"Library",
 	"version":"1.0.0.0"
 }

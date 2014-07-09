@@ -17,6 +17,9 @@ API_SetSource(domain) {
 	
 	domain:=API_ParseSource(domain)
 	
+	if (Package_Source == domain)
+		return 1
+	
 	if API_ValidateSource(domain) {
 		Package_Source:=domain
 		Packs_Source:="http://packs." domain
@@ -27,6 +30,7 @@ API_SetSource(domain) {
 }
 
 API_ParseSource(domain,mainonly:=0) {
+	StringLower,domain,domain
 	if (mainonly) {
 		RegExMatch(domain "/","i)([a-z]+\.[a-z]+/)",m) ;Isolate main domain, ex:  http://packs.fansite.com/asdsd/sdds  -->  fansite.com
 		StringTrimRight,domain,m1,1
@@ -142,6 +146,8 @@ API_Get(file) {
 
 API_GetDependencies(pack_ahkp) {
 	reqCSV:=API_Info(pack_ahkp,"required")
+	if InStr(reqCSV,"ERROR:")
+		return Object()
 	reqArr:=Object()
 	Loop,Parse,reqCSV,CSV
 	{
