@@ -186,7 +186,8 @@ if Ping() {
 		ListView_OfflineMsg:="Offline mode, ASPDM API is not responding."
 		ListView_Offline:=1
 		gosub, ListView_Offline
-		MsgBox, 48, , The ASPDM API is not responding.`nThe server might be down.`n`nPlease try again in while (5 min).
+		gosub, List_Installed
+		MsgBox, 48, , The ASPDM API is not responding.`nThe server might be down.`n`nPlease try again in a while (5 min).
 		Gui -Disabled
 		return
 	}
