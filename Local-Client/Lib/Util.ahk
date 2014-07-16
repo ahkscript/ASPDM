@@ -48,13 +48,9 @@ Util_ArrayInsert(ByRef Arr,InsArr) {
 	return Arr
 }
 
-Util_ObjCount(Obj) {
-	if (!IsObject(Obj))
-		return 0
-	z:=0
-	for k in Obj
-		z+=1 ;or z:=A_Index
-	return z
+Util_ObjCount(obj) {
+	;see http://ahkscript.org/boards/viewtopic.php?f=37&t=3950&p=21579#p21578
+    return NumGet(&obj+4*A_PtrSize)  ; obj->mFieldCount -- OK for v1.1.15.01 and v2.0-a48
 }
 
 Util_ArraySort(Arr) { ;AutoSort
