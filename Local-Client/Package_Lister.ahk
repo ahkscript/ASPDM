@@ -1,6 +1,6 @@
 ﻿#NoTrayIcon
 
-#SingleInstance, Ignore
+#SingleInstance, On  ; Notify User
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ;#Warn  ; Recommended for catching common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
@@ -33,14 +33,14 @@ if (args) {
 					if (!FileExist(Start_select_pack:=args[i+1]))
 						Start_select_pack:=""
 				} else
-					break
+					continue
 				i+=1
 			}
 			else if InStr(args[i],"--source") {
 				if (Package_Source != Trim(args[i+1])) {
 					API_SetSource(args[i+1]) ;If unsuccessful, nothing changes
 				} else
-					break
+					continue
 				i+=1
 			}
 			else if SubStr(args[i],-4) = .ahkp
@@ -219,8 +219,9 @@ if (StrLen(Start_select_pack)) {
 	if (Start_select_localmode) {
 		Start_select_packINFO:=JSON_ToObj(Manifest_FromPackage(Start_select_pack))
 		Start_select_packID:=Start_select_packINFO["id"]
-	} else
-		Start_select_packID:=RegExReplace(Start_select_pack,"\.ahkp")
+	} else {
+		SplitPath,Start_select_pack,,,,Start_select_packID
+	}
 	
 	
 	if (!array_has_value(Settings.Installed,Start_select_packID)) {
