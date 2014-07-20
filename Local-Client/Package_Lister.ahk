@@ -39,6 +39,7 @@ if (args) {
 			else if InStr(args[i],"--source") {
 				if (Package_Source != Trim(args[i+1])) {
 					API_SetSource(args[i+1]) ;If unsuccessful, nothing changes
+					Start_Package_Source := Package_Source
 				} else
 					continue
 				i+=1
@@ -53,6 +54,9 @@ if (FileExist(Start_select_pack))
 	Start_select_localmode:=1
 else
 	Start_select_localmode:=0
+
+if !StrLen(Start_Package_Source)
+	Start_Package_Source:=Package_Source
 
 ;get settings
 Settings:=Settings_Get()
@@ -223,7 +227,6 @@ if (StrLen(Start_select_pack)) {
 		SplitPath,Start_select_pack,,,,Start_select_packID
 	}
 	
-	
 	if (!array_has_value(Settings.Installed,Start_select_packID)) {
 		if (Start_select_localmode) {
 			pack_name:=Start_select_packINFO["name"]
@@ -244,21 +247,26 @@ if (StrLen(Start_select_pack)) {
 				if !LV_GetText(tmp_fpackname, A_index)
 					break
 				if InStr(tmp_fpackname,Start_select_pack) {
-					LV_Modify(A_index, "+Check")
-					gosub,ListView_Events_checkedList
-					GuiControl,,SearchBar,%Start_select_pack%
-					LV_GetText(pack_id,A_index,1)
-					LV_GetText(pack_name,A_index,2)
-					LV_GetText(pack_auth,A_index,4)
-					LV_GetText(pack_desc,A_index,6)
-					SplitPath,pack_id,,,,pack_id
-					pack_desc:=(StrLen(pack_desc))?pack_desc:"No description."
-					MsgBox, 64, , Package Information`nID: `t%pack_id%`nName: `t%pack_name%`nAuthor: `t%pack_auth%`n`nDescription: `n%pack_desc%
-					Gui -Disabled
-					return
+					LV_GetText(pack_src,A_index,5)
+					if pack_src = %Start_Package_Source%
+					{
+						API_SetSource(pack_src)  ; Apply requested source
+						LV_Modify(A_index, "+Check")
+						gosub,ListView_Events_checkedList
+						GuiControl,,SearchBar,%Start_select_pack%
+						LV_GetText(pack_id,A_index,1)
+						LV_GetText(pack_name,A_index,2)
+						LV_GetText(pack_auth,A_index,4)
+						LV_GetText(pack_desc,A_index,6)
+						SplitPath,pack_id,,,,pack_id
+						pack_desc:=(StrLen(pack_desc))?pack_desc:"No description."
+						MsgBox, 64, , Package Information`nID: `t%pack_id%`nName: `t%pack_name%`nAuthor: `t%pack_auth%`n`nDescription: `n%pack_desc%
+						Gui -Disabled
+						return
+					}
 				}
 			}
-			MsgBox, 48, , Could not find the following package:`n%Start_select_pack%
+			MsgBox, 48, , Could not find the following package:`n"%Start_select_pack%" (%Start_Package_Source%)
 		}
 	} else {
 		MsgBox, 64, , The following package is already installed:`n%Start_select_pack%
