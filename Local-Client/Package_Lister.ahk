@@ -135,7 +135,11 @@ Gui, Tab,
 	
 Gui, Add, StatusBar,, Loading...
 SB_SetParts(264)
-SB_SetText("Package sources: " Util_ObjCount(Settings.package_sources),1)
+pk_src_count:=Util_ObjCount(Settings.package_sources)
+if (pk_src_count>1)
+	SB_SetText("Package sources: " pk_src_count,1)
+else
+	SB_SetText("Package source: " Package_Source,1)
 __tmp_localRepo:=Settings.Local_Repo
 StringReplace,__tmp_localRepo,__tmp_localRepo,%A_AppData%,`%AppData`%
 SB_SetText("Local repository: " __tmp_localRepo,2)
@@ -318,7 +322,13 @@ List_Available:
 		else
 			GuiControl,Enable,CheckAll_AButton
 		
-		_tmp_sbtxt:="Package sources: " Util_ObjCount(packs_l) " [" TotalItems " items]"
+		pk_src_count:=Util_ObjCount(packs_l)
+		_tmp_sbtxt:="Package source"
+		if (pk_src_count>1)
+			_tmp_sbtxt .= "s: " pk_src_count
+		else
+			_tmp_sbtxt .= ": " Package_Source
+		_tmp_sbtxt .= " [" TotalItems " items]"
 		SB_SetParts(5*(StrLen(_tmp_sbtxt)+2))
 		SB_SetText(_tmp_sbtxt,1)
 	}
