@@ -1,2 +1,39 @@
-#comment
-*.r #ignore all files with '.r' extension
+##comment##
+
+# ignore all files with '.r' extension
+*.r
+
+# another pattern
+__*__
+
+# Escape '#' character
+\#file123.test
+
+# if line does not start with '#', it is not a comment.
+file#1285.md
+
+# ignore objects and archives, anywhere in the tree.
+*.[oa]
+
+# ignore generated html files,
+*.html
+
+# except foo.html
+##NOT YET SUPPORTED## !foo.html
+
+# ignore items named 'folder'
+folder
+
+# ignore items that start with 'prefix'
+prefix*
+files/prefix_test.g
+
+# ignore items named 'notfolder'
+notfolder
+
+# ignore items named 'folder', directories only
+folder/
+
+# exclude everything in foo/ except directory foo/bar
+/foo/
+##NOT YET SUPPORTED## !/foo/bar

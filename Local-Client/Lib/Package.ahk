@@ -12,19 +12,8 @@ Package_Build(outFile, baseDir, jfile="")
 	tree := Util_DirTree(baseDir)
 	
 	if FileExist(ignorefile:=baseDir "\.aspdm_ignore") {
-		ignore_patterns:=[]
-		Loop,Read,%ignorefile%
-			if StrLen(ignore_line:=Trim(RegExReplace(A_LoopReadLine,"#.+")))
-				ignore_patterns.Insert(ignore_line)
-		for each, pat in ignore_patterns
-		{
-			StringReplace,_tmp,pat,/,\,All
-			StringReplace,_tmp,pat,\,\\,All
-			StringReplace,_tmp,_tmp,.,\.,All
-			StringReplace,_tmp,_tmp,*,.*,All
-			ignore_patterns[each]:=_tmp ;strip ##comments##
-		}
-		tree := Util_DirTreeIgnore(tree,ignore_patterns)
+		ignore_patterns:=Ignore_GetPatterns(ignorefile)
+		tree := Ignore_DirTree(tree,ignore_patterns)
 	}
 	
 	_Package_DumpTree(outFile, tree)

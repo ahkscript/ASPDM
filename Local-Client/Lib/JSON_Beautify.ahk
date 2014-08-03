@@ -10,10 +10,11 @@
 */
 
 JSON_Uglify(JSON) {
-	if JSON is space
-		return ""
-	if (!IsObject(JSON))
-	{
+	if IsObject(JSON) {
+		return JSON_FromObj(JSON)
+	} else {
+		if JSON is space
+			return ""
 		StringReplace,JSON,JSON, `n,,A
 		StringReplace,JSON,JSON, `r,,A
 		StringReplace,JSON,JSON, % A_Tab,,A
@@ -30,8 +31,6 @@ JSON_Uglify(JSON) {
 		}
 		return _JSON
 	}
-	else
-		return JSON_FromObj(JSON)
 }
 
 JSON_Beautify(JSON, gap:="`t") {

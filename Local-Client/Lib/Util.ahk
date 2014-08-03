@@ -134,29 +134,6 @@ Util_DirTree(dir)
 	return data
 }
 
-Util_DirTreeIgnore(tree,patterns)
-{
-	if (patterns.MaxIndex == 0)
-		return tree
-	for i, file in tree
-	{
-		for j, pat in patterns
-		{
-			if RegExMatch(file.fullPath,pat) {
-				tree.Remove(i)
-				break
-			}
-		}
-		if (tree.HasKey(i)) {
-			if (file.isDir)
-				tree[i].contents:=Util_DirTreeIgnore(file.contents,patterns)
-			else
-				continue
-		}
-	}
-	return tree
-}
-
 Util_isASCII(s)
 {
 	Loop, Parse, s
