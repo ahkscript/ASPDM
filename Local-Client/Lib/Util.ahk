@@ -72,6 +72,11 @@ Util_ShortPath(p,l=50) {
 	return _p
 }
 
+Util_FullPath(p) {
+	Loop, %p%
+		return A_LoopFileLongPath
+}
+
 Util_TempDir(outDir="")
 {
 	Loop

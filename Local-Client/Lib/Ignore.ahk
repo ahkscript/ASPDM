@@ -2,6 +2,10 @@
 
 Ignore_GetPatterns(ignorefile)
 {
+	i_fp := Util_FullPath(ignorefile)
+	SplitPath,i_fp,,baseDir
+	StringReplace,baseDir,baseDir,\,/,All
+	
 	ignore_patterns:=[]
 	Loop,Read,%ignorefile%
 	{
@@ -22,8 +26,10 @@ Ignore_GetPatterns(ignorefile)
 	}
 	for each, pat in ignore_patterns
 	{
-		StringReplace,_tmp,pat,/,\,All
-		StringReplace,_tmp,_tmp,\,\\,All
+		_tmp:=pat
+		if (SubStr(_tmp,1,1)=="/")
+			_tmp:= "^" baseDir "/" SubStr(_tmp,2)
+		StringReplace,_tmp,_tmp,/,\\,All
 		StringReplace,_tmp,_tmp,.,\.,All
 		StringReplace,_tmp,_tmp,*,.*,All
 		StringReplace,_tmp,_tmp,$,\$,All
