@@ -1,6 +1,6 @@
-# ![logo](Local-Client/Res/ahk.png) ASPDM
+# ![*](Local-Client/Res/ahk.png) ASPDM
   
-AHKScript.org's Package/StdLib Distribution and Management  
+[AHKScript.org](http://ahkscript.org/)'s Package/StdLib Distribution and Management  
 http://aspdm.tk/  
   
 **Quick Info**  
@@ -10,7 +10,7 @@ _Network_ : The Web Frontend and NetworkAPI
   
 **Try ASPDM right now!**  
   
-Download the latest version (Development Version)  
+Download the latest version (Development Version, Always up to date)  
   
 - http://aspdm.tk/client  
 - http://aspdm.tk/client/get.php (_Direct download_)  
