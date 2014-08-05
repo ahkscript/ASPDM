@@ -127,7 +127,7 @@ Util_DirTree(dir)
 	{
 		StringTrimLeft, name, A_LoopFileFullPath, %ldir%
 		e := { name: name, fullPath: A_LoopFileLongPath }
-		if SubStr(name, 0) = "~" || SubStr(name, -3) = ".bak" || name = "package.json" || name = ".aspdm_ignore"
+		if name in package.json,.aspdm_ignore ;ignores will parsed here in future for effeciency
 			continue
 		IfInString, A_LoopFileAttrib, D
 		{
