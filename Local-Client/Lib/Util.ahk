@@ -133,6 +133,7 @@ Util_DirTree(dir)
 	{
 		StringTrimLeft, name, A_LoopFileFullPath, %ldir%
 		e := { name: name, fullPath: A_LoopFileLongPath }
+		
 		if name in package.json,.aspdm_ignore ;ignores will parsed here in future for effeciency
 			continue
 		IfInString, A_LoopFileAttrib, D

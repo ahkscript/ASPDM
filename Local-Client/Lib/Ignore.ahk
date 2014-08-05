@@ -44,11 +44,15 @@ Ignore_GetPatterns(ignorefile)
 	return ignore_patterns
 }
 
-Ignore_DirTree(tree,patterns) ;currently, inefficient due to indexing problem...
+/*
+	Deprecated, use Ignore_DirTree() instead.
+	IgnoreParse_DirTree() modifies already existent Dir-trees
+*/
+IgnoreParse_DirTree(tree,patterns) ;currently, inefficient due to indexing problem...
 {
-	tree := tree.Clone() ; Indexing problem, therefore using a copy
-	if (patterns.MaxIndex == 0)
+	if (!patterns.MaxIndex())
 		return tree
+	tree := tree.Clone() ; Indexing problem, therefore using a copy	
 	for i, file in tree
 	{
 		for j, pat in patterns
@@ -62,11 +66,50 @@ Ignore_DirTree(tree,patterns) ;currently, inefficient due to indexing problem...
 			if RegExMatch(file.fullPath,"m)" pat "$") {
 				tree.Remove(i)
 				;break
-				return Ignore_DirTree(tree,patterns) ; Indexing problem, therefore reprocess
+				return IgnoreParse_DirTree(tree,patterns) ; Indexing problem, therefore reprocess
 			}
 		}
 		if (file.isDir)
-			tree[i].contents:=Ignore_DirTree(file.contents,patterns)
+			tree[i].contents:=IgnoreParse_DirTree(file.contents,patterns)
 	}
 	return tree
+}
+
+Ignore_DirTree(dir,patterns)
+{
+	data := [], ldir := StrLen(dir)+1
+	Loop, %dir%\*.*, 1
+	{
+		StringTrimLeft, name, A_LoopFileFullPath, %ldir%
+		e := { name: name, fullPath: A_LoopFileLongPath }
+		
+		;quick-ignore the package metadata files
+		if name in package.json,.aspdm_ignore
+			continue
+		
+		;check attrib
+		IfInString, A_LoopFileAttrib, D
+			e.isDir := true
+		
+		;check ignores
+		for j, pat in patterns
+		{
+			if (SubStr(pat,-1)=="\\") {
+				if (e.isDir)
+					StringTrimRight,pat,pat,2
+				else
+					continue
+			}
+			if RegExMatch(e.fullPath,"m)" pat "$") {
+				continue 2
+			}
+		}
+		
+		;continue parsing inside directories
+		if (e.isDir)
+			e.contents := Ignore_DirTree(A_LoopFileFullPath,patterns)
+		
+		data.Insert(e)
+	}
+	return data
 }

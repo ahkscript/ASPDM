@@ -9,11 +9,11 @@ Package_Build(outFile, baseDir, jfile="")
 	
 	man.ahkversion:=A_AhkVersion
 
-	tree := Util_DirTree(baseDir)
-	
 	if FileExist(ignorefile:=baseDir "\.aspdm_ignore") {
 		ignore_patterns:=Ignore_GetPatterns(ignorefile)
-		tree := Ignore_DirTree(tree,ignore_patterns)
+		tree := Ignore_DirTree(baseDir,ignore_patterns)
+	} else {
+		tree := Util_DirTree(baseDir)
 	}
 	
 	_Package_DumpTree(outFile, tree)
