@@ -17,7 +17,8 @@ Ignore_GetPatterns(ignorefile)
 			
 			if (fc=="#") ;A line starting with # serves as a comment.
 				continue
-			if (tf=="\#") { ;Put a backslash ("\") in front of the first hash for patterns that begin with a hash.
+			if (tf=="\ ") ;escape for leading spaces
+			|| (tf=="\#") { ;Put a backslash ("\") in front of the first hash for patterns that begin with a hash.
 				ignore_patterns.Insert(SubStr(current_line,2))
 				continue
 			} else {

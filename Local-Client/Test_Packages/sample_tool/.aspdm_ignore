@@ -12,11 +12,28 @@ thumbs.db
 # another pattern
 __*__
 
+# Use only '/' for paths, '\' is invalid
+# Behaviour is UNDEFINED when using '\' instead of '/'.
+# '\' is for escaping ONLY.
+# Example: "C:\user\file.txt" is NOT VALID.
+# Example: "C:/user/file.txt" is VALID.
+
 # Escape '#' character
 \#file123.test
 
 # if line does not start with '#', it is not a comment.
 file#1285.md
+
+# File names with leading/trailing spaces are discouraged.
+# Escape leading spaces, "[10 spaces]leading_spaces"
+\          leading_spaces
+
+# Escape trailing spaces, "trailing_spaces[10 spaces]"
+## NOT SUPPORTED ON WINDOWS ## illegal filename, tested to be true on:
+## Windows XP, Windows 7 & Windows 8
+## therefore, escaping trailing spaces will NOT be supported.
+## for this flavour of 'gitignore'
+##trailing_spaces          \
 
 # ignore objects and archives, anywhere in the tree.
 *.[oa]

@@ -29,6 +29,12 @@ Util_TagsObj2CSV(TagsObj:="") {
 	return SubStr(CSV,1,-1)
 }
 
+Util_StrRepeat(s,r) {
+	Loop % r
+		k .= s
+	return k
+}
+
 Util_SingleArray2Str(Arr,Delimiter:="",before:=0) {
 	s:=""
 	if (before) {
