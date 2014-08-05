@@ -44,37 +44,6 @@ Ignore_GetPatterns(ignorefile)
 	return ignore_patterns
 }
 
-/*
-	Deprecated, use Ignore_DirTree() instead.
-	IgnoreParse_DirTree() modifies already existent Dir-trees
-*/
-IgnoreParse_DirTree(tree,patterns) ;currently, inefficient due to indexing problem...
-{
-	if (!patterns.MaxIndex())
-		return tree
-	tree := tree.Clone() ; Indexing problem, therefore using a copy	
-	for i, file in tree
-	{
-		for j, pat in patterns
-		{
-			if (SubStr(pat,-1)=="\\")
-				if (file.isDir)
-					StringTrimRight,pat,pat,2
-				else
-					continue
-			;MsgBox % "FILE:`t" file.fullPath "`nPAT:`t" pat "`nMATCH:`t" RegExMatch(file.fullPath,"m)" pat "$")
-			if RegExMatch(file.fullPath,"m)" pat "$") {
-				tree.Remove(i)
-				;break
-				return IgnoreParse_DirTree(tree,patterns) ; Indexing problem, therefore reprocess
-			}
-		}
-		if (file.isDir)
-			tree[i].contents:=IgnoreParse_DirTree(file.contents,patterns)
-	}
-	return tree
-}
-
 Ignore_DirTree(dir,patterns)
 {
 	data := [], ldir := StrLen(dir)+1
