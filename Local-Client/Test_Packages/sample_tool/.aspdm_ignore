@@ -3,6 +3,12 @@
 # ignore all files with '.r' extension
 *.r
 
+# ignore all files with '.bak' extension
+*.bak
+
+# ignore 'thumbs.db'
+thumbs.db
+
 # another pattern
 __*__
 
@@ -21,12 +27,38 @@ file#1285.md
 # except foo.html
 ##NOT YET SUPPORTED## !foo.html
 
+# ignore folders named 'a' or 'c'
+[ac]/
+
 # ignore items named 'folder'
 folder
 
 # ignore items that start with 'prefix'
+# Example : 'files/prefix_test.g'
 prefix*
-files/prefix_test.g
+
+# Two consecutive leading asterisks ("**/") matching
+# matches everything that ends with '/x'
+# example: "a/x", "c/a/x", "c/a/g/x"
+**/x
+
+# Two consecutive trailing asterisks ("/**") matching
+# matches everything inside folder '/a/' but the folder itself
+/a/**
+
+# Two consecutive asterisks with backslashes ("/**/") matching
+# matches : "a/b", "a/x/b" "a/x/y/b", "c/a/g/b"
+a/**/b
+
+# matches anything that has '#'
+**#**
+
+# single asterisk with backslashes ("/*/") matching 
+# matches : "a/x/b", "a/g/b"
+a/*/b
+
+# matches everything that ends with '/x', only one folder deep
+/*/x
 
 # ignore items named 'notfolder'
 notfolder

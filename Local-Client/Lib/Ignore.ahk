@@ -5,6 +5,7 @@ Ignore_GetPatterns(ignorefile)
 	i_fp := Util_FullPath(ignorefile)
 	SplitPath,i_fp,,baseDir
 	StringReplace,baseDir,baseDir,\,/,All
+	c2_:=chr(2), c3_:=chr(3)
 	
 	ignore_patterns:=[]
 	Loop,Read,%ignorefile%
@@ -17,7 +18,7 @@ Ignore_GetPatterns(ignorefile)
 			if (fc=="#") ;A line starting with # serves as a comment.
 				continue
 			if (tf=="\#") { ;Put a backslash ("\") in front of the first hash for patterns that begin with a hash.
-				ignore_patterns.Insert(Trim(SubStr(current_line,2)))
+				ignore_patterns.Insert(SubStr(current_line,2))
 				continue
 			} else {
 				ignore_patterns.Insert(Trim(current_line))
@@ -29,16 +30,20 @@ Ignore_GetPatterns(ignorefile)
 		_tmp:=pat
 		if (SubStr(_tmp,1,1)=="/")
 			_tmp:= "^" baseDir "/" SubStr(_tmp,2)
+		StringReplace,_tmp,_tmp,/**/,%c2_%,All
 		StringReplace,_tmp,_tmp,/,\\,All
 		StringReplace,_tmp,_tmp,.,\.,All
-		StringReplace,_tmp,_tmp,*,.*,All
+		StringReplace,_tmp,_tmp,**,%c3_%,All
+		StringReplace,_tmp,_tmp,*,[^\\]+,All
 		StringReplace,_tmp,_tmp,$,\$,All
+		StringReplace,_tmp,_tmp,%c2_%,\\+.*\\*,All
+		StringReplace,_tmp,_tmp,%c3_%,.*,All
 		ignore_patterns[each]:=_tmp
 	}
 	return ignore_patterns
 }
 
-Ignore_DirTree(tree,patterns) ;currently, inefficient...
+Ignore_DirTree(tree,patterns) ;currently, inefficient due to indexing problem...
 {
 	tree := tree.Clone() ; Indexing problem, therefore using a copy
 	if (patterns.MaxIndex == 0)
