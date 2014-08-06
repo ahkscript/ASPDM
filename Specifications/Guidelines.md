@@ -58,7 +58,7 @@ Repository
 ----------
 
 - Automatic package download and installation.
-- Autoupdate to the latest version.
+- Autoupdate to the latest package version (Optional).
 - Separate sub-repositories for each set of AutoHotkey versions (v1.1, v2-alpha, AHK_H,  others ...).
 - Versions: For each package the latest version of every major version will be stored, for compatibility purposes. (e.g. SomeLib-1, SomeLib-2...)
 
