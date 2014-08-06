@@ -150,6 +150,13 @@ start:
 Gui +Disabled
 Gui +OwnDialogs
 
+ImageListID := IL_Create(2)
+IL_Add(ImageListID, "shell32.dll", 73) ;Lib
+IL_Add(ImageListID, "shell32.dll", 13) ;tool
+IL_Add(ImageListID, "shell32.dll", 1) ;other
+
+Gui, ListView, LV_I
+LV_SetImageList(ImageListID)
 Gui, ListView, LV_U
 LV_ModifyCol(1,"100")
 LV_ModifyCol(2,"220")
@@ -347,7 +354,15 @@ List_Installed: ;and Updates List
 	{
 		i_pack:=Settings.Local_Archive "\" IPacks ".ahkp"
 		i_info:=JSON_ToObj(Manifest_FromPackage(i_pack))
-		LV_Add("",i_info["id"] ".ahkp",i_info["name"],i_info["version"])
+		
+		If InStr(i_info["type"],"lib")
+			_icon:="Icon1"
+		else If InStr(i_info["type"],"tool")
+			_icon:="Icon2"
+		else
+			_icon:="Icon3"
+		
+		LV_Add(_icon,i_info["id"] ".ahkp",i_info["name"],i_info["version"])
 		if (!ListView_Offline) {
 			if (_isUpdate:=API_UpdateExists(i_info["id"] ".ahkp",i_info["version"])) {
 				Gui, ListView, LV_U
