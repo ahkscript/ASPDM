@@ -86,3 +86,42 @@ folder/
 # exclude everything in foo/ except directory foo/bar
 /foo/
 ##NOT YET SUPPORTED## !/foo/bar
+
+################################
+# ---- Negate '!' Examples ----
+################################
+
+# Ignore everything...
+**
+
+# Except for...
+# AutoHotkey Scripts and "files/some_text.txt"
+!*.ahk
+!/files/
+!/files/some_text.txt
+
+# "!/files/" is needed, otherwise "/files/" will be completely ignored
+# ... that means everything inside it too.
+# This is as per the officail git documentation :
+#
+#    An optional prefix "!" which negates the pattern; any matching file
+#    excluded by a previous pattern will become included again. It is not
+#    possible to re-include a file if a parent directory of that file is
+#    excluded. Git doesn't list excluded directories for performance reasons,
+#    so any patterns on contained files have no effect, no matter where they
+#    are defined. Put a backslash ("\") in front of the first "!" for patterns
+#    that begin with a literal "!", for example, "\!important!.txt".
+
+
+# Escape '!' example..
+# Ignore files beginning with '!'
+# "\!ignore.ahk" will not in this case since "!*.ahk" has priority. Therefore,
+# the file named "!ignore.ahk" will still be included.
+# That is why I am using "!ignore.test" instead for this example.
+
+\!ignore.test
+
+
+# when using the negate '!' feature, leading spaces don't need to be escaped,
+# since we have a non-space character (negate char '!') before the leading spaces.
+# Example: "!     file_with_leading_spaces.txt"

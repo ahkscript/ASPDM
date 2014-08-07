@@ -7,10 +7,10 @@ baseDir:="Test_Packages\sample_tool"
 if FileExist(ignorefile:=baseDir "\.aspdm_ignore")
 	ignore_patterns:=Ignore_GetPatterns(ignorefile)
 Original_tree := JSON_Beautify(Obj_StripKey(Util_DirTree(baseDir),"fullPath"),3)
-New_tree := JSON_Beautify(Obj_StripKey(Ignore_DirTree(baseDir,ignore_patterns),"fullPath"),3)
-patterns:=Util_SingleArray2Str(ignore_patterns,"`n")
-Num_patterns := Util_ObjCount(ignore_patterns)
-Num_matches := StrCount("""name"":",Original_tree) - StrCount("""name"":",New_tree)
+New_tree      := JSON_Beautify(Obj_StripKey(Ignore_DirTree(baseDir,ignore_patterns),"fullPath"),3)
+patterns      := Util_SingleArray2Str(ignore_patterns,"`n") "`n-----------`nNegate patterns`n-----------`n" Util_SingleArray2Str(ignore_patterns.negate,"`n")
+Num_patterns  := ignore_patterns.MaxIndex() + (ignore_patterns.negate.MaxIndex()+0)
+Num_matches   := StrCount("""name"":",Original_tree) - StrCount("""name"":",New_tree)
 
 Gui, Font, s8, Courier New
 Gui, Add, Edit, x3 w400 h300, % Original_tree

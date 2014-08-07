@@ -39,10 +39,16 @@ Util_SingleArray2Str(Arr,Delimiter:="",before:=0) {
 	s:=""
 	if (before) {
 		for each, item in Arr
-			s.= Delimiter item
+			if each is not integer
+				continue
+			else
+				s.= Delimiter item
 	} else {
 		for each, item in Arr
-			s.= item Delimiter
+			if each is not integer
+				continue
+			else
+				s.= item Delimiter
 		s:=SubStr(s,1,(-1*Abs(StrLen(Delimiter))))
 	}
 	return s
