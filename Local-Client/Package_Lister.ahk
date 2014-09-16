@@ -171,7 +171,7 @@ Gui, ListView, LV_A
 _selectedlist:="LV_A"
 _selectedlistH:=hLV_A
 LV_Add("","Downloading...")
-LV_ModifyCol(1,"100")
+LV_ModifyCol(1,"110")
 LV_ModifyCol(2,"120")
 LV_ModifyCol(3,"60")
 LV_ModifyCol(4,"80")
