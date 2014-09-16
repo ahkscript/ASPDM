@@ -32,7 +32,8 @@ Menu, tray, Icon, res\ahk.ico
 Gui, Font, s16 wBold, Arial
 Gui, Add, Picture, x12 y8 w32 h-1, res\ahk.png
 Gui, Add, Text, x+4 yp+4 , ASPDM
-Gui, Font
+Gui, Font, s8 wNormal, MS Sans Serif
+Gui, Font, s8 wNormal, Segoe UI
 Gui, Add, Text, yp+5 x+12, AHKScript.org's Package/StdLib Distribution and Management
 ;Gui, Add, Picture, x12 y+16 w418 h1, res\greenpixel.bmp
 
@@ -67,14 +68,14 @@ Gui, Add, Edit, vscreenshot x12 y+4 w244 gInfoActive,
 
 Gui, Add, GroupBox, x12 y+6 w136 h48, Package Type
 Gui, Add, DropDownList, vtype xp+8 yp+18 w120 Choose1, Library|Tool|Other
-Gui, Add, GroupBox, x+14 yp-18 w246 h48, ahkflavour
+Gui, Add, GroupBox, x+14 yp-18 w270 h48, ahkflavour
 Gui, Add, Checkbox, vahkflavour_a32 xp+8 yp+21 Checked, ANSI
 Gui, Add, Checkbox, vahkflavour_u32 x+4 yp Checked, Unicode 32-bit
 Gui, Add, Checkbox, vahkflavour_u64 x+4 yp Checked, Unicode 64-bit
 Gui, Add, GroupBox, x12 y+16 w136 h48, ahkbranch
 Gui, Add, ComboBox, vahkbranch xp+8 yp+18 w120 Choose1, v1.1|v2-alpha|ahk_h
-Gui, Add, GroupBox, x+14 yp-18 w246 h48, Tags
-Gui, Add, Edit, vtags xp+8 yp+18 gInfoActive w230,
+Gui, Add, GroupBox, x+14 yp-18 w270 h48, Tags
+Gui, Add, Edit, vtags xp+8 yp+18 gInfoActive w254,
 
 Gui, Add, Text, x12 y+16, Description
 Gui, Add, Edit, vdescription x12 y+4 gInfoActive +Multi w410 h86,

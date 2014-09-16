@@ -79,10 +79,11 @@ Menu, tray, Icon, res\ahk.ico
 Gui, Font, s16 wBold, Arial
 Gui, Add, Picture, x12 y8 w32 h-1, res\ahk.png
 Gui, Add, Text, x+4 yp+4 , ASPDM
-Gui, Font
+Gui, Font, s8 wNormal, MS Sans Serif
+Gui, Font, s8 wNormal, Segoe UI
 Gui, Add, Text, yp+5 x+12, AHKScript.org's Package/StdLib Distribution and Management
 
-Gui, +hwndhGUI +Resize +MinSize530x384
+Gui, +hwndhGUI +Resize +MinSize560x384
 
 ;gui tabs
 Gui, Add, Tab2, x8 y+16 w456 h264 vTabs gTabSwitch, Available|Updates|Installed|Settings
@@ -144,7 +145,7 @@ __tmp_localRepo:=Settings.Local_Repo
 StringReplace,__tmp_localRepo,__tmp_localRepo,%A_AppData%,`%AppData`%
 SB_SetText("Local repository: " __tmp_localRepo,2)
 
-Gui, Show, w530 h384, ASPDM - Package Listing
+Gui, Show, w560 h384, ASPDM - Package Listing
 
 start:
 Gui +Disabled
@@ -160,12 +161,12 @@ LV_SetImageList(ImageListID)
 Gui, ListView, LV_U
 LV_ModifyCol(1,"100")
 LV_ModifyCol(2,"220")
-LV_ModifyCol(3,"90")
-LV_ModifyCol(4,"80")
+LV_ModifyCol(3,"105")
+LV_ModifyCol(4,"95")
 Gui, ListView, LV_I
 LV_ModifyCol(1,"120")
-LV_ModifyCol(2,"280")
-LV_ModifyCol(3,"90")
+LV_ModifyCol(2,"295")
+LV_ModifyCol(3,"105")
 Gui, ListView, LV_A
 _selectedlist:="LV_A"
 _selectedlistH:=hLV_A
