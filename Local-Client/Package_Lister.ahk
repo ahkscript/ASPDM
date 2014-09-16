@@ -295,6 +295,10 @@ List_Available:
 	if (!ListView_Offline)
 	{
 		LV_Delete()
+		
+		GuiControl,+Checked,LV_A
+		GuiControl,+Checked,LV_U
+		
 		TotalItems:=0
 		for each, packs in packs_l
 			TotalItems += Util_ObjCount(packs)
