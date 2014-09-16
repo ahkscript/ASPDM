@@ -163,8 +163,8 @@ LV_ModifyCol(2,"220")
 LV_ModifyCol(3,"90")
 LV_ModifyCol(4,"80")
 Gui, ListView, LV_I
-LV_ModifyCol(1,"100")
-LV_ModifyCol(2,"300")
+LV_ModifyCol(1,"120")
+LV_ModifyCol(2,"280")
 LV_ModifyCol(3,"90")
 Gui, ListView, LV_A
 _selectedlist:="LV_A"
