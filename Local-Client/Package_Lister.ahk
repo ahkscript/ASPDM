@@ -338,10 +338,12 @@ List_Available:
 		_tmp_sbtxt:="Package source"
 		if (pk_src_count>1)
 			_tmp_sbtxt .= "s: " pk_src_count
-		else
+		else {
 			_tmp_sbtxt .= ": " Package_Source
+			LV_ModifyCol(5,"0")
+		}
 		_tmp_sbtxt .= " [" TotalItems " items]"
-		SB_SetParts(5*(StrLen(_tmp_sbtxt)+2))
+		SB_SetParts(6*(StrLen(_tmp_sbtxt)+2))
 		SB_SetText(_tmp_sbtxt,1)
 	}
 	Gui -Disabled
