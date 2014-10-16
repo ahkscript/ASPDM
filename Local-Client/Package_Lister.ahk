@@ -154,7 +154,7 @@ Gui +OwnDialogs
 ImageListID := IL_Create(2)
 IL_Add(ImageListID, "shell32.dll", 73) ;Lib
 IL_Add(ImageListID, "shell32.dll", 13) ;tool
-IL_Add(ImageListID, "shell32.dll", 1) ;other
+IL_Add(ImageListID, "shell32.dll", 189) ;other
 
 Gui, ListView, LV_I
 LV_SetImageList(ImageListID)
