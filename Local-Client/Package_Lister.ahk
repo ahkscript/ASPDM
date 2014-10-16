@@ -290,7 +290,7 @@ if (StrLen(Start_select_pack)) {
 Gui -Disabled
 return
 
-List_Available:
+List_Available: ;{
 	Gui +Disabled
 	Gui, ListView, LV_A
 	if (!ListView_Offline)
@@ -347,9 +347,9 @@ List_Available:
 		SB_SetText(_tmp_sbtxt,1)
 	}
 	Gui -Disabled
-return
+return ;}
 
-List_Installed: ;and Updates List
+List_Installed: ; and Updates List ;{
 	Gui +Disabled
 	Gui, ListView, LV_U
 	if (!ListView_Offline)
@@ -390,9 +390,9 @@ List_Installed: ;and Updates List
 		else
 			GuiControl,Enable,CheckAll_%A_loopfield%Button
 	Gui -Disabled
-return
+return ;}
 
-ListView_Offline:
+ListView_Offline: ;{
 	LV_Delete(1)
 	LV_Colors.OnMessage()
 	tmp__:="AU"
@@ -410,9 +410,9 @@ ListView_Offline:
 		LV_ModifyCol(6,"0")
 		LV_Colors.Attach(hLV_%A_loopfield%,1,0,1)
 	}
-return
+return ;}
 
-ListView_Events:
+ListView_Events: ;{
 	if A_GuiEvent = I
 	{
 		if InStr(ErrorLevel,"C")
@@ -439,9 +439,9 @@ ListView_Events:
 			Gui -Disabled
 		}
 	}
-return
+return ;}
 
-ListView_Events_checkedList:
+ListView_Events_checkedList: ;{
 	if ((CheckedItems:=LV_GetCheckedCount())>0) {
 		if (_selectedlist == "LV_A")
 		{
@@ -481,9 +481,9 @@ ListView_Events_checkedList:
 			GuiControl,,UpdateButton,Update
 		}
 	}
-return
+return ;}
 
-TabSwitch:
+TabSwitch: ;{
 	GuiControlGet,Tabs,,Tabs
 	if (Tabs!="Settings") {
 		GuiControl,Show,SearchBar
@@ -497,9 +497,9 @@ TabSwitch:
 		GuiControl,Disable,SearchBar
 		GuiControl,Hide,SearchBar
 	}
-return
+return ;}
 
-Search:
+Search: ;{
 	GuiControlGet,Query,,SearchBar
 	Loop % LV_GetCount()
 	{
@@ -538,9 +538,9 @@ Search:
 		}
 	}
 	GuiControl, +Redraw, %_selectedlistH%
-return
+return ;}
 
-GuiSize:
+GuiSize: ;{
 	GuiControl,move,Tabs, % "w" (A_GuiWidth-16) " h" (A_GuiHeight-72)
 	GuiControl,move,SearchBar, % "x" (A_GuiWidth-308)
 	GuiSize_list:="AUI"
@@ -553,12 +553,12 @@ GuiSize:
 	GuiSize_list:="Install|InstallFile|Refresh_A|Update|UpdateFile|Refresh_U|Reinstall|Remove|OpenSelected|SaveSettings|ResetSettings|ClientUpdate|CheckAll_A|CheckAll_U|CheckAll_I"
 	Loop, Parse, GuiSize_list, |
 		GuiControl,move,%A_LoopField%Button, % "y" (A_GuiHeight-56)
-return
+return ;}
 
 GuiClose:
 ExitApp
 
-CheckAll:
+CheckAll: ;{
 	CheckAll_v := "CheckAll_" SubStr(_selectedlist,0)
 	if (%CheckAll_v%) {
 		LV_Modify(0,"-Check")
@@ -568,9 +568,9 @@ CheckAll:
 		GuiControl,,%CheckAll_v%Button,Uncheck all
 	}
 	%CheckAll_v% := !(%CheckAll_v%)
-return
+return ;}
 
-PackSource_Add: ;PackSource_AddButton
+PackSource_Add: ;PackSource_AddButton ;{
 	Gui +Disabled
 	Gui +OwnDialogs
 	InputBox,__tmp,Add package repository,Add a package source to work with.,,300,128
@@ -591,9 +591,9 @@ PackSource_Add: ;PackSource_AddButton
 			MsgBox, 48, , The following package source is invalid:`n`n`t%__tmp%`n`nPlease verify the entry and try again.
 	}
 	Gui -Disabled
-return
+return ;}
 
-PackSource_Remove: ;PackSource_RemoveButton
+PackSource_Remove: ;PackSource_RemoveButton ;{
 	GuiControlGet,PackSource_ListSelected,,PackSource_List
 	ControlGet, PackSource_PipeList, List,, ComboBox1, ahk_pid %SelfPID%
 	__tmp:=""
@@ -604,18 +604,18 @@ PackSource_Remove: ;PackSource_RemoveButton
 	}
 	GuiControl,,PackSource_List,%__tmp% ;auto-add
 	GuiControl, Choose, PackSource_list, 1
-return
+return ;}
 
-stdlib_folderBrowse: ;stdlib_folderBrowseButton
+stdlib_folderBrowse: ;stdlib_folderBrowseButton ;{
 	Gui +Disabled
 	Gui +OwnDialogs
 	FileSelectFolder, __tmp, *C:\, 3, Select the StdLib Installation folder
 	if __tmp is not Space
 		GuiControl,,stdlib_folder,%__tmp%
 	Gui -Disabled
-return
+return ;}
 
-SaveSettings:
+SaveSettings: ;{
 	MsgBox, 36, , Are you sure you want to save these settings?
 	IfMsgBox,Yes
 	{
@@ -633,9 +633,9 @@ SaveSettings:
 		
 		gosub,_SaveSettings
 	}
-return
+return ;}
 
-ResetSettings:
+ResetSettings: ;{
 	MsgBox, 308, , Are you sure you want to reset to default settings?`nInstallation paths will be affected.
 	IfMsgBox,Yes
 	{
@@ -644,9 +644,9 @@ ResetSettings:
 		Settings.Installed:=_settings_installed_tmp
 		gosub,_SaveSettings
 	}
-return
+return ;}
 
-_SaveSettings:
+_SaveSettings: ;{
 	if (Settings_Save(Settings)!=0) ;failure
 	{
 		MsgBox, 18, , Error: Could not save settings.`n(ErrorLevel = -4)
@@ -657,9 +657,9 @@ _SaveSettings:
 		IfMsgBox,Yes
 			Reload
 	}
-return
+return ;}
 
-Install:
+Install: ;{
 	MsgBox, 36, , Are you sure you want to install the selected packages?
 	IfMsgBox,No
 		return
@@ -753,9 +753,9 @@ Install:
 	gosub,ListView_Events_checkedList
 	
 	Gui -Disabled
-return
+return ;}
 
-InstallFile:
+InstallFile: ;{
 	Gui +Disabled
 	Gui +OwnDialogs
 	FileSelectFile, _SelectedPack, 3, , Install a package, AHKP file (*.ahkp)
@@ -765,9 +765,9 @@ InstallFile:
 		gosub,_Install
 	}
 	Gui -Disabled
-return
+return ;}
 
-Refresh:
+Refresh: ;{
 	Gui +Disabled
 	Gui +OwnDialogs
 	CheckedItems:=0
@@ -786,7 +786,7 @@ Refresh:
 	gosub,start
 	gosub,TabSwitch
 	Gui -Disabled
-return
+return ;}
 
 Update:
 	gosub,Install
@@ -803,7 +803,7 @@ Reinstall:
 	Gui, ListView, LV_I
 return
 
-Remove:
+Remove: ;{
 	MsgBox, 52, , Are you sure you want to remove the selected packages?
 	IfMsgBox,No
 		return
@@ -853,9 +853,9 @@ Remove:
 	gosub,ListView_Events_checkedList
 	
 	Gui -Disabled
-return
+return ;}
 
-OpenSelected:
+OpenSelected: ;{
 	if (__tmp:=LV_GetNext()) {
 		__tmp_a:=Settings.Local_Repo
 		LV_GetText(__tmp_id, __tmp)
@@ -864,7 +864,7 @@ OpenSelected:
 	}
 	else
 		MsgBox, 48, , No package is currently selected.`nPlease select/highlight a package in the list.
-return
+return ;}
 
 ClientUpdate:
 	CheckUpdate(AppVersion)
