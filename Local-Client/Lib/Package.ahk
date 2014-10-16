@@ -21,7 +21,8 @@ Package_Build(outFile, baseDir, jfile="")
 	return Package_Validate(outFile)
 }
 
-Package_Validate(fIn) { ;Quick Validate
+Package_Validate(fIn) ;Quick Validate
+{
 	if !FileExist(fIn) {
 		MsgBox Validation Error: Non-existant file.
 		return 0
@@ -42,7 +43,7 @@ Package_Validate(fIn) { ;Quick Validate
 	return ( (magic == "AHKPKG00") && (m_int >= 80) && (m_int<5242880) && (m_st == "{") && (m_en == "}") )
 }
 
-Package_Extract(dir, inFile)
+Package_Extract(dir, inFile, returnObj:=0)
 {
 	FileGetSize, dataSize, %inFile%
 	FileRead, data, *c %inFile%
@@ -61,7 +62,12 @@ Package_Extract(dir, inFile)
 		, "ptr", pData, "uint", &data + dataSize - pData, "uint*", finalSize) != 0
 		throw Exception("Decompression error")
 	
-	return _Package_ExtractTree(&uncompData, dir)
+	if (returnObj) {
+		ret:=Object()
+		_Package_ExtractTreeObj(&uncompData,dir,ret)
+		return ret
+	} else
+		return _Package_ExtractTree(&uncompData, dir)
 }
 
 _Package_Compress(fIn, fOut, manjson)
@@ -137,3 +143,30 @@ _Package_ExtractTree(ptr, dir)
 	}
 	return ptr
 }
+
+_Package_ExtractTreeObj(ptr, tmpdir, Obj)
+{
+	try FileCreateDir, %tmpdir%
+	nElems := NumGet(ptr+0, "UInt"), ptr += 4
+	Loop, %nElems%
+	{
+		name := tmpdir "\" Util_ReadLenStr(ptr, ptr)
+		size := NumGet(ptr+0, "UInt"), ptr += 4
+		if (size = 0xFFFFFFFF)
+		{
+			; Directory
+			Obj.Insert(name,Object())
+			if not ptr := _Package_ExtractTreeObj(ptr, name, Obj[name])
+				break
+		} else
+		{
+			Obj.Insert(name)
+			f := FileOpen(name, "w", "UTF-8-RAW")
+			f.RawWrite(ptr+0, size)
+			f := ""
+			ptr += (size+3) &~ 3
+		}
+	}
+	return ptr
+}
+
