@@ -43,15 +43,30 @@ Ignore_PatternTransform(patterns,baseDir)
 			continue
 		_tmp:=pat
 		if (SubStr(_tmp,1,1)=="/")
-			_tmp:= "^" baseDir "/" SubStr(_tmp,2)
+			_tmp := chr(8) baseDir "/" SubStr(_tmp,2)
 		StringReplace,_tmp,_tmp,/**/, % chr(2) ,All
 		StringReplace,_tmp,_tmp,/,\\,All
-		StringReplace,_tmp,_tmp,.,\.,All
 		StringReplace,_tmp,_tmp,**, % chr(3),All
+		StringReplace,_tmp,_tmp,\[, % chr(4),All
+		StringReplace,_tmp,_tmp,\], % chr(5),All
+		StringReplace,_tmp,_tmp,\?, % chr(6),All
+		StringReplace,_tmp,_tmp,?, % chr(7),All
+		
+		;Normal "escapes", because not in Glob specs
+		static _ := ".^$(){}|+"
+		Loop, Parse, _
+			StringReplace,_tmp,_tmp,%A_LoopField%,\%A_LoopField%,All
+		
+		StringReplace,_tmp,_tmp,[!,[^,All
 		StringReplace,_tmp,_tmp,*,[^\\]+,All
-		StringReplace,_tmp,_tmp,$,\$,All
 		StringReplace,_tmp,_tmp, % chr(2) ,\\+.*\\*,All
 		StringReplace,_tmp,_tmp, % chr(3) ,.*,All
+		StringReplace,_tmp,_tmp, % chr(4) ,\[,All
+		StringReplace,_tmp,_tmp, % chr(5) ,\],All
+		StringReplace,_tmp,_tmp, % chr(7) ,.,All
+		StringReplace,_tmp,_tmp, % chr(6) ,\?,All
+		StringReplace,_tmp,_tmp, % chr(8) ,^,All
+		
 		patterns[each]:=_tmp
 	}
 	return patterns

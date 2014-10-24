@@ -1,4 +1,5 @@
 ##comment##
+# NOTE! THESE ARE GLOB PATTERNS, NOT REGEX!
 
 # ignore all files with '.r' extension
 *.r
@@ -11,6 +12,9 @@ thumbs.db
 
 # another pattern
 __*__
+
+# should match 'cat.txt', 'bat.txt', ...
+?at.txt
 
 # Use only '/' for paths, '\' is invalid
 # Behaviour is UNDEFINED when using '\' instead of '/'.
