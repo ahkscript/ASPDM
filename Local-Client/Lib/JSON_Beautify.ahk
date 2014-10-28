@@ -20,7 +20,7 @@ JSON_Uglify(JSON) {
 		StringReplace,JSON,JSON, % A_Tab,,A
 		StringReplace,JSON,JSON, % Chr(08),,A
 		StringReplace,JSON,JSON, % Chr(12),,A
-		StringReplace,JSON,JSON, \\, % Chr(1),A  ;watchout for '\\\\', convert to '\1'
+		StringReplace,JSON,JSON, \\, % Chr(1),A  ;watchout for escape sequence '\\', convert to '\1'
 		_JSON:="", in_str:=0, l_char:=""
 		Loop, Parse, JSON
 		{
@@ -30,7 +30,7 @@ JSON_Uglify(JSON) {
 				in_str := !in_str
 			_JSON .= (l_char:=A_LoopField)
 		}
-		StringReplace,_JSON,_JSON, % Chr(1),\\,A  ;convert '\1' back to '\\\\'
+		StringReplace,_JSON,_JSON, % Chr(1),\\,A  ;convert '\1' back to '\\'
 		return _JSON
 	}
 }
@@ -38,7 +38,7 @@ JSON_Uglify(JSON) {
 JSON_Beautify(JSON, gap:="`t") {
 	;fork of http://pastebin.com/xB0fG9py
 	JSON:=JSON_Uglify(JSON)
-	StringReplace,JSON,JSON, \\, % Chr(1),A  ;watchout for '\\\\', convert to '\1'
+	StringReplace,JSON,JSON, \\, % Chr(1),A  ;watchout for escape sequence '\\', convert to '\1'
 	
 	indent:=""
 	
@@ -84,6 +84,6 @@ JSON_Beautify(JSON, gap:="`t") {
 			in_str := !in_str
 		_JSON .= (l_char:=A_LoopField)
 	}
-	StringReplace,_JSON,_JSON, % Chr(1),\\,A  ;convert '\1' back to '\\\\'
+	StringReplace,_JSON,_JSON, % Chr(1),\\,A  ;convert '\1' back to '\\'
 	return _JSON
 }
