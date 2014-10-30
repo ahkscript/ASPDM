@@ -9,7 +9,7 @@
 			if (!$len)
 				return "";
 			$JSON = str_replace(array("\n","\r","\f","\b","\t"),"",$JSON);
-			$JSON = str_replace("\\\\","\1",$JSON);  // watchout for '\\\\', convert to '\1'
+			$JSON = str_replace("\\\\","\1",$JSON);  // watchout for escape sequence '\\', convert to '\1'
 			$_JSON="";
 			$in_str=0;
 			$l_char="";
@@ -23,7 +23,7 @@
 				$l_char = $char;
 				$_JSON .= $char;
 			}
-			$_JSON = str_replace("\1","\\\\",$_JSON);  // convert '\1' back to '\\\\'
+			$_JSON = str_replace("\1","\\\\",$_JSON);  // convert '\1' back to '\\'
 			return $_JSON;
 		}
 		else
@@ -33,7 +33,7 @@
 	function JSON_Beautify($JSON, $gap) {
 		//fork of http://pastebin.com/xB0fG9py
 		$JSON = JSON_Uglify($JSON);
-		$JSON = str_replace("\\\\","\1",$JSON);  // watchout for '\\\\', convert to '\1'
+		$JSON = str_replace("\\\\","\1",$JSON);  // watchout for escape sequence '\\', convert to '\1'
 		
 		$indent="";
 		
@@ -74,7 +74,7 @@
 			$l_char = $char;
 			$_JSON .= $char;
 		}
-		$_JSON = str_replace("\1","\\\\",$_JSON);  // convert '\1' back to '\\\\'
+		$_JSON = str_replace("\1","\\\\",$_JSON);  // convert '\1' back to '\\'
 		return $_JSON;
 	}
 ?>
