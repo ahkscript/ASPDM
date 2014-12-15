@@ -5,8 +5,8 @@ http://aspdm.tk/
   
 **Quick Info**  
   
-_Local-Client_ : The local package manager  
-_Network_ : The Web Frontend and NetworkAPI  
+- _Local-Client_ : The local package manager  
+- _Network_ : The Web Frontend and NetworkAPI  
   
 **Try ASPDM right now!**  
   
@@ -17,10 +17,10 @@ Download the latest version (Development Version, Always up to date)
   
 **Specifications**  
 
-_Guidelines_ : [Specifications/Guidelines.md](Specifications/Guidelines.md)  
-_Database_ : [Specifications/Database.md](Specifications/Database.md)  
-_License_ : [Specifications/License.md](Specifications/License.md)  
-_NetworkAPI_ : [Specifications/NetworkAPI.md](Specifications/NetworkAPI.md)  
+- _Guidelines_ : [Specifications/Guidelines.md](Specifications/Guidelines.md)  
+- _Database_ : [Specifications/Database.md](Specifications/Database.md)  
+- _License_ : [Specifications/License.md](Specifications/License.md) (_ASPDL_)  
+- _NetworkAPI_ : [Specifications/NetworkAPI.md](Specifications/NetworkAPI.md)  
   
 **Join the Conversation!**  
   
