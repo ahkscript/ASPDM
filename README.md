@@ -19,7 +19,7 @@ Download the latest version (Development Version, Always up to date)
 
 - _Guidelines_ : [Specifications/Guidelines.md](Specifications/Guidelines.md)  
 - _Database_ : [Specifications/Database.md](Specifications/Database.md)  
-- _License_ : [Specifications/License.md](Specifications/License.md) (_ASPDL_)  
+- _License_ : [Specifications/License.md](Specifications/License.md) (_ASDPL_)  
 - _NetworkAPI_ : [Specifications/NetworkAPI.md](Specifications/NetworkAPI.md)  
   
 **Join the Conversation!**  
