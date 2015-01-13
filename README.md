@@ -24,7 +24,7 @@ Download the latest version (Development Version, Always up to date)
   
 **Join the Conversation!**  
   
-- Trello : http://ahkscript.org/boards/viewtopic.php?f=17&t=1853
+- Trello : https://trello.com/b/XVP4M76d - [(How to Join)](http://ahkscript.org/boards/viewtopic.php?f=17&t=1853)
 - GitHub : http://ahkscript.org/boards/viewtopic.php?f=17&t=936
 - Forum : http://ahkscript.org/boards/viewtopic.php?f=6&t=1241
 - Email : [admin@aspdm.2fh.co](mailto:admin@aspdm.2fh.co) or [joedf@ahkscript.org](mailto:joedf@ahkscript.org)
