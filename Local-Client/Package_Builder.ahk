@@ -331,3 +331,8 @@ array_has_value(arr,value) {
 			return 1
 	return 0
 }
+
+NEVER:
+FileInstall,Res\ahk.ico,NEVER
+FileInstall,Res\ahk.png,NEVER
+return

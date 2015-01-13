@@ -915,3 +915,7 @@ isAdminRunAs_Needed(dir) {
 	}
 }
 
+NEVER:
+FileInstall,Res\ahk.ico,NEVER
+FileInstall,Res\ahk.png,NEVER
+return
