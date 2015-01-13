@@ -26,6 +26,8 @@ Attributes:={id:			"A short name used for identification purposes (Should be a v
 			,forumurl:		"ahkscript.org forum topic URL (Optional, Recommended)"
 			,screenshot:	"Filename of the screenshot to be displayed (Optional)"}
 
+if (A_IsCompiled)
+	gosub,RESOURCES
 if FileExist("res\ahk.ico")
 Menu, tray, Icon, res\ahk.ico
 
@@ -332,7 +334,9 @@ array_has_value(arr,value) {
 	return 0
 }
 
-NEVER:
-FileInstall,Res\ahk.ico,NEVER
-FileInstall,Res\ahk.png,NEVER
+RESOURCES:
+if !FileExist("Res\")
+	FileCreateDir,Res\
+FileInstall,Res\ahk.ico,Res\ahk.ico
+FileInstall,Res\ahk.png,Res\ahk.png
 return

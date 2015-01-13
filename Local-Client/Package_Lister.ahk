@@ -73,6 +73,8 @@ if (!args)
 
 Package_Sources:=Util_SingleArray2Str(Util_ArraySort(Settings.package_sources),"|") ;sort and remove duplicates
 
+if (A_IsCompiled)
+	gosub,RESOURCES
 if FileExist("res\ahk.ico")
 Menu, tray, Icon, res\ahk.ico
 
@@ -915,7 +917,9 @@ isAdminRunAs_Needed(dir) {
 	}
 }
 
-NEVER:
-FileInstall,Res\ahk.ico,NEVER
-FileInstall,Res\ahk.png,NEVER
+RESOURCES:
+if !FileExist("Res\")
+	FileCreateDir,Res\
+FileInstall,Res\ahk.ico,Res\ahk.ico
+FileInstall,Res\ahk.png,Res\ahk.png
 return
