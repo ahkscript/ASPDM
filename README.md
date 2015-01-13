@@ -1,7 +1,7 @@
 # ![*](Local-Client/Res/ahk.png) ASPDM
   
 [AHKScript.org](http://ahkscript.org/)'s Package/StdLib Distribution and Management  
-http://aspdm.tk/  
+http://aspdm.2fh.co/  
   
 **Quick Info**  
   
@@ -12,8 +12,8 @@ http://aspdm.tk/
   
 Download the latest version (Development Version, Always up to date)  
   
-- http://aspdm.tk/client  
-- http://aspdm.tk/client/get.php (_Direct download_)  
+- http://aspdm.2fh.co/client  
+- http://aspdm.2fh.co/client/get.php (_Direct download_)  
   
 **Specifications**  
 
@@ -27,7 +27,7 @@ Download the latest version (Development Version, Always up to date)
 - Trello : http://ahkscript.org/boards/viewtopic.php?f=17&t=1853
 - GitHub : http://ahkscript.org/boards/viewtopic.php?f=17&t=936
 - Forum : http://ahkscript.org/boards/viewtopic.php?f=6&t=1241
-- Email : [admin@aspdm.tk](mailto:admin@aspdm.tk) or [joedf@ahkscript.org](mailto:joedf@ahkscript.org)
+- Email : [admin@aspdm.2fh.co](mailto:admin@aspdm.2fh.co) or [joedf@ahkscript.org](mailto:joedf@ahkscript.org)
   
 **Contributors (Thanks)**  
   

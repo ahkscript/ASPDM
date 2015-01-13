@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2014 The ASPDM group (http://aspdm.tk)
+Copyright (c) 2014 The ASPDM group (http://aspdm.2fh.co)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

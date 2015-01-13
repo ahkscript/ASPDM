@@ -1,5 +1,5 @@
 ﻿API_u2vClean:=1 ;enable u2v_clean()
-API_SetSource("aspdm.tk") ; Über Default packs source
+API_SetSource("aspdm.2fh.co") ; Über Default packs source
 
 ; Other/mirror servers - [not always updated]
 ; --------------------------------------------
@@ -53,7 +53,7 @@ API_ValidateSource(domain) {
 	return 0
 }
 
-CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.tk/client/update.ini") {
+CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.2fh.co/client/update.ini") {
 	URLDownloadToFile,%Update_URL%, % tempupdatefile:=Util_TempFile()
 	IniRead,NewVersion,%tempupdatefile%,Update,Version,NULL (Error)
 	IniRead,__URL,%tempupdatefile%,Update,URL

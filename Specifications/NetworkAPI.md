@@ -10,9 +10,9 @@ See https://trello.com/c/V27ITnHO/16-web-server-api
 It returns a JSON string in the following structure :  
 ```JSON
 {
-	api: {
-		name:"aspdm",
-		check:"CHECKSTRING"
+	"api": {
+		"name": "aspdm",
+		"check": "CHECKSTRING"
 	}
 }
 ```  

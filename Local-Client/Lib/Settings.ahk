@@ -35,8 +35,8 @@ Settings_Default(key="") {
 		,hide_installed:	true
 		,Show_AllPackSources: true
 		,only_show_stdlib:	false
-		,package_source:	"aspdm.tk"
-		,package_sources:	["aspdm.tk","ahk.cu.cc","aspdm.cu.cc","aspdm.1eko.com"]
+		,package_source:	"aspdm.2fh.co"
+		,package_sources:	["aspdm.2fh.co","ahk.cu.cc","aspdm.cu.cc","aspdm.1eko.com"]
 		,Check_ClientUpdates: true
 		,ContentSensitiveSearch: true
 		,installed: {}}
