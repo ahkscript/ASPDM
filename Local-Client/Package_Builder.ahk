@@ -26,6 +26,7 @@ Attributes:={id:			"A short name used for identification purposes (Should be a v
 			,forumurl:		"ahkscript.org forum topic URL (Optional, Recommended)"
 			,screenshot:	"Filename of the screenshot to be displayed (Optional)"}
 
+if FileExist("res\ahk.ico")
 Menu, tray, Icon, res\ahk.ico
 
 ; "Standard" ASPDM Header

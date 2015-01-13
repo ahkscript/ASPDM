@@ -73,6 +73,7 @@ if (!args)
 
 Package_Sources:=Util_SingleArray2Str(Util_ArraySort(Settings.package_sources),"|") ;sort and remove duplicates
 
+if FileExist("res\ahk.ico")
 Menu, tray, Icon, res\ahk.ico
 
 ; "Standard" ASPDM Header
