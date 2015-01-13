@@ -153,8 +153,7 @@ Gui +OwnDialogs
 
 ImageListID := IL_Create(2)
 IL_Add(ImageListID, "shell32.dll", 73) ;Lib
-IL_Add(ImageListID, "shell32.dll", 13) ;tool
-IL_Add(ImageListID, "shell32.dll", 189) ;other
+IL_Add(ImageListID, "shell32.dll", 13) ;tool/other
 
 Gui, ListView, LV_I
 LV_SetImageList(ImageListID)
@@ -364,10 +363,8 @@ List_Installed: ; and Updates List ;{
 		
 		If InStr(i_info["type"],"lib")
 			_icon:="Icon1"
-		else If InStr(i_info["type"],"tool")
+		else ; Tool/Other
 			_icon:="Icon2"
-		else
-			_icon:="Icon3"
 		
 		LV_Add(_icon,i_info["id"] ".ahkp",i_info["name"],i_info["version"])
 		if (!ListView_Offline) {
