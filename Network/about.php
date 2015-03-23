@@ -21,7 +21,7 @@
 			
 			<h2>About ASPDM</h2>
 			<div>
-				<a href="http://ahkscript.org/"><b>AHKScript.org</b></a>'s <b>"Package/StdLib Distribution and Management"</b> was founded ... Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at scelerisque magna, sed hendrerit enim. Aliquam interdum, felis non euismod dignissim, arcu nisi eleifend enim, sed mollis sem sem quis sem. Donec in iaculis quam, sed pretium quam. Donec congue, nunc vitae elementum tempus, nibh neque scelerisque ante, at tempus lacus augue convallis dui. Maecenas vitae elit consequat, volutpat nisl nec, mollis mi. Curabitur non tellus ut enim tristique commodo. Nulla pulvinar tellus augue, eget auctor est euismod nec. Maecenas vestibulum tortor at lacus aliquet, sed rhoncus leo elementum. Aliquam eleifend aliquet odio ut euismod. Morbi volutpat orci in ipsum facilisis, porttitor eleifend ipsum viverra. Nullam quis vehicula nisi.
+				<b>ASPDM</b>, <a href="http://ahkscript.org/"><b>AHKScript.org</b></a>'s packages/StdLibs distribution and managing system !
 			</div>
 
 			<h3>Credits</h3>
