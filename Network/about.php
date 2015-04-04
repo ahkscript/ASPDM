@@ -21,12 +21,12 @@
 			
 			<h2>About ASPDM</h2>
 			<div>
-				<b>ASPDM</b>, <a href="http://ahkscript.org/"><b>AHKScript.org</b></a>'s packages/StdLibs distribution and managing system !
+				<b>ASPDM</b>, <a href="http://ahkscript.org/"><b>AHKScript.org</b></a>'s packages/StdLibs distribution and management system !
 			</div>
 
 			<h3>Credits</h3>
 			<div>
-				Thanks to the whole AutoHotKey team and its contributors, and especially to @george2, @fincs, and @joedf, who worked on the ASPDM project !
+				Thanks to the whole AutoHotKey team and its contributors, and especially to @george2, @perfaram, @fincs, and @joedf, who worked on the ASPDM project !
 			</div>
 			<hr class="max">
 
