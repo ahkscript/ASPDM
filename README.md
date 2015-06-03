@@ -13,7 +13,7 @@ http://aspdm.ahkscript.org/
 Download the latest version (Development Version, Always up to date)  
   
 - http://aspdm.ahkscript.org/client  
-- http://aspdm.ahkscript.org/get.php (_Direct download_)  
+- http://aspdm.ahkscript.org/client/get.php (_Direct download_)  
   
 **Specifications**  
 
