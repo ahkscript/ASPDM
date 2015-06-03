@@ -1,7 +1,7 @@
 ASPDM Network API (WIP)
 ==========================
 
-API is currently hosted @ `api-php.aspdm.2fh.co` or `aspdm.2fh.co/api-php`  
+API is currently hosted @ `aspdm.ahkscript.org/api-php`  
 See https://trello.com/c/V27ITnHO/16-web-server-api  
   
 ## API Status
@@ -40,5 +40,5 @@ _List available packages._
 - By default, packages are sorted by modification date.  
   
 ## Note
-- Packages are currently hosted @ `packs.aspdm.2fh.co` or `aspdm.2fh.co/packs`  
-- Packages that are waiting to be "validated" are stored @ `packs.aspdm.2fh.co/tmp` or `aspdm.2fh.co/packs/tmp`
+- Packages are currently hosted @ `aspdm.ahkscript.org/packs`  
+- Packages that are waiting to be "validated" are stored @ `aspdm.ahkscript.org/packs/tmp`
