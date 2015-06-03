@@ -1,3 +1,4 @@
+<?php include 'header.php'; ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <!-- Forked Web Design from here: http://win32.libav.org/win64/ -->
@@ -6,14 +7,19 @@
 	<head>
 		<title>ASPDM - AHKScript.org's Package/StdLib Distribution and Management</title>
 		
-		<?php include 'header.php'; ?>
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+		<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=0.6"/>
+		<link type="image/png" href="src/ahk.png" rel="icon"/>
+		<link rel="stylesheet" href="src/font-awesome-4.0.3/css/font-awesome.min.css"/>
+		<link type="text/css"  href="src/bootstrap.css" rel="stylesheet"/>
+		<link type="text/css"  href="src/style.css" rel="stylesheet"/>
 		
-		<link type="text/css"  href="src/bootstrap_buttons.min.css" rel="stylesheet">
-		<link type="text/css"  href="src/bootstrap_buttons-theme.min.css" rel="stylesheet">
+		<link type="text/css"  href="src/bootstrap_buttons.min.css" rel="stylesheet"/>
+		<link type="text/css"  href="src/bootstrap_buttons-theme.min.css" rel="stylesheet"/>
 		<script src="src/jquery-1.11.0.min.js"></script>
 		<script src="src/jquery.hashchange.min.js"></script>
 		<script src="src/sorttable.js"></script>
-        <link type="text/css"  href="src/modal.css" rel="stylesheet">
+        <link type="text/css"  href="src/modal.css" rel="stylesheet"/>
         <script>
 			function openDialog(modal) {
 				Avgrund.show( "#"+modal );
