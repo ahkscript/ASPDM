@@ -42,7 +42,7 @@
 		if ($internal) { //safe func call
 			$file = $file;
 		} else {
-			$file = $_SERVER['DOCUMENT_ROOT'] . "/packs/" . safe_var(strtolower($file)); //Remove '/' to avoid exploit
+			$file = "packs/" . safe_var(strtolower($file)); //Remove '/' to avoid exploit
 		}
 		
 		if (!file_exists($file))
