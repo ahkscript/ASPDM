@@ -1,8 +1,10 @@
 ﻿API_u2vClean:=1 ;enable u2v_clean()
-API_SetSource("aspdm.2fh.co") ; Über Default packs source
+API_SetSource("aspdm.ahkscript.org") ; Über Default packs source
 
 ; Other/mirror servers - [not always updated]
 ; --------------------------------------------
+; API_SetSource("aspdm.2fh.co")
+; 
 ; API_SetSource("ahk.cu.cc")
 ;
 ; API_SetSource("aspdm.cu.cc")
@@ -22,8 +24,10 @@ API_SetSource(domain) {
 	
 	if API_ValidateSource(domain) {
 		Package_Source:=domain
-		Packs_Source:="http://packs." domain
-		API_Source:="http://api-php." domain
+		;Packs_Source:="http://packs." domain
+		;API_Source:="http://api-php." domain
+		Packs_Source:="http://" domain "/packs"
+		API_Source:="http://" domain "/api-php"
 		return 1
 	}
 	return 0
@@ -45,7 +49,8 @@ API_ParseSource(domain,mainonly:=0) {
 
 API_ValidateSource(domain) {
 	check:=A_NowUTC "|" A_TickCount
-	data:=JSON_ToObj(u2v_clean("http://api-php." domain "/status.php?_c=" check))
+	;data:=JSON_ToObj(u2v_clean("http://api-php." domain "/status.php?_c=" check))
+	data:=JSON_ToObj(u2v_clean("http://" domain "/api-php/status.php?_c=" check))
 	if IsObject(data) {
 		if ( (data["api"]["check"] == check) && (data["api"]["name"] == "aspdm") )
 			return 1
@@ -53,7 +58,7 @@ API_ValidateSource(domain) {
 	return 0
 }
 
-CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.2fh.co/client/update.ini") {
+CheckUpdate(version,silent:=0,Update_URL:="http://aspdm.ahkscript.org/client/update.ini") {
 	URLDownloadToFile,%Update_URL%, % tempupdatefile:=Util_TempFile()
 	IniRead,NewVersion,%tempupdatefile%,Update,Version,NULL (Error)
 	IniRead,__URL,%tempupdatefile%,Update,URL

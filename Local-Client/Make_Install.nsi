@@ -4,7 +4,7 @@
 !define PRODUCT_COMPANY "The ASPDM group" ;The ahkscript.org Group
 !define PRODUCT_PUBLISHER "The ASPDM group"
 !define PRODUCT_COPYRIGHT "(c) 2014 The ASPDM group"
-!define PRODUCT_WEB_SITE "http://aspdm.2fh.co"
+!define PRODUCT_WEB_SITE "http://aspdm.ahkscript.org"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\Package_Lister.ahk"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
