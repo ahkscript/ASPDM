@@ -40,6 +40,7 @@ if (args) {
 				if (Package_Source != Trim(args[i+1])) {
 					API_SetSource(args[i+1]) ;If unsuccessful, nothing changes
 					Start_Package_Source := Package_Source
+					SourceArgFlag:=1
 				} else
 					continue
 				i+=1
@@ -194,7 +195,7 @@ if Ping() {
 		}
 		packs:=packs_l[Settings.package_sources[1]]
 	} else {
-		API_SetSource(Settings.package_source)
+		API_SetSource(Start_Package_Source)
 		packs_l[package_source]:=API_ListAll()
 		packs:=packs_l[package_source]
 	}
