@@ -52,7 +52,7 @@
 
 	<body>
 		<div class="container">
-			<h1><a href="/" id="logolink"><img id="logo" src="src/ahk.png"> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</h1></a>
+			<h1><a href="/" id="logolink"><img id="logo" src="src/ahk.png"> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</a></h1>
 			<div id="body">
 			
 			<div id="headerlinks">

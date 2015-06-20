@@ -104,7 +104,7 @@
 	</head>
 
 	<body>
-	<img id="get_aspdm" usemap="#get_aspdm_map" src="src/get_aspdm.png"></img>
+	<img id="get_aspdm" usemap="#get_aspdm_map" src="src/get_aspdm.png">
 		<map name="get_aspdm_map">
 			<area href="/client" alt="Get ASPDM" coords="0,0,0,128,128,0" shape="poly">
 		</map>
@@ -193,7 +193,7 @@
 	?>
         
 		<div class="container" id="index_containter">
-			<h1><a href="/" id="logolink"><img id="logo" src="src/ahk.png"> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</h1></a>
+			<h1><a href="/" id="logolink"><img id="logo" src="src/ahk.png"> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</a></h1>
 			<div id="body">
 			
 			<div id="headerlinks">
