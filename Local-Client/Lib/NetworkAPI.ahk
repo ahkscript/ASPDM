@@ -126,7 +126,7 @@ API_List(sort:=0) {
 
 API_ListNum(lim,origin:=0,sort:=0) {
 	global API_Source
-	return JSON_ToObj(u2v_clean(API_Source "/list.php?lim=" lim ((origin) ? "&origin=" origin : "") ((sort)?"&sort":"") ))
+	return JSON_ToObj(u2v_clean(API_Source "/list.php?" ((lim)?"lim=" lim:"") ((origin) ? "&origin=" origin : "") ((sort)?"&sort":"") ))
 }
 
 API_ListAll(sort:=0) {

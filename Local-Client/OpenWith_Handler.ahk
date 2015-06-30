@@ -4,9 +4,6 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include Lib\Arguments.ahk
-#Include Lib\NetworkAPI.ahk
-
-; Custom URI Documentation : http://msdn.microsoft.com/en-us/library/ie/aa767914
 
 if (!A_IsCompiled) {
 	MsgBox, 48, , Please compile this script first.
@@ -32,7 +29,7 @@ Progress CWFEFEF0 CT111111 CB468847 w330 h52 B1 FS8 WM700 WS700 FM8 ZH12 ZY3 C11
 Progress Show
 info:=JSON_ToObj(Manifest_FromPackage(FILE_str)) ;assuming only one package. Future: CSV Elements -> Loop for each
 pack_id:=info["id"]
-load_progress(URI_str,1,1)
+load_progress(pack_id,1,1)
 Sleep 100
 Progress, Off
 if (StrLen(trim(pack_id))==0) {

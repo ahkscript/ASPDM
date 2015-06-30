@@ -34,7 +34,7 @@ if !URI_PackID
 	URI_PackID:=URI_Source ;source unspecified, using default 
 } else {
 	if !API_SetSource(URI_Source) {
-		MsgBox, 48, , [URI Error] The specified package source is invalid:`n`n`t%URI_Source%`n`nThe program will now exit.
+		MsgBox, 48, , [URI Error] The specified package source is invalid or failed to respond correctly:`n`n`t%URI_Source%`n`nThe program will now exit.
 		ExitApp
 	}
 }
