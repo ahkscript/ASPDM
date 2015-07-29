@@ -26,13 +26,6 @@ var /GLOBAL h_ahk_path
 
 Function .onInit
 	SetOutPath $TEMP
-  
-	; Uncomment the following lines for splash screen
-	;File /oname=spltmp.bmp "Installer_resources\ahk_Splash.bmp"
-	;advsplash::show 2000 600 400 -1 $TEMP\spltmp
-	;Pop $0 ; $0 has '1' if the user closed the splash screen early,
-		; '0' if everything closed normally, and '-1' if some error occurred.
-	;Delete $TEMP\spltmp.bmp
 
 	; Install to the correct directory on 32 bit or 64 bit machines
 	IfFileExists $WINDIR\SYSWOW64\*.* Is64bit Is32bit
