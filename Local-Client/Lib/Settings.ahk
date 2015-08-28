@@ -33,10 +33,10 @@ Settings_Default(key="") {
 		,local_repo:		A_AppData "\aspdm\repo"
 		,local_archive:		A_AppData "\aspdm\archive"
 		,hide_installed:	true
-		,Show_AllPackSources: true
+		,Show_AllPackSources: false
 		,only_show_stdlib:	false
 		,package_source:	"aspdm.ahkscript.org"
-		,package_sources:	["aspdm.ahkscript.org","aspdm.2fh.co","ahk.cu.cc","aspdm.cu.cc","aspdm.1eko.com"]
+		,package_sources:	["aspdm.ahkscript.org","aspdm.2fh.co","aspdm.1eko.com"]
 		,Check_ClientUpdates: true
 		,ContentSensitiveSearch: true
 		,installed: {}}
