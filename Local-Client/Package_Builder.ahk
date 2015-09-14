@@ -1,10 +1,12 @@
 ﻿#NoTrayIcon
-
+#SingleInstance,Off
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
 ;#Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-#SingleInstance,Off
+#Include %A_ScriptDir%\Lib\Arguments.ahk
+
+autoopen:=(args)?true:false
 
 Settings:=Settings_Get()
 
@@ -105,6 +107,12 @@ SB_SetText("(Idle)",2)
 Gui, Show,, ASPDM - Package Creation
 GroupAdd, MainGUIWindows, ahk_id %hGUI%
 ControlFocus, Button1, ahk_id %hGUI%
+
+if (autoopen) {
+	_SelectedFile:=args[1]
+	goto _open
+}
+
 return
 
 GuiDropFiles: ;forked from Ahk2Exe.ahk  -  permalink: https://github.com/fincs/Ahk2Exe/blob/44f155b96c571dc83a16370762fda78a46320d92/Ahk2Exe.ahk#L85-L93

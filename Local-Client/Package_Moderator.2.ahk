@@ -9,8 +9,9 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	Gui, Add, ListView, w430 h270 vLVMetaData +Grid -Readonly hwndHLV1 AltSubmit, Attribute|Value
 	Gui, Add, TreeView, wp h135 vTVFiles
 	Gui, Add, Button, w80 gOpen, Open
-	Gui, Add, Button, yp x+4 wp gotmpdir +Disabled vtmpdirBtn, Inspect files...
-	Gui, Add, Button, yp x+4 wp gSave, Save As...
+	Gui, Add, Button, yp x+4 w80 gSave +Disabled, Save As...
+	Gui, Add, Button, yp x+4 w150 gOpenPKG +Disabled vopkgBtn, Open in Package Builder
+	Gui, Add, Button, yp x+4 w80 gotmpdir +Disabled vtmpdirBtn, Inspect files...
 	Gui, Show
 
 	LV_ModifyCol(1,"80")
@@ -44,12 +45,12 @@ Open:
 		; Package Metadata
 		mdata:=Manifest_FromStr(Manifest_FromPackage(thePack))
 		LV_Delete()
-		for each, item in all_vars
+		for each, item in mdata
 		{
-			if (IsObject(mdata[item]))
-				LV_Add("",item,Util_TagsObj2CSV(mdata[item]))
+			if (IsObject(item))
+				LV_Add("",each,Util_TagsObj2CSV(item))
 			else
-				LV_Add("",item,mdata[item])
+				LV_Add("",each,item)
 		}
 		
 		; Package tree
@@ -64,7 +65,14 @@ Open:
 		; Save a copy of the extracted manifest in the extraction folder
 		outman:=JSON_Beautify(mdata)
 		FileAppend, %outman%, %tmpDir%\package.json
+		
+		GuiControl, -Disabled, opkgBtn
 	}
+return
+
+OpenPKG:
+MsgBox, Once you close %A_ScriptName%, all the package files that were extracted to a temporary folder will be deleted.
+Run, Package_Builder.ahk "%tmpDir%\package.json"
 return
 
 eObj2TV(obj,parentID) {

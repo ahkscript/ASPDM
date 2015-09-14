@@ -1,0 +1,28 @@
+{
+	"ahkbranch":"v1.1",
+	"ahkflavour":[
+		"a32",
+		"u32",
+		"u64"
+	],
+	"ahkversion":"1.1.15.00",
+	"author":"Joe DF",
+	"description":"Pack of packages, extra metadata, etc. This is a sample description.\nThis is the second sentence of this description.",
+	"forumurl":"http:\/\/forum.com\/?topic=1234",
+	"id":"sample_extra",
+	"license":"ASPDM Default License",
+	"name":"Sample extra test",
+	"screenshot":"http:\/\/example.com\/preview.png",
+	"tags":[
+		"file",
+		"sample",
+		"lua",
+		"test",
+		"package",
+		"example"
+	],
+	"type":"Library",
+	"version":"1.0.0.0",
+	"number": 123,
+	"string": "Hello World"
+}
