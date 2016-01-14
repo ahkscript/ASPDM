@@ -5,7 +5,7 @@
 		"u32",
 		"u64"
 	],
-	"ahkversion":"1.1.15.00",
+	"ahkversion":"1.1.22.09",
 	"author":"Joe DF",
 	"description":"This is a sample description.\nThis is the second sentence of this description.",
 	"forumurl":"http:\/\/forum.com\/?topic=1234",
@@ -15,7 +15,7 @@
 	"required":{
 		
 	},
-	"screenshot":"",
+	"screenshot":"http:\/\/ahkscript.org\/static\/ahk_logo.png",
 	"tags":[
 		"sample",
 		"tool",
