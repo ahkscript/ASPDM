@@ -56,11 +56,6 @@ if A_GuiEvent = DoubleClick
 }
 return
 
-load_progress(t,c,f) {
-	p:=Round((c/f)*100)
-	Progress, %p% , Loading:  %c% / %f% items  [ %p%`% ] , %t%
-}
-
 Display(wb,html_str) {
 	wb.Navigate("about:blank")
 	while wb.readystate != 4
