@@ -9,7 +9,7 @@ Gui, Show,,%A_scriptName% - DoubleClick to view screenshot...
 
 Gui, projector:+ToolWindow
 Gui, projector:Margin, 0, 0
-Gui, projector:Add, ActiveX, w600 h300 vWB, Shell.Explorer
+Gui, projector:Add, ActiveX, w600 h400 vWB, Shell.Explorer
 WB.silent := true
 
 LV_Add("","Downloading...")
@@ -46,6 +46,7 @@ if A_GuiEvent = DoubleClick
 	pName 		:= packs[objRef].name
 	pAuthor 	:= packs[objRef].author
 	pType	 	:= packs[objRef].type
+	pVer	 	:= packs[objRef].version
 	pURL	 	:= packs[objRef].forumurl
 	pReq	 	:= packs[objRef].required, pReq:=(StrLen(pReq))?pReq:"None."
 	pLicense	:= packs[objRef].license
@@ -59,17 +60,19 @@ if A_GuiEvent = DoubleClick
 	(
 	<!DOCTYPE html>
 	<html>
+		<style>body,textarea{font-family:sans-serif;font-size:11px;}</style>
 		<body>
 			<h2>%pName%</h2>
-			<table class="sortable"><thead><tr><th colspan="2"></th></tr></thead>
+			<table class="sortable"><thead><tr><th>Package details</th></tr></thead>
 			<tbody><tr></tr>
+			<tr><td>Version           : </td><td>%pVer%</td></tr>
 			<tr><td>Type              : </td><td>%pType%</td></tr>
 			<tr><td>Author            : </td><td>%pAuthor%</td></tr>
-			<tr><td>URL              : </td><td><a href="%pURL%">%pURL%</a></td></tr>
+			<tr><td>URL               : </td><td><a href="%pURL%">%pURL%</a></td></tr>
 			<tr><td class="important">Required Packages : </td><td>%pReq%</td></tr>
 			<tr><td class="important_blue">License : </td><td><a href="#">%pLicense%</a></td></tr>
 			</tbody><tfoot></tfoot></table>
-			<textarea style="width:100`%;height:200px">%pDesc%</textarea>
+			<textarea style="width:100`%;height:150px">%pDesc%</textarea>
 			<hr>
 			<h3>Screenshot</h3>
 			<img src="%pScreenshot%" title="screenshot" alt="%pImgErr%" style="max-width:100`%;max-height:100`%;">
