@@ -3,6 +3,7 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include Lib\NetworkAPI.ahk
+#Include Lib\Licenses.ahk
 
 Gui, Add, ListView, x4 y4 w500 h250 gListViewEvents, File|Name|Version|Author|index
 Gui, Show,,%A_scriptName% - DoubleClick to view screenshot...
@@ -47,9 +48,9 @@ if A_GuiEvent = DoubleClick
 	pAuthor 	:= packs[objRef].author
 	pType	 	:= packs[objRef].type
 	pVer	 	:= packs[objRef].version
-	pURL	 	:= packs[objRef].forumurl
 	pReq	 	:= packs[objRef].required, pReq:=(StrLen(pReq))?pReq:"None."
-	pLicense	:= packs[objRef].license
+	pURL	 	:= packs[objRef].forumurl, _:=license(packs[objRef].license)
+	pLicense	:= _.name, pLicenseURL:=_.url
 	pScreenshot := packs[objRef].screenshot, d := packs[objRef].description
 	pDesc		:= (StrLen(d))?d:"No description."
 	
@@ -70,7 +71,7 @@ if A_GuiEvent = DoubleClick
 			<tr><td>Author            : </td><td>%pAuthor%</td></tr>
 			<tr><td>URL               : </td><td><a href="%pURL%">%pURL%</a></td></tr>
 			<tr><td class="important">Required Packages : </td><td>%pReq%</td></tr>
-			<tr><td class="important_blue">License : </td><td><a href="#">%pLicense%</a></td></tr>
+			<tr><td class="important_blue">License : </td><td><a href="%pLicenseURL%">%pLicense%</a></td></tr>
 			</tbody><tfoot></tfoot></table>
 			<textarea style="width:100`%;height:150px">%pDesc%</textarea>
 			<hr>
