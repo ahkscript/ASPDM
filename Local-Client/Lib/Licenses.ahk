@@ -33,7 +33,7 @@ license(_s) {
 		return {name:"Apache License v2.0",url:"http://opensource.org/licenses/Apache-2.0"}
 	if (InStr(_s,"MPL") || InStr(_s,"Mozilla"))
 		return {name:"Mozilla Public License v2.0",url:"http://opensource.org/licenses/MPL-2.0"}
-	if (InStr(_s,"CC0"))
+	if (InStr(_s,"CC0") || "Public domain")
 		return {name:"Public domain (CC0 1.0)",url:"http://creativecommons.org/publicdomain/zero/1.0"}
 	if ( (InStr(_s,"CC")) || (InStr(_s,"creative")) || (InStr(_s,"commons")) )
 		return {name:_s,url:"http://creativecommons.org/licenses"}
