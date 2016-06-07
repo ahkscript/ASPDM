@@ -23,7 +23,7 @@ _**All attributes are mandatory, unless otherwise stated.**_
 | license       | (**Optional**) Name of the license under which the package is released                     |
 | tags          | Comma-separated tags (**Optional**, **Recommended**)                                       |
 | forumurl      | (**Optional**, **Recommended**) ahkscript.org forum topic URL                              |
-| screenshot    | (**Optional**) Filename of the screenshot to be displayed                                  |
+| screenshot    | (**Optional**) URL of the screenshot image to be displayed                                 |
 
 _**Licenses :**_ packages submitted to ahkscript.org without the license attribute filled in are assumed to be released under the [ahkscript.org Default Package License](License.md).
 
