@@ -45,13 +45,13 @@ Function .onInit
 	"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
 	"UninstallString"
 	StrCmp $R0 "" done
- 
+
 	MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
 	"${PRODUCT_NAME} is already installed. $\n$\nClick `OK` to remove the \
 	previous version or `Cancel` to cancel this upgrade." \
 	IDOK uninst
 	Abort
-		 
+
 	;Run the uninstaller
 	uninst:
 		ClearErrors
@@ -147,13 +147,13 @@ Section "MainSection" SEC01
 	File "Package_Remover.ahk"
 	File "CustomURI_Handler.exe"
 	File "OpenWith_Handler.exe"
-	
+
 	SetOutPath "$INSTDIR\Res"
 	File /r Res\*.*
-	
+
 	SetOutPath "$INSTDIR\Lib"
 	File /r Lib\*.*
-	
+
 	DetailPrint "Associating .ahkp files..."
 	WriteRegStr HKCR ".ahkp" "" "ahkp.package"
 	WriteRegStr HKCR "ahkp.package" "" \
@@ -168,7 +168,7 @@ Section "MainSection" SEC01
 	WriteRegStr HKCR "ASPDM" "" "URL:ASPDM Protocol"
 	WriteRegStr HKCR "ASPDM\DefaultIcon" "" "$INSTDIR\res\ahk.ico"
 	WriteRegStr HKCR "ASPDM\shell\open\command" "" '"$INSTDIR\CustomURI_Handler.exe" "%1"'
-	
+
 	DetailPrint "Creating shortcuts..."
 	SetShellVarContext all
 	SetOutPath "$INSTDIR"
@@ -221,10 +221,10 @@ Section Uninstall
 	Delete "$INSTDIR\OpenWith_Handler.exe"
 	RMDir /r "$INSTDIR\Res"
 	RMDir /r "$INSTDIR\Lib"
-	
+
 	MessageBox MB_ICONEXCLAMATION|MB_YESNO "Keep ASPDM local repository and settings?" IDYES UNINST_KEEP_REPO
 	DetailPrint "Removing ASPDM local repository and settings..."
-	Delete "$APPDATA\${PRODUCT_NAME}"
+	RMDir /r "$APPDATA\${PRODUCT_NAME}"
 	UNINST_KEEP_REPO:
 	
 	DetailPrint "Removing .ahkp file association..."
@@ -232,7 +232,7 @@ Section Uninstall
 	DeleteRegKey HKCR "ahkp.package"
 	DetailPrint "Removing ASPDM:// URI Scheme..."
 	DeleteRegKey HKCR "ASPDM"
-	
+
 	DetailPrint "Removing shortcuts..."
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Website.lnk"
@@ -241,10 +241,10 @@ Section Uninstall
 	Delete "$DESKTOP\${PRODUCT_NAME} Package Builder.lnk"
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk"
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Package Builder.lnk"
-	
+
 	RMDir "$SMPROGRAMS\${PRODUCT_NAME}"
 	;RMDir /r "$INSTDIR"
-	
+
 	DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
 	DeleteRegKey HKLM "${PRODUCT_DIR_REGKEY}"
 	SetAutoClose false
