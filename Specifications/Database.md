@@ -25,7 +25,7 @@ _**All attributes are mandatory, unless otherwise stated.**_
 | forumurl      | (**Optional**, **Recommended**) ahkscript.org forum topic URL                              |
 | screenshot    | (**Optional**) URL of the screenshot image to be displayed                                 |
 
-_**Licenses :**_ packages submitted to ahkscript.org without the license attribute filled in are assumed to be released under the [ahkscript.org Default Package License](License.md).
+_**Licenses :**_ packages submitted to ahkscript.org without the license attribute filled in are assumed to be released under the [ASPDM Default Package License (ADPL)](License.md).
 
 ### Package Repository-only attributes
 
