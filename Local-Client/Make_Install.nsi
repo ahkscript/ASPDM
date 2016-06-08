@@ -87,9 +87,27 @@ Function .onInit
 		; Get the installed AutoHotkey Version
 		StrCmp $h_ahk_path "" AHK_no_version
 		${GetFileVersion} '$h_ahk_path' $h_ahk_ver
-		Goto AHK_Check_END
+		Goto AHK_min_version
 	AHK_no_version:
 		StrCpy $h_ahk_ver "NOT INSTALLED"
+		goto AHK_Check_END
+	AHK_min_version: ;1.1.13.01 but exclude 1.2+ and 2+
+		GetDLLVersion "$h_ahk_path" $R0 $R1
+		IntOp $R2 $R0 >> 16
+		IntOp $R2 $R2 & 0x0000FFFF ; $R2 now contains major version
+		IntOp $R3 $R0 & 0x0000FFFF ; $R3 now contains minor version
+		IntOp $R4 $R1 >> 16
+		IntOp $R4 $R4 & 0x0000FFFF ; $R4 now contains release
+		IntOp $R5 $R1 & 0x0000FFFF ; $R5 now contains build
+		IntCmp $R2 1 0 0 AHK_min_v_err
+		IntCmp $R3 1 0 AHK_min_v_err AHK_min_v_err
+		IntCmp $R4 13 AHK_Check_END AHK_min_v_err AHK_Check_END
+		;IntCmp $R5 1 0 0 AHK_min_v_err
+		MessageBox MB_OK "$R2.$R3.$R4"
+		AHK_min_v_err:
+		MessageBox MB_ICONEXCLAMATION|MB_YESNO "Your AutoHotkey version ($h_ahk_ver) is not supported.$\nIt is strongly recommended for the latest version of AutoHotkey v1.1 to be installed. Please note that versions 2+ are not supported by this version of ${PRODUCT_NAME}.$\n$\nContinue Installation?" IDYES AHK_Check_END
+		MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. The installer will now exit."
+		Abort
 	AHK_Check_END:
 FunctionEnd
 
@@ -102,13 +120,14 @@ BrandingText "${PRODUCT_NAME_LONG} v${PRODUCT_VERSION}"
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW WelcomeShowVersion
 !insertmacro MUI_PAGE_WELCOME
 Function WelcomeShowVersion ;see http://stackoverflow.com/a/5319228/883015
-	${NSD_CreateLabel} 120u 165u 50% 12u "${PRODUCT_NAME} Version: ${PRODUCT_VERSION}"
+	${NSD_CreateLabel} 120u 165u 50% 12u "Setup for ${PRODUCT_NAME} Version: ${PRODUCT_VERSION}"
 	Pop $0
 	SetCtlColors $0 "" "${MUI_BGCOLOR}"
 	${NSD_CreateLabel} 120u 174u 50% 12u "Detected AutoHotkey Version: $h_ahk_ver"
 	Pop $0
 	SetCtlColors $0 "" "${MUI_BGCOLOR}"
 FunctionEnd
+
 ; License page
 !insertmacro MUI_PAGE_LICENSE "Installer_resources\license.txt"
 ; Directory page
