@@ -1,4 +1,4 @@
-ahkscript.org Default Package License
+ASPDM Default Package License (ADPL)
 ================================================
 **Version 1, February 2014**
 
