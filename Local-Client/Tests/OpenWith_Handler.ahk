@@ -6,7 +6,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 #Include Lib\Arguments.ahk
 
 if (!A_IsCompiled) {
-	MsgBox, 48, , Please compile this script first.
+	MsgBox, 48, , Please compile this script first / Please run "CustomURI_SetupURI.ahk" first.
 	ExitApp
 }
 /*
