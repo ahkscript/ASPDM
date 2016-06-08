@@ -13,6 +13,7 @@ SetCompressor /SOLID LZMA
 
 !include "MUI2.nsh"
 !include "StrFunc.nsh"
+!include "FileFunc.nsh"
 ${StrRep} ;StringReplace Function
 
 ; MUI Settings
@@ -23,6 +24,7 @@ ${StrRep} ;StringReplace Function
 
 InstallDir "$PROGRAMFILES\AutoHotkey\${PRODUCT_NAME}"
 var /GLOBAL h_ahk_path
+var /GLOBAL h_ahk_ver
 
 Function .onInit
 	SetOutPath $TEMP
@@ -67,19 +69,28 @@ Function .onInit
 	; Check if AutoHotkey is Installed
 	ReadRegStr $1 HKLM "SOFTWARE\AutoHotkey" "InstallDir"
 	${StrRep} $1 '$1' '"' "" ;remove all quotes
-	IfFileExists '$1\AutoHotkey.exe' AHK_Installed AHK_NotInstalled_firstcheck
+	IfFileExists '$1\AutoHotkey.exe' AHK_Installed_A AHK_NotInstalled_firstcheck
 	AHK_NotInstalled_firstcheck:
 		ReadRegStr $1 HKCR "AutoHotkeyScript\Shell\Open\Command" ""
 		${StrRep} $1 '$1' ' "%1" %*' "" ;extract path
 		${StrRep} $1 '$1' '"' "" ;remove all quotes
-		IfFileExists '$1' AHK_Installed AHK_NotInstalled_secondcheck
+		IfFileExists '$1\AutoHotkey.exe' AHK_Installed_A AHK_NotInstalled_secondcheck
 		AHK_NotInstalled_secondcheck:
 			IfFileExists $h_ahk_path AHK_Installed AHK_NotInstalled
 			AHK_NotInstalled:
-				MessageBox MB_ICONEXCLAMATION|MB_YESNO "AutoHotkey seems to be not installed.$\nContinue Installation?" IDYES AHK_Installed
+				MessageBox MB_ICONEXCLAMATION|MB_YESNO "AutoHotkey seems to be not installed.$\nContinue Installation?" IDYES AHK_no_version
 				MessageBox MB_OK|MB_ICONINFORMATION "Installation aborted. The installer will now exit."
 				Abort
+	AHK_Installed_A:
+		StrCpy $h_ahk_path '$1\AutoHotkey.exe'
 	AHK_Installed:
+		; Get the installed AutoHotkey Version
+		StrCmp $h_ahk_path "" AHK_no_version
+		${GetFileVersion} '$h_ahk_path' $h_ahk_ver
+		Goto AHK_Check_END
+	AHK_no_version:
+		StrCpy $h_ahk_ver "NOT INSTALLED"
+	AHK_Check_END:
 FunctionEnd
 
 Function LaunchASPDM
@@ -91,7 +102,10 @@ BrandingText "${PRODUCT_NAME_LONG} v${PRODUCT_VERSION}"
 !define MUI_PAGE_CUSTOMFUNCTION_SHOW WelcomeShowVersion
 !insertmacro MUI_PAGE_WELCOME
 Function WelcomeShowVersion ;see http://stackoverflow.com/a/5319228/883015
-	${NSD_CreateLabel} 120u 150u 50% 12u "Version: ${PRODUCT_VERSION}"
+	${NSD_CreateLabel} 120u 165u 50% 12u "${PRODUCT_NAME} Version: ${PRODUCT_VERSION}"
+	Pop $0
+	SetCtlColors $0 "" "${MUI_BGCOLOR}"
+	${NSD_CreateLabel} 120u 174u 50% 12u "Detected AutoHotkey Version: $h_ahk_ver"
 	Pop $0
 	SetCtlColors $0 "" "${MUI_BGCOLOR}"
 FunctionEnd
@@ -226,7 +240,7 @@ Section Uninstall
 	DetailPrint "Removing ASPDM local repository and settings..."
 	RMDir /r "$APPDATA\${PRODUCT_NAME}"
 	UNINST_KEEP_REPO:
-	
+
 	DetailPrint "Removing .ahkp file association..."
 	DeleteRegKey HKCR ".ahkp"
 	DeleteRegKey HKCR "ahkp.package"
