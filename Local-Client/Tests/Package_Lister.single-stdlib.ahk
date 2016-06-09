@@ -127,21 +127,9 @@ Gui, Tab, Settings
 	Gui, Add, Button, yp x+2 vPackSource_RemoveButton gPackSource_Remove, Remove
 	Gui, Add, DropDownList, yp+1 x+4 w280 h21 R5 Choose1 vPackSource_list -Multi, %Package_Sources%
 	GuiControl, ChooseString, PackSource_list, % Settings.Package_Source
-	
-	Gui, Add, GroupBox, y+10 x20 w408 h100, StdLib Installation folder
-	
-	Gui, Add, Text, yp+22 x28 w40 +Right, Global
-	Gui, Add, Button, yp-5 x74 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
+	Gui, Add, Text, y+10 x20, StdLib Installation folder
+	Gui, Add, Button, yp-5 x+4 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
 	Gui, Add, Edit, yp+1 x+4 w280 h21 Disabled vstdlib_folder -Multi, % Settings.stdlib_folder
-	
-	Gui, Add, Text, y+8 x28 w40 +Right, User
-	Gui, Add, Button, yp-5 x74, Browse...
-	Gui, Add, Edit, yp+1 x+4 w280 h21 Disabled -Multi, C:\some\path
-	
-	Gui, Add, Text, y+8 x28 w40 +Right, Custom
-	Gui, Add, Button, yp-5 x74, Browse...
-	Gui, Add, Edit, yp+1 x+4 w280 h21 Disabled -Multi, C:\some\path
-	
 	Gui, Add, Button, y278 x16 w80 vSaveSettingsButton gSaveSettings, Save Settings
 	Gui, Add, Button, yp x+2 vResetSettingsButton gResetSettings, Reset Settings
 	Gui, Add, Button, yp x+2 vClientUpdateButton gClientUpdate, Check for updates
@@ -149,12 +137,6 @@ Gui, Tab, Settings
 Gui, Tab,
 	Gui, Add, Edit, vSearchBar gSearch y44 x222 w300,
 	SetEditPlaceholder("SearchBar","Search...")
-	
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	Gui, Add, Text, y7 x484 vDDL_StdLibT, StdLib Mode
-	Gui, Add, DropDownList, y21 x482 w70 -Multi vDDL_StdLib Choose1, Global|User|Custom
-	GuiControl, ChooseString, DDL_StdLib, Global
-	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	
 Gui, Add, StatusBar,, Loading...
 SB_SetParts(264)
@@ -562,8 +544,6 @@ return ;}
 GuiSize: ;{
 	GuiControl,move,Tabs, % "w" (A_GuiWidth-16) " h" (A_GuiHeight-72)
 	GuiControl,move,SearchBar, % "x" (A_GuiWidth-308)
-	GuiControl,move,DDL_StdLibT, % "x" (A_GuiWidth-76)
-	GuiControl,move,DDL_StdLib, % "x" (A_GuiWidth-78)
 	GuiSize_list:="AUI"
 	Loop, Parse, GuiSize_list
 	{

@@ -19,7 +19,7 @@ Settings_Get() {
 
 Settings_Validate(j) {
 	j_default:=Settings_Default()
-	vars:="stdlib_folder|local_repo|local_archive|hide_installed|Show_AllPackSources|only_show_stdlib|package_source|package_sources|installed|Check_ClientUpdates|ContentSensitiveSearch"
+	vars:="stdlib_folder|userlib_folder|customlib_folder|local_repo|local_archive|hide_installed|Show_AllPackSources|only_show_stdlib|package_source|package_sources|installed|Check_ClientUpdates|ContentSensitiveSearch"
 	loop,Parse,vars,`|
 		if (!j.Haskey(A_LoopField))
 			j[A_LoopField]:=j_default[A_LoopField]
@@ -30,6 +30,7 @@ Settings_Validate(j) {
 Settings_Default(key="") {
 	j:={stdlib_folder:		RegExReplace(A_AhkPath,"\w+\.exe","lib")
 		,userlib_folder:	A_MyDocuments "\AutoHotkey\Lib"
+		,customlib_folder:	A_MyDocuments "\AutoHotkey\aspdm\Lib"
 		,local_repo:		A_AppData "\aspdm\repo"
 		,local_archive:		A_AppData "\aspdm\archive"
 		,hide_installed:	true

@@ -127,9 +127,23 @@ Gui, Tab, Settings
 	Gui, Add, Button, yp x+2 vPackSource_RemoveButton gPackSource_Remove, Remove
 	Gui, Add, DropDownList, yp+1 x+4 w280 h21 R5 Choose1 vPackSource_list -Multi, %Package_Sources%
 	GuiControl, ChooseString, PackSource_list, % Settings.Package_Source
-	Gui, Add, Text, y+10 x20, StdLib Installation folder
-	Gui, Add, Button, yp-5 x+4 vstdlib_folderBrowseButton gstdlib_folderBrowse, Browse...
-	Gui, Add, Edit, yp+1 x+4 w280 h21 Disabled vstdlib_folder -Multi, % Settings.stdlib_folder
+	
+	;///////////////////////////////////////////////////////////////////////
+	Gui, Add, GroupBox, y+10 x20 w463 h100, StdLib Installation folder
+	
+	Gui, Add, Text, yp+22 x28 w40 +Right, Global
+	Gui, Add, Button, yp-5 x74 gstdlib_folderBrowse, Browse...
+	Gui, Add, Edit, yp+1 x+4 w335 h21 Disabled -Multi vstdlib_folder, % Settings.stdlib_folder
+	
+	Gui, Add, Text, y+8 x28 w40 +Right, User
+	Gui, Add, Button, yp-5 x74 guserlib_folderBrowse, Browse...
+	Gui, Add, Edit, yp+1 x+4 w335 h21 Disabled -Multi vuserlib_folder, % Settings.userlib_folder
+	
+	Gui, Add, Text, y+8 x28 w40 +Right, Custom
+	Gui, Add, Button, yp-5 x74 gcustomlib_folderBrowse, Browse...
+	Gui, Add, Edit, yp+1 x+4 w335 h21 Disabled -Multi vcustomlib_folder, % Settings.customlib_folder
+	;///////////////////////////////////////////////////////////////////////
+	
 	Gui, Add, Button, y278 x16 w80 vSaveSettingsButton gSaveSettings, Save Settings
 	Gui, Add, Button, yp x+2 vResetSettingsButton gResetSettings, Reset Settings
 	Gui, Add, Button, yp x+2 vClientUpdateButton gClientUpdate, Check for updates
@@ -137,6 +151,12 @@ Gui, Tab, Settings
 Gui, Tab,
 	Gui, Add, Edit, vSearchBar gSearch y44 x222 w300,
 	SetEditPlaceholder("SearchBar","Search...")
+	
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	Gui, Add, Text, y7 x484 vDDL_StdLibT, StdLib Mode
+	Gui, Add, DropDownList, y21 x482 w70 -Multi vDDL_StdLib Choose1, Global|User|Custom
+	GuiControl, ChooseString, DDL_StdLib, Global
+	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	
 Gui, Add, StatusBar,, Loading...
 SB_SetParts(264)
@@ -151,7 +171,7 @@ SB_SetText("Local repository: " __tmp_localRepo,2)
 
 Gui, Show, w560 h384, ASPDM - Package Listing
 
-start:
+start: ;{
 Gui +Disabled
 Gui +OwnDialogs
 
@@ -291,7 +311,7 @@ if (StrLen(Start_select_pack)) {
 	}
 }
 Gui -Disabled
-return
+return ;}
 
 List_Available: ;{
 	Gui +Disabled
@@ -544,6 +564,8 @@ return ;}
 GuiSize: ;{
 	GuiControl,move,Tabs, % "w" (A_GuiWidth-16) " h" (A_GuiHeight-72)
 	GuiControl,move,SearchBar, % "x" (A_GuiWidth-308)
+	GuiControl,move,DDL_StdLibT, % "x" (A_GuiWidth-76)
+	GuiControl,move,DDL_StdLib, % "x" (A_GuiWidth-78)
 	GuiSize_list:="AUI"
 	Loop, Parse, GuiSize_list
 	{
@@ -607,20 +629,29 @@ PackSource_Remove: ;PackSource_RemoveButton ;{
 	GuiControl, Choose, PackSource_list, 1
 return ;}
 
-stdlib_folderBrowse: ;stdlib_folderBrowseButton ;{
+stdlib_folderBrowse: ;{
+Userlib_folderBrowse:
+Customlib_folderBrowse:
+	StringReplace,__tmp,A_ThisLabel,lib_folderBrowse
+	stdlib_fBrowse(__tmp)
+return ;}
+
+stdlib_fBrowse(v) {
 	Gui +Disabled
 	Gui +OwnDialogs
-	FileSelectFolder, __tmp, *C:\, 3, Select the StdLib Installation folder
+	StringReplace,t,v,std,Global
+	FileSelectFolder, __tmp, *C:\, 3, Select the %t% StdLib Installation folder
 	if __tmp is not Space
-		GuiControl,,stdlib_folder,%__tmp%
+		GuiControl,,%v%lib_folder,%__tmp%
 	Gui -Disabled
-return ;}
+	return
+}
 
 SaveSettings: ;{
 	MsgBox, 36, , Are you sure you want to save these settings?
 	IfMsgBox,Yes
 	{
-		_list_SaveSettings:="Hide_Installed|Show_AllPackSources|Only_Show_StdLib|Check_ClientUpdates|ContentSensitiveSearch|stdlib_folder"
+		_list_SaveSettings:="Hide_Installed|Show_AllPackSources|Only_Show_StdLib|Check_ClientUpdates|ContentSensitiveSearch|stdlib_folder|userlib_folder|customlib_folder"
 		Loop, Parse, _list_SaveSettings, |
 		{
 			GuiControlGet, %A_LoopField%
