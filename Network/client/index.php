@@ -7,15 +7,10 @@
 <link type="text/css"  href="/client/style.css" rel="stylesheet">
 <style>
 	table { text-align:center;vertical-align:middle; }
-	#dnl{
-		border: solid 1px;
-		border-radius: 4px;
-		font-size:12px;
-		font-weight: bold;
-		background-color:#6FBE4A;
-		/*background-color:#E5E5E5;*/
-	}
-	#dnl td { vertical-align:middle;text-align:center;color:whitesmoke;}
+	#dnl{padding:1px;border-style:solid;border-width:2px;border-radius:0;border-color:#333;color:#FEFEFE;background-color:#468847;font-size:12px;font-family:sans-serif;font-weight:700}
+	#dnl:hover{ cursor:pointer;background-color:#EFEFEF;color:#468847 }
+	#dnl:active{ position:relative;top:2px }
+	#dnl td { vertical-align:middle;text-align:center; }
 	#sp { margin:auto;text-align:center;width:300px; }
 	#info { font-size:10px;color:#666; }
 	hr { width:640px; }
@@ -39,7 +34,7 @@
 			<tr>
 				<td><img src="/src/install48.png" alt="Logo"></td>
 <?php
-				echo '<td style="min-width:130px;">Download<br>Version '.$version.' (beta)</td>';
+				echo '<td style="min-width:160px;">Download<br>Version '.$version.' (beta)</td>';
 ?>
 			</tr>
 		</table>
