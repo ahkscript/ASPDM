@@ -11,9 +11,11 @@
 		border: solid 1px;
 		border-radius: 4px;
 		font-size:12px;
-		background-color:#E5E5E5;
+		font-weight: bold;
+		background-color:#6FBE4A;
+		/*background-color:#E5E5E5;*/
 	}
-	#dnl td { vertical-align:middle;text-align:center; }
+	#dnl td { vertical-align:middle;text-align:center;color:whitesmoke;}
 	#sp { margin:auto;text-align:center;width:300px; }
 	#info { font-size:10px;color:#666; }
 	hr { width:640px; }
@@ -31,13 +33,13 @@
 	$version = iniget("update.ini","version");
 	echo '<div id="sp">';
 	$file = 'ASPDM_Install-v'.$version.'.exe';
-	echo '<a href="'.$file.'" id="link">';
+	echo '<a href="'.$file.'" id="link" style="display:inline-block">';
 ?>
 		<table id="dnl">
 			<tr>
 				<td><img src="/src/install48.png" alt="Logo"></td>
 <?php
-				echo '<td>Click here to download the preview release.<br>[Version: '.$version.']</td>';
+				echo '<td style="min-width:130px;">Download<br>Version '.$version.' (beta)</td>';
 ?>
 			</tr>
 		</table>
