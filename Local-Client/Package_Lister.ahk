@@ -154,7 +154,7 @@ Gui, Tab,
 	
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	Gui, Add, Text, y7 x484 vDDL_StdLibT, StdLib Mode
-	Gui, Add, DropDownList, y21 x482 w70 -Multi vDDL_StdLib Choose1, Global|User|Custom
+	Gui, Add, DropDownList, y21 x482 w70 -Multi vDDL_StdLib gDDL_StdLibEvent Choose1, Global|User|Custom
 	GuiControl, ChooseString, DDL_StdLib, Global
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	
@@ -921,6 +921,11 @@ GetCurrentInstallationFolder:
 		else ;Default/Global
 			InstallationFolder:=Settings.StdLib_Folder
 	}
+return
+
+DDL_StdLibEvent:
+	gosub,GetCurrentInstallationFolder
+	gosub,Refresh
 return
 
 ;{ Utility Functions and Misc.
