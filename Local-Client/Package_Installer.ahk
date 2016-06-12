@@ -31,8 +31,7 @@ InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Con
 	%A_MyDocuments%\AutoHotkey\Lib\  ; User library.
 	path-to-the-currently-running-AutoHotkey.exe\Lib\  ; Standard library.
 */
-InstallIndexFile := InstallationFolder . "\aspdm.json"
-InstallIndex := Settings_InstallGet(InstallIndexFile)
+InstallIndex := Settings_InstallGet(InstallationFolder)
 
 packs:=StrSplit(args[1],"|")
 if (!IsObject(packs))
@@ -126,7 +125,7 @@ for Current, FilePath in packs
 	InstallIndex.installed.Insert(mdata["id"])
 	
 	;Save settings right-away in case of error-exit
-	Settings_InstallSave(InstallIndexFile,InstallIndex)
+	Settings_InstallSave(InstallationFolder,InstallIndex)
 	
 	;Increment progress bar
 	load_progress(mdata["id"],Current,TotalItems)
@@ -136,7 +135,7 @@ for Current, FilePath in packs
 
 ;Save Settings & Exit Success
 Settings_Save(Settings)
-Settings_InstallSave(InstallIndexFile,InstallIndex)
+Settings_InstallSave(InstallationFolder,InstallIndex)
 ExitApp, % Install.Success
 
 load_progress(t,c,f) {

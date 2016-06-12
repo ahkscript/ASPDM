@@ -902,13 +902,10 @@ return
 
 LoadLocalMetadata:
 	;get settings
-	Settings:=Settings_Get()
-
+		Settings:=Settings_Get()
 	;get InstallIndex
-	InstallationFolder:=Settings.StdLib_Folder
-	InstallIndexFile := InstallationFolder . "\aspdm.json"
-	;MsgBox % InstallIndexFile
-	InstallIndex := Settings_InstallGet(InstallIndexFile)
+		InstallationFolder:=Settings.StdLib_Folder
+		InstallIndex := Settings_InstallGet(InstallationFolder)
 return
 
 array_has_value(arr,value) {

@@ -55,6 +55,7 @@ Settings_Save(j) {
 }
 
 Settings_InstallGet(f) {
+	f := f . "\aspdm.json"
 	if !FileExist(f) {
 		Settings_InstallSave(f,false)
 	}
@@ -71,6 +72,7 @@ Settings_InstallSave(f,j) {
 	else
 		j := {installed:{}}
 	s:=JSON_FromObj(j)
+	f := f . "\aspdm.json"
 	FileDelete, % f
 	if ( FileExist(f) && (ErrorLevel) )
 		return ErrorLevel
