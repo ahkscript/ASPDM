@@ -31,6 +31,8 @@ InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Con
 	%A_MyDocuments%\AutoHotkey\Lib\  ; User library.
 	path-to-the-currently-running-AutoHotkey.exe\Lib\  ; Standard library.
 */
+InstallIndexFile := InstallationFolder . "\aspdm.json"
+InstallIndex := Settings_InstallGet(InstallIndexFile)
 
 packs:=StrSplit(args[1],"|")
 if (!IsObject(packs))
@@ -76,7 +78,7 @@ for Current, FilePath in packs
 		FileGetSize,file_Sz,%FilePath%
 		FileGetSize,arch_Sz,%arch_file%
 		mdata_arch:=JSON_ToObj(Manifest_FromPackage(arch_file))
-		if ( (file_Sz!=arch_Sz) || (mdata["id"] != mdata_arch["version"]) ) {
+		if ( (file_Sz!=arch_Sz) || (mdata["version"] != mdata_arch["version"]) ) {
 			FileCopy,%FilePath%,%arch_file%,1
 			if ErrorLevel
 				ExitApp, % Install.Error_ArchiveBackup
@@ -116,15 +118,15 @@ for Current, FilePath in packs
 	}
 	
 	;delete key in case of "double-install"
-	for x, installed in Settings.installed
+	for x, installed in InstallIndex.installed
 		if (installed==mdata["id"])
-			Settings.installed.Remove(x)
+			InstallIndex.installed.Remove(x)
 	
 	;Append Package ID to "Installed" in Settings
-	Settings.installed.Insert(mdata["id"])
+	InstallIndex.installed.Insert(mdata["id"])
 	
 	;Save settings right-away in case of error-exit
-	Settings_Save(Settings)
+	Settings_InstallSave(InstallIndexFile,InstallIndex)
 	
 	;Increment progress bar
 	load_progress(mdata["id"],Current,TotalItems)
@@ -134,6 +136,7 @@ for Current, FilePath in packs
 
 ;Save Settings & Exit Success
 Settings_Save(Settings)
+Settings_InstallSave(InstallIndexFile,InstallIndex)
 ExitApp, % Install.Success
 
 load_progress(t,c,f) {

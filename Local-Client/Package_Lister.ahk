@@ -59,8 +59,8 @@ else
 if !StrLen(Start_Package_Source)
 	Start_Package_Source:=Package_Source
 
-;get settings
-Settings:=Settings_Get()
+;get settings & InstallIndex
+gosub,LoadLocalMetadata
 
 AppVersion:="1.0.0.0"
 if (Settings.Check_ClientUpdates)
@@ -262,7 +262,7 @@ if (StrLen(Start_select_pack)) {
 		SplitPath,Start_select_pack,,,,Start_select_packID
 	}
 	
-	if (!array_has_value(Settings.Installed,Start_select_packID)) {
+	if (!array_has_value(InstallIndex.Installed,Start_select_packID)) {
 		if (Start_select_localmode) {
 			pack_name:=Start_select_packINFO["name"]
 			pack_auth:=Start_select_packINFO["author"]
@@ -332,7 +332,7 @@ List_Available: ;{
 		for _each, info in packs
 		{
 			if (Settings.hide_installed) {
-				if (!array_has_value(Settings.Installed,info["id"])) {
+				if (!array_has_value(InstallIndex.Installed,info["id"])) {
 					LV_Add("",info["id"] ".ahkp",info["name"],info["version"],info["author"],each,info["description"],Util_TagsObj2CSV(info["tags"]))
 					TotalItemsNew-=1
 				}
@@ -380,7 +380,7 @@ List_Installed: ; and Updates List ;{
 	TotalItems_U:=0
 	Gui, ListView, LV_I
 	LV_Delete()
-	for each, IPacks in Settings.Installed
+	for each, IPacks in InstallIndex.Installed
 	{
 		i_pack:=Settings.Local_Archive "\" IPacks ".ahkp"
 		i_info:=JSON_ToObj(Manifest_FromPackage(i_pack))
@@ -402,7 +402,7 @@ List_Installed: ; and Updates List ;{
 	}
 	if (!ListView_Offline)
 		GuiControl,,PackageCounter_U, %TotalItems_U% Packages
-	TotalItems_I := Util_ObjCount(Settings.Installed)
+	TotalItems_I := Util_ObjCount(InstallIndex.Installed)
 	GuiControl,,PackageCounter_I, %TotalItems_I% Packages
 	_tmp:="UI"
 	Loop,Parse,_tmp
@@ -671,9 +671,7 @@ ResetSettings: ;{
 	MsgBox, 308, , Are you sure you want to reset to default settings?`nInstallation paths will be affected.
 	IfMsgBox,Yes
 	{
-		_settings_installed_tmp:=Settings.Installed
 		Settings:=Settings_Default()
-		Settings.Installed:=_settings_installed_tmp
 		gosub,_SaveSettings
 	}
 return ;}
@@ -739,7 +737,7 @@ Install: ;{
 			for _each, r_item in Install_packs_dependencies
 			{
 				SplitPath,r_item,,,,r_item_noExt
-				if (!array_has_value(Settings.Installed,r_item_noExt)) {
+				if (!array_has_value(InstallIndex.Installed,r_item_noExt)) {
 					API_SetSource(Install_packs_dependencies_src[_each])
 					r_path:=API_Get(r_item)
 					if (Package_Validate(r_path))
@@ -758,7 +756,7 @@ Install: ;{
 	;Assuming approximately 50 each file path, should be around 114 packages with "|" delimiters
 	
 	;Changing Install folder will added in the future
-	if (isAdminRunAs_Needed(Settings.StdLib_Folder)) {
+	if (isAdminRunAs_Needed(InstallationFolder)) {
 		ecode:=Admin_run("Package_Installer.ahk",Install_packs)
 		if (ecode=="NOT_ADMIN") {
 			Gui -Disabled
@@ -770,7 +768,7 @@ Install: ;{
 	}
 	
 	;Update "Installed" list - full-blown list update
-	Settings:=Settings_Get()
+	gosub,LoadLocalMetadata
 	gosub,List_Installed
 	gosub,List_Available
 	Gui, ListView, LV_A
@@ -803,7 +801,7 @@ Refresh: ;{
 	Gui +Disabled
 	Gui +OwnDialogs
 	CheckedItems:=0
-	Settings:=Settings_Get()
+	gosub, LoadLocalMetadata
 	Start_select_pack:=""
 	_tmp:="UIA"
 	Loop,Parse,_tmp
@@ -859,7 +857,7 @@ Remove: ;{
 	;Assuming approximately 50 each file path, should be around 114 packages with "|" delimiters
 	
 	;Changing Install folder will added in the future
-	if (isAdminRunAs_Needed(Settings.StdLib_Folder)) {
+	if (isAdminRunAs_Needed(InstallationFolder)) {
 		ecode:=Admin_run("Package_Remover.ahk",Remove_packs)
 		if (ecode=="NOT_ADMIN") {
 			Gui -Disabled
@@ -871,7 +869,7 @@ Remove: ;{
 	}
 	
 	;full-blown list update
-	Settings:=Settings_Get()
+	gosub,LoadLocalMetadata
 	gosub,List_Installed
 	gosub,List_Available
 	Gui, ListView, LV_I
@@ -900,6 +898,17 @@ return ;}
 
 ClientUpdate:
 	CheckUpdate(AppVersion)
+return
+
+LoadLocalMetadata:
+	;get settings
+	Settings:=Settings_Get()
+
+	;get InstallIndex
+	InstallationFolder:=Settings.StdLib_Folder
+	InstallIndexFile := InstallationFolder . "\aspdm.json"
+	;MsgBox % InstallIndexFile
+	InstallIndex := Settings_InstallGet(InstallIndexFile)
 return
 
 array_has_value(arr,value) {

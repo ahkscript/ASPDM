@@ -19,11 +19,10 @@ Settings_Get() {
 
 Settings_Validate(j) {
 	j_default:=Settings_Default()
-	vars:="stdlib_folder|userlib_folder|customlib_folder|local_repo|local_archive|hide_installed|Show_AllPackSources|only_show_stdlib|package_source|package_sources|installed|Check_ClientUpdates|ContentSensitiveSearch"
+	vars:="stdlib_folder|userlib_folder|customlib_folder|local_repo|local_archive|hide_installed|Show_AllPackSources|only_show_stdlib|package_source|package_sources|Check_ClientUpdates|ContentSensitiveSearch"
 	loop,Parse,vars,`|
 		if (!j.Haskey(A_LoopField))
 			j[A_LoopField]:=j_default[A_LoopField]
-	j.installed:=Util_ArraySort(j.installed)
 	return j
 }
 
@@ -39,15 +38,13 @@ Settings_Default(key="") {
 		,package_source:	"aspdm.ahkscript.org"
 		,package_sources:	["aspdm.ahkscript.org","aspdm.2fh.co","aspdm.1eko.com"]
 		,Check_ClientUpdates: true
-		,ContentSensitiveSearch: true
-		,installed: {}}
+		,ContentSensitiveSearch: true}
 	if (k=="")
 		return j
 	return j[key]
 }
 
 Settings_Save(j) {
-	j.installed:=Util_ArraySort(j.installed)
 	s:=JSON_FromObj(j)
 	f:=Settings_File()
 	FileDelete, % f
@@ -57,3 +54,26 @@ Settings_Save(j) {
 	return ErrorLevel
 }
 
+Settings_InstallGet(f) {
+	if !FileExist(f) {
+		Settings_InstallSave(f,false)
+	}
+	FileRead,s, % f
+	j:=JSON_ToObj(s)
+	if IsObject(j.installed)
+		return j
+	return j:={installed:{}}
+}
+
+Settings_InstallSave(f,j) {
+	if (j)
+		j.installed:=Util_ArraySort(j.installed)
+	else
+		j := {installed:{}}
+	s:=JSON_FromObj(j)
+	FileDelete, % f
+	if ( FileExist(f) && (ErrorLevel) )
+		return ErrorLevel
+	FileAppend, % s, % f
+	return ErrorLevel
+}
