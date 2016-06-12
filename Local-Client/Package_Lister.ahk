@@ -903,11 +903,27 @@ return
 LoadLocalMetadata:
 	;get settings
 		Settings:=Settings_Get()
+	;get InstallationFolder
+		gosub,GetCurrentInstallationFolder
 	;get InstallIndex
-		InstallationFolder:=Settings.StdLib_Folder
 		InstallIndex := Settings_InstallGet(InstallationFolder)
 return
 
+GetCurrentInstallationFolder:
+	GuiControlGet,DDL_StdLibSelected,,DDL_StdLib
+	if DDL_StdLibSelected =
+		InstallationFolder:=Settings.StdLib_Folder
+	else {
+		if InStr(DDL_StdLibSelected,"User")
+			InstallationFolder:=Settings.userlib_folder
+		else if InStr(DDL_StdLibSelected,"Custom")
+			InstallationFolder:=Settings.customlib_folder
+		else ;Default/Global
+			InstallationFolder:=Settings.StdLib_Folder
+	}
+return
+
+;{ Utility Functions and Misc.
 array_has_value(arr,value) {
 	for each, item in arr
 		if (item=value)
@@ -960,4 +976,4 @@ if !FileExist("Res\")
 	FileCreateDir,Res\
 FileInstall,Res\ahk.ico,Res\ahk.ico
 FileInstall,Res\ahk.png,Res\ahk.png
-return
+return ;}
