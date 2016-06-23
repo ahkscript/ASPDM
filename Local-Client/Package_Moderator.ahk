@@ -24,6 +24,20 @@ GuiClose:
 FileRemoveDir, %A_temp%\ASPDM_tmp, 1
 ExitApp
 
+GuiDropFiles:
+	Loop, parse, A_GuiEvent, `n
+	{
+		FirstFile = %A_LoopField%
+		Break
+	}
+	if FileExist(FirstFile) {
+		thePack:=FirstFile
+		gosub,_open
+	} else {
+		MsgBox, 16, , Could not open the dragged file.
+	}
+return
+
 PrepTV:
 	TV_Delete()
 	TV_baseDirID := TV_Add("Package Base Dir")
@@ -41,33 +55,35 @@ Open:
 	Gui +OwnDialogs
 	FileSelectFile, thePack, 3, , Open AHKP Package, AHKP Package (*.ahkp)
 	if !ErrorLevel
+		gosub,_open
+return
+
+_open:
+	; Package Metadata
+	mdata:=Manifest_FromStr(Manifest_FromPackage(thePack))
+	LV_Delete()
+	for each, item in mdata
 	{
-		; Package Metadata
-		mdata:=Manifest_FromStr(Manifest_FromPackage(thePack))
-		LV_Delete()
-		for each, item in mdata
-		{
-			if (IsObject(item))
-				LV_Add("",each,Util_TagsObj2CSV(item))
-			else
-				LV_Add("",each,item)
-		}
-		
-		; Package tree
-		tmpDir:=Util_TempDir(A_Temp "\ASPDM_tmp")
-		eTree:=Package_Extract(tmpDir,thePack,1)
-		gosub,PrepTV
-		GuiControl, -Redraw, TVFiles
-		eObj2TV(eTree,TV_baseDirID)
-		GuiControl, +Redraw, TVFiles
-		GuiControl, -Disabled, tmpdirBtn
-		
-		; Save a copy of the extracted manifest in the extraction folder
-		outman:=JSON_Beautify(mdata)
-		FileAppend, %outman%, %tmpDir%\package.json
-		
-		GuiControl, -Disabled, opkgBtn
+		if (IsObject(item))
+			LV_Add("",each,Util_TagsObj2CSV(item))
+		else
+			LV_Add("",each,item)
 	}
+
+	; Package tree
+	tmpDir:=Util_TempDir(A_Temp "\ASPDM_tmp")
+	eTree:=Package_Extract(tmpDir,thePack,1)
+	gosub,PrepTV
+	GuiControl, -Redraw, TVFiles
+	eObj2TV(eTree,TV_baseDirID)
+	GuiControl, +Redraw, TVFiles
+	GuiControl, -Disabled, tmpdirBtn
+
+	; Save a copy of the extracted manifest in the extraction folder
+	outman:=JSON_Beautify(mdata)
+	FileAppend, %outman%, %tmpDir%\package.json
+
+	GuiControl, -Disabled, opkgBtn
 return
 
 OpenPKG:
