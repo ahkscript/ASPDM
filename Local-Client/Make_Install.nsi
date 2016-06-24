@@ -187,19 +187,20 @@ Section "MainSection" SEC01
 	File /r Lib\*.*
 
 	DetailPrint "Associating .ahkp files..."
-	WriteRegStr HKCR ".ahkp" "" "ahkp.package"
-	WriteRegStr HKCR "ahkp.package" "" \
-		"ahkp Package"
-	WriteRegStr HKCR "ahkp.package\DefaultIcon" "" \
-		"$INSTDIR\Res\ahk.ico"
-	WriteRegStr HKCR "ahkp.package\shell\open\command" "" \
-		'"$INSTDIR\rHandler.exe" "%1"'
+		WriteRegStr HKCR ".ahkp" "" "ahkp.package"
+		WriteRegStr HKCR "ahkp.package" "" "ahkp Package"
+		WriteRegStr HKCR "ahkp.package\DefaultIcon" "" "$INSTDIR\Res\ahk.ico"
+		WriteRegStr HKCR "ahkp.package\shell\open\command" "" '"$INSTDIR\rHandler.exe" "%1"'
 
 	DetailPrint "Creating ASPDM:// URI Scheme..."
-	WriteRegStr HKCR "ASPDM" "URL Protocol" ""
-	WriteRegStr HKCR "ASPDM" "" "URL:ASPDM Protocol"
-	WriteRegStr HKCR "ASPDM\DefaultIcon" "" "$INSTDIR\res\ahk.ico"
-	WriteRegStr HKCR "ASPDM\shell\open\command" "" '"$INSTDIR\rHandler.exe" "%1"'
+		WriteRegStr HKCR "ASPDM" "URL Protocol" ""
+		WriteRegStr HKCR "ASPDM" "" "URL:ASPDM Protocol"
+		WriteRegStr HKCR "ASPDM\DefaultIcon" "" "$INSTDIR\res\ahk.ico"
+		WriteRegStr HKCR "ASPDM\shell\open\command" "" '"$INSTDIR\rHandler.exe" "%1"'
+		WriteRegStr HKCU "Software\Classes\aspdm" "URL Protocol" ""
+		WriteRegStr HKCU "Software\Classes\aspdm" "" "URL:AHK Script Protocol"
+		WriteRegStr HKCU "Software\Classes\aspdm\DefaultIcon" "" "$INSTDIR\res\ahk.ico"
+		WriteRegStr HKCU "Software\Classes\aspdm\shell\open\command" "" '"$INSTDIR\rHandler.exe" "%1"'
 
 	DetailPrint "Creating shortcuts..."
 	SetShellVarContext all
@@ -222,8 +223,9 @@ SectionEnd
 Section -Post
 	WriteUninstaller "$INSTDIR\uninst.exe"
 	WriteRegStr HKLM "${PRODUCT_DIR_REGKEY}" "" "$INSTDIR\Package_Lister.ahk"
-	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "$(^Name)"
+	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayName" "${PRODUCT_NAME_LONG}"
 	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "UninstallString" "$INSTDIR\uninst.exe"
+	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "QuietUninstallString" "$INSTDIR\uninst.exe /S"
 	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\Res\ahk.ico"
 	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PRODUCT_VERSION}"
 	WriteRegStr ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "URLInfoAbout" "${PRODUCT_WEB_SITE}"
@@ -263,6 +265,7 @@ Section Uninstall
 	DeleteRegKey HKCR "ahkp.package"
 	DetailPrint "Removing ASPDM:// URI Scheme..."
 	DeleteRegKey HKCR "ASPDM"
+	DeleteRegKey HKCU "Software\Classes\aspdm"
 
 	DetailPrint "Removing shortcuts..."
 	Delete "$SMPROGRAMS\${PRODUCT_NAME}\Uninstall.lnk"
