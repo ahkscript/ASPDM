@@ -19,7 +19,7 @@ Settings_Get() {
 
 Settings_Validate(j) {
 	j_default:=Settings_Default()
-	vars:="stdlib_folder|userlib_folder|customlib_folder|local_repo|local_archive|hide_installed|Show_AllPackSources|only_show_stdlib|package_source|package_sources|Check_ClientUpdates|ContentSensitiveSearch"
+	vars:="stdlib_folder|userlib_folder|customlib_folder|local_repo|local_archive|hide_installed|Show_AllPackSources|only_show_stdlib|package_source|package_sources|Check_ClientUpdates|ContentSensitiveSearch|DefaultLibMode|RememberLibMode"
 	loop,Parse,vars,`|
 		if (!j.Haskey(A_LoopField))
 			j[A_LoopField]:=j_default[A_LoopField]
@@ -38,8 +38,10 @@ Settings_Default(key="") {
 		,package_source:	"aspdm.ahkscript.org"
 		,package_sources:	["aspdm.ahkscript.org","aspdm.2fh.co","aspdm.1eko.com"]
 		,Check_ClientUpdates: true
-		,ContentSensitiveSearch: true}
-	if (k=="")
+		,ContentSensitiveSearch: true
+		,DefaultLibMode:	"Global"
+		,RememberLibMode:	false}
+	if (key=="")
 		return j
 	return j[key]
 }

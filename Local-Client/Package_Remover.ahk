@@ -24,15 +24,30 @@ FileCreateDir, % Local_Archive:=Settings.Local_Archive
 if ErrorLevel
 	ExitApp, % Install.Error_CreateArchiveDir
 
-InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Config" file
+InstallMode:="NULL"
+if (SubStr(args[1],1,2) == "--") {
+	InstallMode := SubStr(args[1],3)
+	pList := args[2]
+} else {
+	pList := args[1]
+}
+
+if Instr(InstallMode,"User") {
+	InstallationFolder := Settings.userlib_folder
+} else if Instr(InstallMode,"Custom") {
+	InstallationFolder := Settings.customlib_folder
+} else { ;/ "Global"
+	InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Config" file
+}
 /*	Possible Lib\ Folders:
 
 	%A_ScriptDir%\Lib\  ; Local library - requires AHK_L 42+.
 	%A_MyDocuments%\AutoHotkey\Lib\  ; User library.
 	path-to-the-currently-running-AutoHotkey.exe\Lib\  ; Standard library.
 */
+InstallIndex := Settings_InstallGet(InstallationFolder)
 
-packs:=StrSplit(args[1],"|")
+packs:=StrSplit(pList,"|")
 if (!IsObject(packs))
 	ExitApp, % Install.Error_NoAction
 TotalItems:=packs.MaxIndex()
@@ -96,18 +111,23 @@ for Current, id_akhp in packs
 		}
 	}
 	
+	/* comment out for now, because of deletion of local repo
+	*  should not happen when still installed in other Lib dirs
 	;Delete data in local repo "[ID]\"
-	FileRemoveDir,%RepoSubDir%,1
-	if ErrorLevel
-		ExitApp, % Install.Error_DeleteRepoSubDir
+	if FileExist(RepoSubDir) {
+		FileRemoveDir,%RepoSubDir%,1
+		if ErrorLevel
+			ExitApp, % Install.Error_DeleteRepoSubDir
+	}
+	*/
 	
 	;Remove Package ID from "Installed" in Settings
-	for x, installed in Settings.installed
+	for x, installed in InstallIndex.installed
 		if (installed==mdata["id"])
-			Settings.installed.Remove(x)
+			InstallIndex.installed.Remove(x)
 	
 	;Save settings right-away in case of error-exit
-	Settings_Save(Settings)
+	Settings_InstallSave(InstallationFolder,InstallIndex)
 	
 	;Increment progress bar
 	load_progress(mdata["id"],Current,TotalItems)
@@ -117,6 +137,7 @@ for Current, id_akhp in packs
 
 ;Save Settings & Exit Success
 Settings_Save(Settings)
+Settings_InstallSave(InstallationFolder,InstallIndex)
 ExitApp, % Install.Success
 
 load_progress(t,c,f) {

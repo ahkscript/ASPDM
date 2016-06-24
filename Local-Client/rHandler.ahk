@@ -59,6 +59,7 @@ URL_MODE:
 	URI_:=StrSplit(URI_str,"/")
 	URI_Source:=Trim(URI_[1])
 	URI_PackID:=Trim(URI_[2])
+	URI_LIBDIR:=Trim(URI_[3])
 
 	if !URI_PackID
 	{
@@ -101,7 +102,10 @@ URL_MODE:
 		MsgBox, 16, , Error: Non existent Package ("%URI_PackID%.ahkp")?
 		ExitApp
 	}
-	run Package_Lister.ahk "--source" "%URI_Source%" "%pack_id%.ahkp",,UseErrorLevel
+	LIBMODE := ""
+	if StrLen(URI_LIBDIR)>1
+		LIBMODE := "-L" URI_LIBDIR
+	run Package_Lister.ahk %LIBMODE% "--source" "%URI_Source%" "%pack_id%.ahkp",,UseErrorLevel
 	if ErrorLevel
 		MsgBox, 48, , ASPDM could not start properly.`nError: (%ErrorLevel%)[%A_LastError%]
 return

@@ -45,6 +45,16 @@ if (args) {
 					continue
 				i+=1
 			}
+			else if (SubStr(args[i],1,2) == "-L") {
+				if (StrLen(_t:=SubStr(args[i],3))>2) {
+					if InStr(_t,"User")
+						Start_LibMode:="User"
+					else if InStr(_t,"Custom")
+						Start_LibMode:="Custom"
+					else
+						Start_LibMode:="Global"
+				}
+			}
 			else if SubStr(args[i],-4) = .ahkp
 				Start_select_pack:=args[i]
 		}
@@ -60,7 +70,17 @@ if !StrLen(Start_Package_Source)
 	Start_Package_Source:=Package_Source
 
 ;get settings & InstallIndex
-gosub,LoadLocalMetadata
+	;get settings
+		Settings:=Settings_Get()
+	;get InstallationFolder
+		INSTALLDIR_MODE:=Settings.DefaultLibMode
+		if (Settings.RememberLibMode)
+			INSTALLDIR_MODE:=Settings.RememberLibMode
+		if (StrLen(Start_LibMode)>3)
+			INSTALLDIR_MODE:=Start_LibMode
+		InstallationFolder:=LibMode_Dir(INSTALLDIR_MODE,Settings)
+	;get InstallIndex
+		InstallIndex := Settings_InstallGet(InstallationFolder)
 
 AppVersion:="1.0.0.0"
 if (Settings.Check_ClientUpdates)
@@ -117,11 +137,13 @@ Gui, Tab, Settings
 	Gui, Add, Checkbox, y+4 xp vOnly_Show_StdLib Disabled, Only show StdLib Packages
 	Gui, Add, Checkbox, y+4 xp vCheck_ClientUpdates, Check for ASPDM client updates
 	Gui, Add, Checkbox, y+4 xp vContentSensitiveSearch, Content-Sensitive Search (Uncheck to search tags only)
+	Gui, Add, Checkbox, y+4 xp vRememberLibMode, Remember StdLib Mode (on settings save)
 	GuiControl,,Hide_Installed, % (!(!(Settings.hide_installed)))+0
 	GuiControl,,Show_AllPackSources, % (!(!(Settings.Show_AllPackSources)))+0
 	GuiControl,,Only_Show_StdLib, % (!(!(Settings.only_show_stdlib)))+0
 	GuiControl,,Check_ClientUpdates, % (!(!(Settings.Check_ClientUpdates)))+0
 	GuiControl,,ContentSensitiveSearch, % (!(!(Settings.ContentSensitiveSearch)))+0
+	GuiControl,,RememberLibMode, % (Strlen(Settings.RememberLibMode)>1)
 	Gui, Add, Text, y+10 xp, Package source
 	Gui, Add, Button, yp-5 x+4 vPackSource_AddButton gPackSource_Add, Add...
 	Gui, Add, Button, yp x+2 vPackSource_RemoveButton gPackSource_Remove, Remove
@@ -145,8 +167,8 @@ Gui, Tab,
 	Gui, Add, Edit, vSearchBar gSearch y44 x222 w300,
 	SetEditPlaceholder("SearchBar","Search...")
 	Gui, Add, Text, y7 x484 vDDL_StdLibT, StdLib Mode
-	Gui, Add, DropDownList, y21 x482 w70 -Multi vDDL_StdLib gDDL_StdLibEvent Choose1, Global|User|Custom
-	GuiControl, ChooseString, DDL_StdLib, Global
+	Gui, Add, DropDownList, y21 x482 w70 -Multi vDDL_StdLib gDDL_StdLibEvent, Global|User|Custom
+	GuiControl, ChooseString, DDL_StdLib, % INSTALLDIR_MODE
 	
 Gui, Add, StatusBar,, Loading...
 SB_SetParts(264)
@@ -648,10 +670,16 @@ SaveSettings: ;{
 			Settings[A_LoopField] := (%A_LoopField%)
 		}
 		
+		GuiControlGet, RememberLibMode
+			if (RememberLibMode) {
+				gosub,GetCurrentInstallationFolder
+				Settings.RememberLibMode := INSTALLDIR_MODE
+			} else
+				Settings.RememberLibMode := false
 		GuiControlGet,PackSource_ListSelected,,PackSource_List
-		Settings.package_source := PackSource_ListSelected
+			Settings.package_source := PackSource_ListSelected
 		ControlGet, PackSource_PipeList, List,, ComboBox1, ahk_pid %SelfPID%
-		Settings.package_sources := StrSplit(PackSource_PipeList,"`n")
+			Settings.package_sources := StrSplit(PackSource_PipeList,"`n")
 		
 		gosub,_SaveSettings
 	}
@@ -747,13 +775,13 @@ Install: ;{
 	
 	;Changing Install folder will added in the future
 	if (isAdminRunAs_Needed(InstallationFolder)) {
-		ecode:=Admin_run("Package_Installer.ahk",Install_packs)
+		ecode:=Admin_run("Package_Installer.ahk","--" INSTALLDIR_MODE " " Install_packs)
 		if (ecode=="NOT_ADMIN") {
 			Gui -Disabled
 			return
 		}
 	} else {
-		Runwait "Package_Installer.ahk" "%Install_packs%",,UseErrorLevel
+		Runwait "Package_Installer.ahk" --%INSTALLDIR_MODE% "%Install_packs%",,UseErrorLevel
 		ecode := ErrorLevel
 	}
 	
@@ -848,13 +876,13 @@ Remove: ;{
 	
 	;Changing Install folder will added in the future
 	if (isAdminRunAs_Needed(InstallationFolder)) {
-		ecode:=Admin_run("Package_Remover.ahk",Remove_packs)
+		ecode:=Admin_run("Package_Remover.ahk","--" INSTALLDIR_MODE " " Remove_packs)
 		if (ecode=="NOT_ADMIN") {
 			Gui -Disabled
 			return
 		}
 	} else {
-		Runwait "Package_Remover.ahk" "%Remove_packs%",,UseErrorLevel
+		Runwait "Package_Remover.ahk" --%INSTALLDIR_MODE% "%Remove_packs%",,UseErrorLevel
 		ecode := ErrorLevel
 	}
 	
@@ -902,15 +930,9 @@ return
 GetCurrentInstallationFolder:
 	GuiControlGet,DDL_StdLibSelected,,DDL_StdLib
 	if DDL_StdLibSelected =
-		InstallationFolder:=Settings.StdLib_Folder
-	else {
-		if InStr(DDL_StdLibSelected,"User")
-			InstallationFolder:=Settings.userlib_folder
-		else if InStr(DDL_StdLibSelected,"Custom")
-			InstallationFolder:=Settings.customlib_folder
-		else ;Default/Global
-			InstallationFolder:=Settings.StdLib_Folder
-	}
+		DDL_StdLibSelected:="Global"
+	InstallationFolder:=LibMode_Dir(DDL_StdLibSelected,Settings)
+	INSTALLDIR_MODE := DDL_StdLibSelected
 return
 
 DDL_StdLibEvent:
@@ -919,6 +941,15 @@ DDL_StdLibEvent:
 return
 
 ;{ Utility Functions and Misc.
+LibMode_Dir(x,z) {
+	if InStr(x,"User")
+		return z.userlib_folder
+	else if InStr(x,"Custom")
+		return z.customlib_folder
+	else ;Default/Global
+		return z.StdLib_Folder
+}
+
 array_has_value(arr,value) {
 	for each, item in arr
 		if (item=value)
@@ -937,12 +968,12 @@ LV_GetCheckedCount() {
 			return (A_Index-1)
 }
 
-Admin_run(program, argument) {
+Admin_run(program, arguments) {
 	;AutoHotkey Supported OS Versions: WIN_7, WIN_8, WIN_8.1, WIN_VISTA, WIN_2003, WIN_XP, WIN_2000
 	if A_OSVersion in WIN_2003,WIN_XP,WIN_2000
 	{
 		if (A_IsAdmin)
-			Runwait "%program%" "%argument%",,UseErrorLevel
+			Runwait "%program%" %arguments%,,UseErrorLevel
 		else {
 			MsgBox, 48, , Sorry`, an error has occured.`n`nYou need administrator rights.`nPlease contact your administrator for help.
 			Gui -Disabled
@@ -950,7 +981,7 @@ Admin_run(program, argument) {
 		}
 	}
 	else
-		Runwait *RunAs "%program%" "%argument%",,UseErrorLevel
+		Runwait *RunAs "%program%" %arguments%,,UseErrorLevel
 	return ErrorLevel
 }
 

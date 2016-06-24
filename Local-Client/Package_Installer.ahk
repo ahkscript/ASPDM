@@ -24,7 +24,21 @@ FileCreateDir, % Local_Archive:=Settings.Local_Archive
 if ErrorLevel
 	ExitApp, % Install.Error_CreateArchiveDir
 
-InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Config" file
+InstallMode:="NULL"
+if (SubStr(args[1],1,2) == "--") {
+	InstallMode := SubStr(args[1],3)
+	pList := args[2]
+} else {
+	pList := args[1]
+}
+
+if Instr(InstallMode,"User") {
+	InstallationFolder := Settings.userlib_folder
+} else if Instr(InstallMode,"Custom") {
+	InstallationFolder := Settings.customlib_folder
+} else { ;/ "Global"
+	InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Config" file
+}
 /*	Possible Lib\ Folders:
 
 	%A_ScriptDir%\Lib\  ; Local library - requires AHK_L 42+.
@@ -33,7 +47,7 @@ InstallationFolder:=Settings.StdLib_Folder ;Should be fetched from "settings/Con
 */
 InstallIndex := Settings_InstallGet(InstallationFolder)
 
-packs:=StrSplit(args[1],"|")
+packs:=StrSplit(pList,"|")
 if (!IsObject(packs))
 	ExitApp, % Install.Error_NoAction
 TotalItems:=packs.MaxIndex()
