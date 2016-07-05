@@ -1,4 +1,4 @@
-#Include ..\build\libcrypt.ahk
+#Include ..\lib\libcrypt.ahk
 
 ; Generate some random binary
 Size := 32

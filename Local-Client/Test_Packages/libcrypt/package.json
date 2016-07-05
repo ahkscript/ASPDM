@@ -7,7 +7,7 @@
 	],
 	"ahkversion":"1.1.24.00",
 	"author":"ahkscript",
-	"description":"A collection of crypting and encoding functions from the community.\n\nCurrently included function:\n- Hashing: CRC32, MD2, MD4, MD5, SHA-1, SHA-2 (SHA-256, SHA-384, SHA-512), HMAC (Checksums), Secure Salted (Checksums)\n\n- Hashing (Custom): RSHash (Robert Sedgewick's string hashing algorithm)\n\n- En-\/Decryption: Caesar Cipher, RC4, Vigen\u00E8re Cipher, XOR, ROT5, ROT13, ROT18, ROT47\n\n- En-\/Decryption (Custom): Div2, nnnik21, VxE (VxE-89, VxE-251)\n\n- En-\/Decoding: ASCII \/ Binary, Base64, Bin \/ Hex, Dec (2 to 36), URI\/URL encode\/decode\n\nA special thanks to: Bentschi, @AHK-just-me, @IsNull, @jNizM, @G33kDude, @joedf, @nnnik and others",
+	"description":"A collection of crypting and encoding functions from the community.\n\nCurrently included function:\n- Hashing: CRC32, MD2, MD4, MD5, SHA-1, SHA-2 (SHA-256, SHA-384, SHA-512), HMAC (Checksums), Secure Salted (Checksums)\n\n- Hashing (Custom): RSHash (Robert Sedgewick's string hashing algorithm)\n\n- En-\/Decryption: Caesar Cipher, RC4, Vigen\u00E8re Cipher, XOR, ROT5, ROT13, ROT18, ROT47\n\n- En-\/Decryption (Custom): Div2, nnnik21, VxE (VxE-89, VxE-251)\n\n- En-\/Decoding: ASCII \/ Binary, Base64, Bin \/ Hex, Dec (2 to 36), URI\/URL encode\/decode\n\nMore functions are on the way!\n\nA special thanks to: Bentschi, @AHK-just-me, @IsNull, @jNizM, @G33kDude, @joedf, @nnnik and others",
 	"forumurl":"https:\/\/github.com\/ahkscript\/libcrypt.ahk\/issues",
 	"id":"libcrypt",
 	"license":"MIT",

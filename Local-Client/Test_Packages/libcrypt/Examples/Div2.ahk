@@ -1,4 +1,4 @@
-#Include ..\build\libcrypt.ahk
+#Include ..\lib\libcrypt.ahk
 
 Original 	:= "Jack was here"
 Encoded 	:= LC_Div2_encode(Original)
