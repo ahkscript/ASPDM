@@ -6,14 +6,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>ASPDM - AHKScript.org's Package/StdLib Distribution and Management</title>
-		
+
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
 		<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=0.6"/>
 		<link type="image/png" href="src/ahk.png" rel="icon"/>
 		<link rel="stylesheet" href="src/font-awesome-4.0.3/css/font-awesome.min.css"/>
 		<link type="text/css"  href="src/bootstrap.css" rel="stylesheet"/>
 		<link type="text/css"  href="src/style.css" rel="stylesheet"/>
-		
+
 		<link type="text/css"  href="src/bootstrap_buttons.min.css" rel="stylesheet"/>
 		<link type="text/css"  href="src/bootstrap_buttons-theme.min.css" rel="stylesheet"/>
 		<script src="src/jquery-1.11.0.min.js"></script>
@@ -37,18 +37,18 @@
 				height:128px;
 				width:128px;
 			}
-			
+
 			/* #index_containter{ margin-top:0 !important; } */
-		
+
 			/* Special Modal "anti-body-scroll" trick
 			 * See here:  http://coding.abel.nu/2013/02/prevent-page-behind-jquery-ui-dialog-from-scrolling */
 			#full_wrapper { overflow-y:scroll;height:100%; }
 			html, body { margin:0;overflow:hidden;height:100%; }
-			
+
 			table {
 				margin-bottom: 20px;
 			}
-		
+
 			/* Extra popup styling */
 			.avgrund-popup p { margin: 0 0 4px; }
 			.avgrund-popup .close { position: absolute; right: 8px; top: 4px; }
@@ -56,7 +56,7 @@
 			.dialog_button { display: inline-block !important; }
 			.avgrund-popup .packname { margin-bottom: -6px; }
 			.avgrund-popup th, .avgrund-popup td { padding-left: 8px; }
-			
+
 			.avgrund-popup .h {
 				display: inline-block;
 				/* margin-left: 4px; */
@@ -74,7 +74,7 @@
 				display: inline;
 				right: 20px;
 			}
-			
+
 			.avgrund-popup .h h3 {
 				line-height: 16px;
 				display: inline-block;
@@ -97,7 +97,7 @@
 				border-top: 1px solid #DDDDDD;
 				border-bottom: 1px solid #DDDDDD;
 			}
-			
+
 			/* avgrund has bugs... this is a temp bugfix */
 			.avgrund-popup-animate { z-index: 99; }
 		</style>
@@ -112,7 +112,7 @@
     <?php
 	if (!function_exists("html_linefmt"))
 		include 'lib/utils.php';
-	
+
     $num = 0;
 	if ($handled = opendir('packs')) {
 		while (false !== ($entry = readdir($handled))) {
@@ -127,52 +127,53 @@
                     //$date = date('Y-m-d H:i', filectime($file));
                     $date = filemtime($file);
                     $date = date('Y-m-d H:i', $date);
-                    
+
                     $obj = json_decode($jsondata);
                     $j_author = $obj->author;
                     $j_name = $obj->name;
                     $j_id = $obj->id;
                     $j_type = $obj->type;
-					
+
 					$h_forumurl = $obj->forumurl;
                     $h_forumurl = (strlen($h_forumurl))?(" (<a href=\"" . $h_forumurl . "\">View forum topic</a>)"):"";
-					
+
 					$j_tags = json_encode($obj->tags);
                     $j_tags = ($j_tags==="{}")?"None":substr($j_tags,1,-1);
                     $j_tags = str_replace('"', '', $j_tags);
                     $j_tags = str_replace(',', ', ', $j_tags);
-					
+                    $j_tags = str_shorten($j_tags,75);
+
 					$j_required = json_encode($obj->required);
                     $j_required = ($j_required==="{}")?"None":substr($j_required,1,-1);
                     $j_required = str_replace('"', '', $j_required);
                     $j_required = str_replace(',', ', ', $j_required);
-					
+
                     $j_description = html_linefmt(html_escape($obj->description));
                     $j_description = (strlen($j_description))?$j_description:"No description.";
-					
+
                     $j_size = formatSizeUnits(filesize($file));
-					
+
 					$a_license = html_licensefmt($obj->license);
-					
+
 					if (!function_exists("getServerName"))
 						include 'lib/server.php';
-						
+
 					$URI_Domain = getServerName();
     ?>
     	<aside id="<?=$j_id?>" class="avgrund-popup">
 			<button type="button" class="close" aria-hidden="true" onclick="closeDialog()">&times;</button>
-			
+
 			<div class="packname">
 				<div class="h"><h3><?=$j_name?></h3><span class="hsub">by <?=$j_author?><?=$h_forumurl?></span></div>
 				<div class="setup-btns">
-					
+
 					<!-- PHP Download script necessary for compatibility with all browsers, especially IE... -->
 					<a href="/dl_file.php?f=<?=$j_id?>.ahkp" class="btn btn-sm btn-success dialog_button btn-download" type="button">Download</a>
 
 					<a href="aspdm://<?=$URI_Domain?>/<?=$j_id?>" class="btn btn-sm btn-primary dialog_button btn-install" type="button">Install</a>
 				</div>
 			</div>
-			
+
 			<table class="sortable">
 				<tr><th colspan="2">Information</th><tr>
 				<tr><td>Type              : </td><td><?=$j_type?></td></tr>
@@ -191,20 +192,20 @@
 		closedir($handled);
 	};
 	?>
-        
+
 		<div class="container" id="index_containter">
 			<h1><a href="/" id="logolink"><img id="logo" src="src/ahk.png"> ASPDM - AHKScript.org's Package/StdLib Distribution and Management</a></h1>
 			<div id="body">
-			
+
 			<div id="headerlinks">
 				<?php include 'navmenu.php'; ?>
 			</div>
-				
+
 			<h2>Latest AutoHotkey packages</h2>
 			<div class="file-listing">
 				<table class="sortable">
                 <tr><th>Type</th><th id="th01a">Name</th><th>Options</th><th>Maintainer</th><th>Last modified</th><th>Size</th></tr>
-<?php	
+<?php
     $num = 0;
 	if ($handled = opendir('packs')) {
 		while (false !== ($entry = readdir($handled))) {
@@ -219,14 +220,14 @@
                     //$date = date('Y-m-d H:i', filectime($file));
                     $date = filemtime($file);
                     $date = date('Y-m-d H:i', $date);
-                    
+
                     $obj = json_decode($jsondata);
                     $j_author = $obj->author;
                     $j_name = $obj->name;
                     $j_id = $obj->id;
                     $j_type = $obj->type;
                     $j_size = formatSizeUnits(filesize($file));
-					
+
 					$j_forum = $obj->forumurl;
                     $j_forum = (strlen($j_forum))?$j_forum:"#";
     ?>
@@ -258,9 +259,9 @@
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at scelerisque magna, sed hendrerit enim. Aliquam interdum, felis non euismod dignissim, arcu nisi eleifend enim, sed mollis sem sem quis sem. Donec in iaculis quam, sed pretium quam. Donec congue, nunc vitae elementum tempus, nibh neque scelerisque ante, at tempus lacus augue convallis dui. Maecenas vitae elit consequat, volutpat nisl nec, mollis mi. Curabitur non tellus ut enim tristique commodo. Nulla pulvinar tellus augue, eget auctor est euismod nec. Maecenas vestibulum tortor at lacus aliquet, sed rhoncus leo elementum. Aliquam eleifend aliquet odio ut euismod. Morbi volutpat orci in ipsum facilisis, porttitor eleifend ipsum viverra. Nullam quis vehicula nisi.
 				</p>
 			</div>
-			
+
 			<?php include 'footer.php'; ?>
-			
+
 		</div>
 		<div class="avgrund-cover" onclick="javascript:closeDialog();"></div>
 		<script type="text/javascript" src="src/modal.js"></script>
@@ -269,7 +270,7 @@
 		$(window).load(function() {
 			loadmodal_hashref();
 		});
-		
+
 		$(function(){
 			// Bind the event.
 			$(window).hashchange( function(){
@@ -279,12 +280,12 @@
 			// Trigger the event
 			$(window).hashchange();
 		});
-		
+
 		function get_hashref() {
 			var p = location.href.lastIndexOf("#");
 			return location.href.substr(p+1);
 		}
-		
+
 		function loadmodal_hashref() {
 			var link = get_hashref();
 			if (link.length > 0)

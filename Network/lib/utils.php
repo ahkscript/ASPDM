@@ -11,7 +11,7 @@
 		}
 		return hexdec($size);
 	}
-	
+
 	function iniget($inifile, $key) {
 		$h = fopen($inifile, "r");
 		if ($h) {
@@ -30,21 +30,21 @@
 		}
 		return "null";
 	}
-	
+
 	function in_arrayi($needle, $haystack) {
 		return in_array(strtolower($needle), array_map('strtolower', $haystack));
 	}
-	
+
 	function get_metadata($file,$raw=0,$internal=0) {
 		if ($file == NULL)
 			return -1;
-		
+
 		if ($internal) { //safe func call
 			$file = $file;
 		} else {
 			$file = "packs/" . safe_var(strtolower($file)); //Remove '/' to avoid exploit
 		}
-		
+
 		if (!file_exists($file))
 			return -2;
 		$handle = fopen($file, "r");
@@ -55,7 +55,7 @@
 		else
 			return json_decode(fread($handle,$size));
 	}
-	
+
 	function print_metadata($file,$content_item) {
 		if ($file == NULL) {
 			echo "ERROR: Invalid parameters";
@@ -88,7 +88,7 @@
 		}
 		return 1;
 	}
-	
+
 	function valid_ahkp($file) {
 		$handle = fopen($file, "r");
 		$magic = fread($handle,8);
@@ -101,7 +101,7 @@
 		//echo "[" . $magic . "|" . $m_int . "|" . $m_st . "|" . $m_en . "]";
 		return ( ($magic === "AHKPKG00") && ($m_int >= 80) && ($m_int<5242880) && ($m_st === "{") && ($m_en === "}") );
 	}
-	
+
 	function formatSizeUnits($bytes) {
 		if ($bytes >= 1073741824)
 			$bytes = number_format($bytes / 1073741824, 2) . ' GB';
@@ -117,7 +117,7 @@
 			$bytes = '0 bytes';
 		return $bytes;
 	}
-	
+
 	function safe_var($v) {
 		$v = str_replace(array("/","\\"),"",$v);
 		if (strlen(str_replace("..","",$v))==0)
@@ -125,18 +125,18 @@
 		else
 			return $v;
 	}
-	
+
 	function html_escape($str) {
 		return str_replace('>', "&gt;",str_replace('<', "&lt;", $str));
 	}
-	
+
 	function html_linefmt($str) {
 		$order   = array("\r\n", "\n", "\r");
 		$replace = '<br />';
 		// Processes \r\n's first so they aren't converted twice.
 		return str_replace($order, $replace, $str);
 	}
-	
+
 	function html_licensefmt($str) {
 		$str = trim($str);
 		if ( (strlen($str)<2) || (stristr($str,"ASPDM")) )
@@ -173,5 +173,13 @@
 		if ( (stristr($str,"CC")) || (stristr($str,"creative")) || (stristr($str,"commons")) )
 			return "<a href=\"http://creativecommons.org/licenses\">" . $str . "</a>";
 		return $str;
+	}
+
+	function str_shorten($input,$maxLen) {
+		if (strlen($input) > $maxLen) { //from http://stackoverflow.com/a/3076523/883015
+			$characters = floor($maxLen / 2);
+			return substr($input, 0, $characters) . '...' . substr($input, -1 * $characters);
+		}
+		return $input;
 	}
 ?>
