@@ -339,6 +339,7 @@ List_Available: ;{
 		for each, packs in packs_l
 			TotalItems += Util_ObjCount(packs)
 		TotalItemsNew:=TotalItems
+		_curr_n:=0
 		for each, packs in packs_l
 		{
 		for _each, info in packs
@@ -356,6 +357,8 @@ List_Available: ;{
 				else
 					LV_Add("","ERROR: Unable to load package(s)")
 			}
+			_curr_n+=1
+			load_progress("Loading data from " each,_curr_n,TotalItems)
 		}
 		}
 		TotalItemsNew:=(TotalItemsNew<0)?0:(TotalItems-TotalItemsNew)
