@@ -13,8 +13,10 @@ Package Quality Guidelines
 --------------------------
 
 - Clean, well structured code.
-- Code must be wrapped in functions/classes with clear, non-conflicting namespaces. Global variables should be avoided whenever possible.
-- Code must not depend on positioning of #include.
+- Code must be wrapped in functions/classes
+- The only prefix thats allowed in any library is the name of the library itself
+- Using global scope or super global scope is not permited (with the exception of classes)
+- A library should work even if it is #Included after the auto-execute section and it should not prevent the auto-execute secion from finishing when it is included there
 - Prefer code without side effects. (e.g. unnecessarily and unexpectedly polluting or relying on the global namespace.)
 - Code should be reasonably optimized.
 - Consistent indentation style (Doesn't matter which).
