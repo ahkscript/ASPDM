@@ -13,10 +13,6 @@ Package Quality Guidelines
 --------------------------
 
 - Clean, well structured code.
-- Code must be wrapped in functions/classes
-- The only prefix thats allowed in any library is the name of the library itself
-- Using global scope or super global scope is not permited (with the exception of classes)
-- A library should work even if it is #Included after the auto-execute section and it should not prevent the auto-execute secion from finishing when it is included there
 - Prefer code without side effects. (e.g. unnecessarily and unexpectedly polluting or relying on the global namespace.)
 - Code should be reasonably optimized.
 - Consistent indentation style (Doesn't matter which).
@@ -25,7 +21,12 @@ Package Quality Guidelines
 - The versioning must follow AutoHotkey-Flavored Semantic Versioning (see below).
 - Exposed interfaces should be stable and not change (see Semantic Versioning below).
 - Usage examples are encouraged to be provided.
-- (Recommended) Forum topic at [ahkscript.org](http://ahkscript.org/)
+- (Recommended) Post a forum topic at [ahkscript.org](http://ahkscript.org/)
+- Pertaining to `lib` (library) type packages in particular:
+  - Code must not depend on positioning of #include. In other words, a library should work even if it is #Included after the auto-execute section and it should not prevent the auto-execute section from finishing.  
+  - Code must be wrapped in functions/classes
+  - The only prefix thats allowed in any library is the name of the library itself.
+  - Using global scope or super global scope is not permited (with the exception of classes).
 
 AutoHotkey-Flavored Semantic Versioning
 ---------------------------------------
