@@ -24,7 +24,7 @@ Package Quality Guidelines
 - (Recommended) Post a forum topic at [ahkscript.org](http://ahkscript.org/)
 - Pertaining to `lib` (library) type packages in particular:
   - Code must not depend on positioning of #include. In other words, a library should work even if it is #Included after the auto-execute section and it should not prevent the auto-execute section from finishing.  
-  - Code must be wrapped in functions/classes
+  - Code must be wrapped in functions/classes.
   - The only prefix thats allowed in any library is the name of the library itself.
   - Using global scope or super global scope is not permited (with the exception of classes).
 
